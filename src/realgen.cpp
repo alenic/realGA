@@ -245,24 +245,11 @@ void RealGen::evolve() {
 		// Selection
 		//tournmentSelection(4, p1, p2);
 		rouletteWheelSelection(index1, index2);
-		#ifdef DEBUGMODE
-		cout << "selection " << p[index1].toString() << " " << p[index2].toString() << endl;
-		#endif
 		// Crossover
 		crossoverUniform(index1, index2, offspring);
-		#ifdef DEBUGMODE
-		cout << "crossover " << offspring.toString() << endl;
-		#endif
-		
 		// Mutation
 		uniformMutate(offspring, 0.1);
-		#ifdef DEBUGMODE
-		cout << "mutation  " << offspring.toString()  << endl;
-		#endif
-		
-		#ifdef DEBUGMODE
-		cout << endl;
-		#endif
+
 		offspring.fitness  = fitnessFcn(offspring, fitnessPar);
 
 		newPopulation[k] = offspring;

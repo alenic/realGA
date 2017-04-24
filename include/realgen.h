@@ -12,7 +12,6 @@
 #include "stat.h"
 
 using namespace std;
-//#define DEBUGMODE
 
 typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=0, FIXED_CROSSOVER, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
