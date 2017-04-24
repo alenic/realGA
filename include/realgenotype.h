@@ -15,6 +15,7 @@ public:
 	double fitness;
 	vector<float> *LB;
 	vector<float> *UB;
+	Stat stat;
 
 	RealGenotype();
 	RealGenotype(int n);

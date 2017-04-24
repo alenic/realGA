@@ -13,7 +13,7 @@ endif
 
 # obj
 LOCAL_OBJ_PATH=./obj
-LIB_OBJECTS=realgenotype.o realgen.o
+LIB_OBJECTS=realgenotype.o realgen.o stat.o
 LOCAL_OBJECT_FILES=$(addprefix $(LOCAL_OBJ_PATH)/,$(LIB_OBJECTS))
 
 # lib
@@ -23,7 +23,7 @@ LIB_A_TARGET=lib$(NAME).a
 LIB_SO_TARGET=lib$(NAME).so
 L_LIBFLAGS=-L$(LOCAL_LIB_PATH)
 
-# Tests
+# tests
 LOCAL_TEST_PATH=./test
 EXECUTABLE=main.bin
 

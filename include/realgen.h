@@ -75,6 +75,7 @@ private:
 	double (*fitnessFcn)(RealGenotype &, void *);
 	void *fitnessPar;
 	int evolution;
+	Stat stat;
 
 	double sumFitnessR;
 public:

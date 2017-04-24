@@ -279,8 +279,8 @@ void RealGen::evolve() {
 
 // ================= Selection =================================
 void RealGen::rouletteWheelSelection(int &index1, int &index2) {
-	rouletteWheel(index1, sumFitnessR*Stat::uniformRand());
-	rouletteWheel(index2, sumFitnessR*Stat::uniformRand());
+	rouletteWheel(index1, sumFitnessR*stat.uniformRand());
+	rouletteWheel(index2, sumFitnessR*stat.uniformRand());
 	if(index1 == index2)
 	{
 		index2 = (index1 + 1) % Np;
@@ -317,7 +317,7 @@ void RealGen::tournmentSelect(int p, RealGenotype &g) {
 	int *rindex = new int[p];
 	double fMin = 1.8e16, iMin = 0;
 	for(int i=0; i<p; i++) {
-		rindex[i] = Stat::uniformRand()*Np;
+		rindex[i] = stat.uniformRand()*Np;
 	}
 	for(int i=0; i<p; i++) {
 		double f=population[rindex[i]].fitness;
@@ -332,7 +332,7 @@ void RealGen::tournmentSelect(int p, RealGenotype &g) {
 //==================================== Crossover ==================
 void RealGen::crossoverUniform(int index1, int index2, RealGenotype &c) {
 	for(size_t i=0; i<Nx; i++) {
-		if(Stat::uniformRand()<0.5) {
+		if(stat.uniformRand()<0.5) {
 			c.gene[i] = population[index1].gene[i];
 		} else {
 			c.gene[i] = population[index2].gene[i];
@@ -351,7 +351,7 @@ void RealGen::crossoverFixed(int index1, int index2, RealGenotype &c, int n) {
 //===================================== Mutation ======================
 void RealGen::uniformMutate(RealGenotype &g, float perc) {
 	for (size_t i=0; i<Nx; i++) {
-		if(Stat::uniformRand() < options.mutation.mutationRate) {
+		if(stat.uniformRand() < options.mutation.mutationRate) {
 			if(perc < 1.0)
 				g.uniformLocalRandom(i, perc);
 			else
@@ -362,7 +362,7 @@ void RealGen::uniformMutate(RealGenotype &g, float perc) {
 
 void RealGen::gaussianLocalMutate(RealGenotype &g, float stDev) {
 	for (size_t i=0; i<Nx; i++) {
-		if(Stat::uniformRand() < options.mutation.mutationRate) {
+		if(stat.uniformRand() < options.mutation.mutationRate) {
 			g.gaussianLocalRandom(i, stDev);
 		}
 	}

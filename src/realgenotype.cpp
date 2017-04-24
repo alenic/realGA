@@ -39,21 +39,21 @@ double RealGenotype::distanceTo(RealGenotype &g) {
 void RealGenotype::uniformRandom()
 {
 	for (size_t i=0; i<gene.size(); i++) {
-		gene[i] = (UB->at(i)-LB->at(i))*Stat::uniformRand() + LB->at(i);
+		gene[i] = stat.uniformRand(LB->at(i), UB->at(i));
 	}
 }
 
 void RealGenotype::uniformRandom(int i)
 {
-	gene[i] = (UB->at(i)-LB->at(i))*Stat::uniformRand() + LB->at(i);
+	gene[i] = stat.uniformRand(LB->at(i), UB->at(i));
 }
 
 void RealGenotype::uniformLocalRandom(int i, float perc)
 {
 	float width = (UB->at(i) - LB->at(i))/ 2.0;
-	float var = width*perc*Stat::uniformRand();
+	float var = width*perc*stat.uniformRand();
 
-	if(Stat::uniformRand() < 0.5) {
+	if(stat.uniformRand() < 0.5) {
 		gene[i] = gene[i] - var;
 		if(gene[i] < LB->at(i))
 			gene[i] = LB->at(i);
@@ -65,7 +65,7 @@ void RealGenotype::uniformLocalRandom(int i, float perc)
 }
 
 void RealGenotype::gaussianLocalRandom(int i, float stDev) {
-	gene[i] += Stat::gaussianRand(0.0,stDev);
+	gene[i] += stat.gaussianRand(0.0,stDev);
 	if(gene[i] > 1.0)
 		gene[i] = 1.0;
 	if(gene[i] < 0.0)
