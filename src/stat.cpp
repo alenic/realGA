@@ -8,6 +8,10 @@ float Stat::uniformRand() {
 	return (float)rand()/(1.0 + RAND_MAX); 
 }
 
+int Stat::uniformIndex(int N) {
+	return rand() % N;
+}
+
 
 float Stat::uniformRand(float lb, float ub) {
 	return (ub-lb)*uniformRand() + lb;

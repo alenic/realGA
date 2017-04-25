@@ -20,7 +20,9 @@ void test_real_sphere() {
 	exp_min.gene[2] = 0.0;
 	exp_min.gene[3] = 0.0;
 
-	RealGen ga(50, 4, LB, UB);
+	GAOptions opt;
+	opt.selection.type = TOURNMENT_SELECTION;
+	RealGen ga(50, 4, LB, UB, opt);
 	// Options
 	ga.setFitnessFunction(real_sphere, NULL);
 	ga.initRandom();
@@ -48,7 +50,7 @@ void test_real_sphere() {
 	cout << "================================"<<endl;
 	cout << "        Sphere benchmark" << endl;
 	cout << "================================"<<endl; 
-	cout << ga.populationToString();
+	//cout << ga.populationToString();
 	cout << "Convergence generation: " << convergence << endl;
 	cout << "Solution: "<< best->toString() << endl;
 	cout << "Fitness = " << best->fitness << endl;

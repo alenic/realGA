@@ -19,7 +19,7 @@ void test_uniformDist() {
 	int N=100000;
 	int a[] = {0,0,0,0,0,0,0,0,0,0};
 	for(int i=0; i<N; i++) {
-		int k = stat.uniformRand()*10;
+		int k = (int)(stat.uniformRand()*10);
 		a[k]++;
 	}
 	float chi = uniformChiSquared(a, 10, N);

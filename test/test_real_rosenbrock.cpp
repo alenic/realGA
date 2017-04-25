@@ -16,7 +16,10 @@ void test_rosenbrock() {
 	exp_min.gene[0] = 1.0;
 	exp_min.gene[1] = 1.0;
 
-	RealGen ga(200, 2, LB, UB);
+	GAOptions opt;
+	//opt.selection.type = TOURNMENT_SELECTION;
+	RealGen ga(200, 2, LB, UB, opt);
+
 	
 	// Options
 	ga.setFitnessFunction(rosenbrock, NULL);
@@ -47,7 +50,7 @@ void test_rosenbrock() {
 	cout << "================================"<<endl;
 	cout << "        Rosenbrock benchmark" << endl;
 	cout << "================================"<<endl; 
-	cout << ga.populationToString();
+	//cout << ga.populationToString();
 	cout << "Convergence generation: " << convergence << endl;
 	cout << "Solution: "<< best->toString() << endl;
 	cout << "Fitness = " << best->fitness << endl;

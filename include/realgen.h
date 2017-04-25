@@ -76,11 +76,12 @@ private:
 	int evolution;
 	Stat stat;
 
-	double sumFitnessR;
+	double sumFitnessR; // Only for roulette wheel selection
+	int *tourIndex; // Only for tournment selection
 public:
 	RealGen(int np, int nx, float *lb, float *ub);
 	RealGen(int np, int nx, float *lb, float *ub, GAOptions);
-
+	~RealGen();
 	// Setter
 	void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
 	void setSorting(bool);
@@ -106,8 +107,8 @@ public:
 	void rouletteWheelSelection(int &index1, int &index2);
 	double sumFitnessRoulette();
 	void rouletteWheel(int &index, float stop);
-	void tournmentSelection(int p, RealGenotype &p1, RealGenotype &p2);
-	void tournmentSelect(int p, RealGenotype &g);
+	void tournmentSelection(int p, int &index1, int &index2);
+	void tournmentSelect(int p, int &index);
 	//==================================== Crossover ==================
 	void crossoverUniform(int index1, int index2, RealGenotype &c);
 	void crossoverFixed(int index1, int index2, RealGenotype &c, int n);

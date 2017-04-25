@@ -28,11 +28,29 @@ RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) {
 		population[i].LB = lb;
 		population[i].UB = ub;
 	}
+	tourIndex = NULL;
 
-	options = opt;
+	setOptions(opt);
 
 	if(options.verbose) {
 		checkOptions();
+	}
+}
+
+RealGen::~RealGen() {
+	if(tourIndex) {
+		delete []tourIndex;
+	}
+}
+
+
+void RealGen::setOptions(GAOptions opt) {
+	options = opt;
+	if (tourIndex) {
+		delete []tourIndex;
+		tourIndex = new int[options.selection.tournmentP];
+	} else {
+		tourIndex = new int[options.selection.tournmentP];
 	}
 }
 
@@ -122,9 +140,6 @@ void RealGen::checkOptions() {
 	cout << endl;
 }
 
-void RealGen::setOptions(GAOptions opt) {
-	options = opt;
-}
 
 void RealGen::setFitnessFunction(double (*f)(RealGenotype &, void *), void *par) {
 	fitnessFcn = f;
@@ -229,7 +244,10 @@ void RealGen::evolve() {
 
 	int index1, index2;
 	size_t k=0;
-	sumFitnessRoulette();
+
+	if(options.selection.type == ROULETTE_WHEEL_SELECTION) {
+		sumFitnessRoulette();
+	}
 
 	if(options.selection.sorting) {
 		while(k< options.selection.elitismFactor*Np) {
@@ -243,8 +261,15 @@ void RealGen::evolve() {
 
 	while(k < Np) {
 		// Selection
-		//tournmentSelection(4, p1, p2);
-		rouletteWheelSelection(index1, index2);
+		switch(options.selection.type) {
+			case ROULETTE_WHEEL_SELECTION:
+				rouletteWheelSelection(index1, index2);
+			break;
+			case TOURNMENT_SELECTION:
+				tournmentSelection(options.selection.tournmentP, index1, index2);
+			break;
+		}
+		
 		// Crossover
 		crossoverUniform(index1, index2, offspring);
 		// Mutation
@@ -264,13 +289,17 @@ void RealGen::evolve() {
 	evolution++;
 }
 
+
+
 // ================= Selection =================================
 void RealGen::rouletteWheelSelection(int &index1, int &index2) {
 	rouletteWheel(index1, sumFitnessR*stat.uniformRand());
 	rouletteWheel(index2, sumFitnessR*stat.uniformRand());
-	if(index1 == index2)
-	{
-		index2 = (index1 + 1) % Np;
+	if(index1 == index2) {
+		if(index1 != Np-1)
+			index2 = index1 + 1;
+		else
+			index2 = index1 - 1;
 	}
 }
 
@@ -295,26 +324,30 @@ void RealGen::rouletteWheel(int &index, float stop) {
 	}
 }
 
-void RealGen::tournmentSelection(int p, RealGenotype &p1, RealGenotype &p2) {
-	tournmentSelect(p, p1);
-	tournmentSelect(p, p2);
+void RealGen::tournmentSelection(int p, int &index1, int &index2) {
+	tournmentSelect(p, index1);
+	tournmentSelect(p, index2);
+	if(index1 == index2) {
+		if(index1 != Np-1)
+			index2 = index1 + 1;
+		else
+			index2 = index1 - 1;
+	}
 }
 
-void RealGen::tournmentSelect(int p, RealGenotype &g) {
-	int *rindex = new int[p];
-	double fMin = 1.8e16, iMin = 0;
+void RealGen::tournmentSelect(int p, int &iMin) {
+	iMin = 0;
+	double fMin = population[0].fitness;
 	for(int i=0; i<p; i++) {
-		rindex[i] = stat.uniformRand()*Np;
+		tourIndex[i] = stat.uniformIndex(Np);
 	}
 	for(int i=0; i<p; i++) {
-		double f=population[rindex[i]].fitness;
+		double f=population[tourIndex[i]].fitness;
 		if(f < fMin) {
 			fMin = f;
-			iMin = rindex[i];
+			iMin = tourIndex[i];
 		}
 	}
-	g = population[iMin];
-	delete []rindex;
 }
 //==================================== Crossover ==================
 void RealGen::crossoverUniform(int index1, int index2, RealGenotype &c) {

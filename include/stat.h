@@ -9,6 +9,7 @@ public:
 	float uniformRand();
 	float uniformRand(float lb, float ub);
 	float gaussianRand(float m, float s);
+	int uniformIndex(int N);
 };
 
 #endif // STAT_H
