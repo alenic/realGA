@@ -1,14 +1,16 @@
 # Options
-DEBUG = 1
+DEBUG = 0
 NAME = realgen
 
 
 # Compiler
 CPP=g++
-CPPFLAGS=-O3 -fPIC
+CPPFLAGS=-fPIC
 
 ifeq ($(DEBUG), 1) 
 CPPFLAGS+= -g
+else
+CPPFLAGS+=-O3
 endif
 
 # obj
