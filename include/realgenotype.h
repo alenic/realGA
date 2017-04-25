@@ -13,8 +13,8 @@ class RealGenotype {
 public:
 	vector<float> gene;
 	double fitness;
-	vector<float> *LB;
-	vector<float> *UB;
+	float *LB;
+	float *UB;
 	Stat stat;
 
 	RealGenotype();

@@ -12,19 +12,13 @@ double real_sphere(RealGenotype &g, void *par) {
 
 void test_real_sphere() {
 	srand(time(NULL));
-	vector<float> *LB = new vector<float>(),
-	              *UB = new vector<float>();
-	LB->push_back(-5.12);
-	LB->push_back(-5.12);
-	LB->push_back(-5.12);
-	LB->push_back(-5.12);
-	UB->push_back(5.12);
-	UB->push_back(5.12);
-	UB->push_back(5.12);
-	UB->push_back(5.12);
+	float LB[] = {-5.12, -5.12, -5.12, -5.12},
+		  UB[] = { 5.12,  5.12,  5.12,  5.12};
 	RealGenotype exp_min(4);
 	exp_min.gene[0] = 0.0;
 	exp_min.gene[1] = 0.0;
+	exp_min.gene[2] = 0.0;
+	exp_min.gene[3] = 0.0;
 
 	RealGen ga(50, 4, LB, UB);
 	// Options

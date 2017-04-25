@@ -68,8 +68,8 @@ private:
 	vector <RealGenotype> newPopulation;
 	size_t Np;
 	size_t Nx;
-	vector<float> *LB;
-	vector<float> *UB;
+	float *LB;
+	float *UB;
 	GAOptions options;
 	double (*fitnessFcn)(RealGenotype &, void *);
 	void *fitnessPar;
@@ -78,8 +78,8 @@ private:
 
 	double sumFitnessR;
 public:
-	RealGen(int np, int nx, vector<float> *lb, vector<float> *ub);
-	RealGen(int np, int nx, vector<float> *lb, vector<float> *ub, GAOptions);
+	RealGen(int np, int nx, float *lb, float *ub);
+	RealGen(int np, int nx, float *lb, float *ub, GAOptions);
 
 	// Setter
 	void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);

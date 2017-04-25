@@ -9,13 +9,9 @@ double rosenbrock(RealGenotype &g, void *par) {
 
 void test_rosenbrock() {
 	srand(time(NULL));
-	vector<float> *LB = new vector<float>,
-	              *UB = new vector<float>;
+	float LB[] = {-2048.0, -2048.0},
+		  UB[] = { 2048.0,  2048.0};
 
-	LB->push_back(-2048);
-	LB->push_back(-2048);
-	UB->push_back(2048);
-	UB->push_back(2048);
 	RealGenotype exp_min(2);
 	exp_min.gene[0] = 1.0;
 	exp_min.gene[1] = 1.0;

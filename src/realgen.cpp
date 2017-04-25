@@ -1,6 +1,6 @@
 #include "realgen.h"
 
-RealGen::RealGen(int np, int nx, vector<float> *lb, vector<float> *ub) {
+RealGen::RealGen(int np, int nx, float *lb, float *ub) {
 	Np = np;
 	Nx = nx;
 	LB = lb;
@@ -15,7 +15,7 @@ RealGen::RealGen(int np, int nx, vector<float> *lb, vector<float> *ub) {
 	}
 }
 
-RealGen::RealGen(int np, int nx, vector<float> *lb, vector<float> *ub, GAOptions opt) {
+RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) {
 	Np = np;
 	Nx = nx;
 	LB = lb;

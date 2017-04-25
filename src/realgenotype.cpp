@@ -39,28 +39,28 @@ double RealGenotype::distanceTo(RealGenotype &g) {
 void RealGenotype::uniformRandom()
 {
 	for (size_t i=0; i<gene.size(); i++) {
-		gene[i] = stat.uniformRand(LB->at(i), UB->at(i));
+		gene[i] = stat.uniformRand(LB[i], UB[i]);
 	}
 }
 
 void RealGenotype::uniformRandom(int i)
 {
-	gene[i] = stat.uniformRand(LB->at(i), UB->at(i));
+	gene[i] = stat.uniformRand(LB[i], UB[i]);
 }
 
 void RealGenotype::uniformLocalRandom(int i, float perc)
 {
-	float width = (UB->at(i) - LB->at(i))/ 2.0;
+	float width = (UB[i] - LB[i])/ 2.0;
 	float var = width*perc*stat.uniformRand();
 
 	if(stat.uniformRand() < 0.5) {
 		gene[i] = gene[i] - var;
-		if(gene[i] < LB->at(i))
-			gene[i] = LB->at(i);
+		if(gene[i] < LB[i])
+			gene[i] = LB[i];
 	} else {
 		gene[i] = gene[i] + var;
-		if(gene[i] > UB->at(i))
-			gene[i] = UB->at(i);
+		if(gene[i] > UB[i])
+			gene[i] = UB[i];
 	}
 }
 
