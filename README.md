@@ -23,14 +23,10 @@ double myFitnessFunction(RealGenotype &g, void *par) {
 }
 
 int main(int argc,  char** argv) {
-  vector<float> *LB = new vector<float>(),  // Lower bound of genes
-                *UB = new vector<float>();  // Upper bound of genes
-  LB->push_back(-5);
-  LB->push_back(-5);
-  UB->push_back(5);
-  UB->push_back(5);
+  float *LB = {-5.0, -5.0},  // Lower bound of genes
+        *UB = { 5.0,  5.0};  // Upper bound of genes
   
-  // Define RealGen(Number of population, size of genes = size of LB/UB, LB, UB)
+  // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
   RealGen ga(50, 2, LB, UB);
   ga.setFitnessFunction(myFitnessFunction, NULL);
   // Init population with uniform random
