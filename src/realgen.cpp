@@ -285,7 +285,7 @@ void RealGen::evolve() {
 		partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
 	}
 
-	population = newPopulation;
+	newPopulation.swap(population);
 	evolution++;
 }
 

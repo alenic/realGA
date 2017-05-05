@@ -5,7 +5,7 @@ NAME = realgen
 
 # Compiler
 CPP=g++
-CPPFLAGS=-fPIC
+CPPFLAGS=-fPIC -std=c++11
 
 ifeq ($(DEBUG), 1) 
 CPPFLAGS+= -g
