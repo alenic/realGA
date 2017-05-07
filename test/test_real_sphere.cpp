@@ -10,19 +10,22 @@ double real_sphere(RealGenotype &g, void *par) {
 }
 
 
-void test_real_sphere() {
+void test_real_sphere(GAOptions opt) {
+	cout << "================================"<<endl;
+	cout << "        Sphere benchmark" << endl;
+	cout << "================================"<<endl; 
+	
 	srand(time(NULL));
 	float LB[] = {-5.12, -5.12, -5.12, -5.12},
-		  UB[] = { 5.12,  5.12,  5.12,  5.12};
+				UB[] = { 5.12,  5.12,  5.12,  5.12};
 	RealGenotype exp_min(4);
 	exp_min.gene[0] = 0.0;
 	exp_min.gene[1] = 0.0;
 	exp_min.gene[2] = 0.0;
 	exp_min.gene[3] = 0.0;
 
-	GAOptions opt;
-	opt.selection.type = TOURNMENT_SELECTION;
 	RealGen ga(50, 4, LB, UB, opt);
+	ga.checkOptions();
 	// Options
 	ga.setFitnessFunction(real_sphere, NULL);
 	ga.initRandom();
@@ -32,6 +35,7 @@ void test_real_sphere() {
 	bool converged = false;
 	RealGenotype *best;
 	int N = 10000;
+	ga.setMaxGenerations(N);
 	clock_t startTime = clock(), endTime;
 	for (int i=0; i<N; i++) {
 		ga.evolve();
@@ -46,10 +50,6 @@ void test_real_sphere() {
 	endTime = clock();
 	if(!converged)
 		convergence = N;
-
-	cout << "================================"<<endl;
-	cout << "        Sphere benchmark" << endl;
-	cout << "================================"<<endl; 
 	//cout << ga.populationToString();
 	cout << "Convergence generation: " << convergence << endl;
 	cout << "Solution: "<< best->toString() << endl;

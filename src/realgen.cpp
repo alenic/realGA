@@ -1,5 +1,6 @@
 #include "realgen.h"
 
+// Constructors
 RealGen::RealGen(int np, int nx, float *lb, float *ub) {
 	Np = np;
 	Nx = nx;
@@ -13,23 +14,18 @@ RealGen::RealGen(int np, int nx, float *lb, float *ub) {
 		population[i].LB = lb;
 		population[i].UB = ub;
 	}
-}
-
-RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) {
-	Np = np;
-	Nx = nx;
-	LB = lb;
-	UB = ub;
-	if(Np != population.size()) {
-		population.resize(Np,Nx);
-		newPopulation.resize(Np,Nx);
+	// Initialize standars deviations or gaussian mutation
+	sigma = new float[nx];
+	for(int i=0; i<Nx; i++) {
+		sigma[i] = options.mutation.gaussianScale*(UB[i]-LB[i]);
 	}
-	for(int i=0; i<Np; i++) {
-		population[i].LB = lb;
-		population[i].UB = ub;
-	}
+	// Tournment indices array
 	tourIndex = NULL;
 
+	maxGenerations = 100*Nx;
+}
+
+RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) : RealGen(np, nx, lb, ub) {
 	setOptions(opt);
 
 	if(options.verbose) {
@@ -37,10 +33,12 @@ RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) {
 	}
 }
 
+// Destructor
 RealGen::~RealGen() {
 	if(tourIndex) {
 		delete []tourIndex;
 	}
+	delete [] sigma;
 }
 
 
@@ -119,15 +117,8 @@ void RealGen::checkOptions() {
 			
 		break;
 		case GAUSSIAN_MUTATION:
-			if (options.mutation.gaussianPerc >= 0.0 && options.mutation.gaussianPerc <= 1.0) {
-				cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianPerc = " << options.mutation.gaussianPerc << endl;
-			} else {
-				cerr << "ERROR: options.selection.gaussianPerc must be a number between 0.0 and 1.0" << endl;
-				exit(-1);
-			}
-		break;
-		case GAUSSIAN_SHRINK_MUTATION:
-			cout << "-> Mutation: GAUSSIAN_SHRINK_MUTATION : gaussianShrink = " << options.mutation.gaussianShrink << endl;
+			cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianScale = " << options.mutation.gaussianScale << endl;
+			cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianShrink = " << options.mutation.gaussianShrink << endl;
 		break;
 	}
 
@@ -140,7 +131,7 @@ void RealGen::checkOptions() {
 	cout << endl;
 }
 
-
+// ========================================= Setter ======================================
 void RealGen::setFitnessFunction(double (*f)(RealGenotype &, void *), void *par) {
 	fitnessFcn = f;
 	fitnessPar = par;
@@ -168,8 +159,15 @@ void RealGen::setElitismFactor(float value) {
 	}
 }
 
-int RealGen::getEvolution() {
-	return evolution;
+void RealGen::setMaxGenerations(int maxG) {
+	maxGenerations = maxG;
+}
+
+
+// ========================================= Getter ======================================
+
+int RealGen::getGeneration() {
+	return generation;
 }
 
 
@@ -219,7 +217,7 @@ int RealGen::iminFitness(){
 
 // ===================================== Init function =============================
 void RealGen::initRandom() {
-	evolution=0;
+	generation=0;
 	for(int i=0; i<Np; i++) {
 		population[i].uniformRandom();
 		population[i].fitness = fitnessFcn(population[i], fitnessPar);
@@ -230,7 +228,7 @@ void RealGen::initRandom() {
 }
 
 void RealGen::evaluateFitness() {
-	evolution=0;
+	generation=0;
 	for(int i=0; i<Np; i++) {
 		population[i].fitness = fitnessFcn(population[i], fitnessPar);
 	}
@@ -273,7 +271,15 @@ void RealGen::evolve() {
 		// Crossover
 		crossoverUniform(index1, index2, offspring);
 		// Mutation
-		uniformMutate(offspring, 0.1);
+		switch(options.mutation.type) {
+			case UNIFORM_MUTATION:
+				uniformMutate(offspring, options.mutation.uniformPerc);
+			break;
+			case GAUSSIAN_MUTATION:
+				gaussianLocalMutate(offspring);
+			break;
+		}
+		
 
 		offspring.fitness  = fitnessFcn(offspring, fitnessPar);
 
@@ -286,7 +292,7 @@ void RealGen::evolve() {
 	}
 
 	newPopulation.swap(population);
-	evolution++;
+	generation++;
 }
 
 
@@ -380,10 +386,11 @@ void RealGen::uniformMutate(RealGenotype &g, float perc) {
 	}
 }
 
-void RealGen::gaussianLocalMutate(RealGenotype &g, float stDev) {
+void RealGen::gaussianLocalMutate(RealGenotype &g) {
 	for (size_t i=0; i<Nx; i++) {
 		if(stat.uniformRand() < options.mutation.mutationRate) {
-			g.gaussianLocalRandom(i, stDev);
+			g.gaussianLocalRandom(i, sigma[i]);
+			sigma[i] = sigma[i]*(1.0 - generation/maxGenerations);
 		}
 	}
 }
@@ -400,7 +407,7 @@ void RealGen::setPopulationSize(int n) {
 
 string RealGen::populationToString() {
 	std::ostringstream os;
-	os << "============== Evolution " << evolution << " ===================" << endl;
+	os << "============== generation " << generation << " ===================" << endl;
 	for(int i=0; i<Np; i++) {
 		os << "[" << (i+1) << "] : "<< population[i].toString() << " -> Fitness " << population[i].fitness << endl;
 	}

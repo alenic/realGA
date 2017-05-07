@@ -64,12 +64,12 @@ void RealGenotype::uniformLocalRandom(int i, float perc)
 	}
 }
 
-void RealGenotype::gaussianLocalRandom(int i, float stDev) {
-	gene[i] += stat.gaussianRand(0.0,stDev);
-	if(gene[i] > 1.0)
-		gene[i] = 1.0;
-	if(gene[i] < 0.0)
-		gene[i] = 0.0;
+void RealGenotype::gaussianLocalRandom(int i, float sigma) {
+	gene[i] += stat.gaussianRand(0.0, sigma);
+	if(gene[i] < LB[i])
+		gene[i] = LB[i];
+	if(gene[i] > UB[i])
+		gene[i] = UB[i];
 }
 
 RealGenotype & RealGenotype::operator= ( const RealGenotype &c ) {

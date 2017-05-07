@@ -15,7 +15,7 @@ using namespace std;
 
 typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=0, FIXED_CROSSOVER, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
-typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION, GAUSSIAN_SHRINK_MUTATION} MutationType;
+typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION} MutationType;
 
 struct SelectionOpt {
 	SelectionType type;
@@ -33,7 +33,7 @@ struct MutationOpt {
 	MutationType type;
 	float uniformPerc;
 	float mutationRate;
-	float gaussianPerc;
+	float gaussianScale;
 	float gaussianShrink;
 }; 
 
@@ -53,9 +53,11 @@ struct GAOptions {
 		crossover.fixedIndex = 0;
 
 		mutation.type = UNIFORM_MUTATION;
-		mutation.uniformPerc = 0.3;
+		mutation.uniformPerc = 0.25;
+
 		mutation.mutationRate = 0.1;
-		mutation.gaussianPerc = 0.3;
+
+		mutation.gaussianScale = 1.0;
 		mutation.gaussianShrink = 1.0;
 
 		verbose = false;
@@ -73,11 +75,14 @@ private:
 	GAOptions options;
 	double (*fitnessFcn)(RealGenotype &, void *);
 	void *fitnessPar;
-	int evolution;
+	int generation;
 	Stat stat;
+
+	int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
 
 	double sumFitnessR; // Only for roulette wheel selection
 	int *tourIndex; // Only for tournment selection
+	float *sigma;
 public:
 	RealGen(int np, int nx, float *lb, float *ub);
 	RealGen(int np, int nx, float *lb, float *ub, GAOptions);
@@ -89,11 +94,12 @@ public:
 	void setElitismFactor(float);
 	void setPopulationSize(int);
 	void setOptions(GAOptions opt);
+	void setMaxGenerations(int);
 
 	// getter
 	RealGenotype *getBestChromosome();
 	int iminFitness();
-	int getEvolution();
+	int getGeneration();
 	double getMeanFitness();
 	double getBestScore();
 	string populationToString();
@@ -114,7 +120,7 @@ public:
 	void crossoverFixed(int index1, int index2, RealGenotype &c, int n);
 	//===================================== Mutation ======================
 	void uniformMutate(RealGenotype &g, float perc);
-	void gaussianLocalMutate(RealGenotype &g, float stDev);
+	void gaussianLocalMutate(RealGenotype &);
 	// ====================================================================
 	void evolve();
 };

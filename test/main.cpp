@@ -1,13 +1,20 @@
 #include "testcommon.h"
 
 void test_uniformDist();
-void test_real_sphere();
-void test_rosenbrock();
+void test_real_sphere(GAOptions);
+void test_rosenbrock(GAOptions);
 
 
 int main() {
+	GAOptions opt;
 	test_uniformDist();
-	test_real_sphere();
-	test_rosenbrock();
+	opt.mutation.type = UNIFORM_MUTATION;
+	test_real_sphere(opt);
+	opt.mutation.type = GAUSSIAN_MUTATION;
+	test_real_sphere(opt);
+	opt.mutation.type = UNIFORM_MUTATION;
+	test_rosenbrock(opt);
+	opt.mutation.type = GAUSSIAN_MUTATION;
+	test_rosenbrock(opt);
 	return 0;
 }

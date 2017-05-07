@@ -7,20 +7,20 @@ double rosenbrock(RealGenotype &g, void *par) {
 }
 
 
-void test_rosenbrock() {
+void test_rosenbrock(GAOptions opt) {
+	cout << "================================"<<endl;
+	cout << "        Rosenbrock benchmark" << endl;
+	cout << "================================"<<endl; 
 	srand(time(NULL));
 	float LB[] = {-2048.0, -2048.0},
-		  UB[] = { 2048.0,  2048.0};
+				UB[] = { 2048.0,  2048.0};
 
 	RealGenotype exp_min(2);
 	exp_min.gene[0] = 1.0;
 	exp_min.gene[1] = 1.0;
 
-	GAOptions opt;
-	//opt.selection.type = TOURNMENT_SELECTION;
 	RealGen ga(200, 2, LB, UB, opt);
-
-	
+	ga.checkOptions();
 	// Options
 	ga.setFitnessFunction(rosenbrock, NULL);
 	//ga.checkOptions();
@@ -32,6 +32,7 @@ void test_rosenbrock() {
 	bool converged = false;
 	RealGenotype *best;
 	int N = 50000;
+	ga.setMaxGenerations(N);
 	clock_t startTime = clock(), endTime;
 	for (int i=0; i<N; i++) {
 		ga.evolve();
@@ -46,10 +47,6 @@ void test_rosenbrock() {
 	endTime = clock();
 	if(!converged)
 		convergence = N;
-
-	cout << "================================"<<endl;
-	cout << "        Rosenbrock benchmark" << endl;
-	cout << "================================"<<endl; 
 	//cout << ga.populationToString();
 	cout << "Convergence generation: " << convergence << endl;
 	cout << "Solution: "<< best->toString() << endl;
