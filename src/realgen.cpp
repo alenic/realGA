@@ -141,6 +141,16 @@ void RealGen::setSorting(bool value) {
 	options.selection.sorting = value;
 }
 
+
+void RealGen::setPopulationSize(int n) {
+	Np = n;
+	population.clear();
+	newPopulation.clear();
+	if(Np != population.size()) {
+		population.resize(Np,Nx);
+	}
+}
+
 void RealGen::setMutationRate(float value) {
 	if(value >= 0 && value <= 1) {
 		options.mutation.mutationRate = value;
@@ -214,6 +224,16 @@ int RealGen::iminFitness(){
 	}
 	return iminf;
 }
+
+string RealGen::populationToString() {
+	std::ostringstream os;
+	os << "============== generation " << generation << " ===================" << endl;
+	for(int i=0; i<Np; i++) {
+		os << "[" << (i+1) << "] : "<< population[i].toString() << " -> Fitness " << population[i].fitness << endl;
+	}
+	return os.str();
+}
+
 
 // ===================================== Init function =============================
 void RealGen::initRandom() {
@@ -378,10 +398,7 @@ void RealGen::crossoverFixed(int index1, int index2, RealGenotype &c, int n) {
 void RealGen::uniformMutate(RealGenotype &g, float perc) {
 	for (size_t i=0; i<Nx; i++) {
 		if(stat.uniformRand() < options.mutation.mutationRate) {
-			if(perc < 1.0)
-				g.uniformLocalRandom(i, perc);
-			else
-				g.uniformRandom(i);
+			g.uniformLocalRandom(i, perc);
 		}
 	}
 }
@@ -389,27 +406,8 @@ void RealGen::uniformMutate(RealGenotype &g, float perc) {
 void RealGen::gaussianLocalMutate(RealGenotype &g) {
 	for (size_t i=0; i<Nx; i++) {
 		if(stat.uniformRand() < options.mutation.mutationRate) {
+			sigma[i] = sigma[i]*(1.0 - (float)generation/(float)maxGenerations);
 			g.gaussianLocalRandom(i, sigma[i]);
-			sigma[i] = sigma[i]*(1.0 - generation/maxGenerations);
 		}
 	}
-}
-
-
-void RealGen::setPopulationSize(int n) {
-	Np = n;
-	population.clear();
-	newPopulation.clear();
-	if(Np != population.size()) {
-		population.resize(Np,Nx);
-	}
-}
-
-string RealGen::populationToString() {
-	std::ostringstream os;
-	os << "============== generation " << generation << " ===================" << endl;
-	for(int i=0; i<Np; i++) {
-		os << "[" << (i+1) << "] : "<< population[i].toString() << " -> Fitness " << population[i].fitness << endl;
-	}
-	return os.str();
 }

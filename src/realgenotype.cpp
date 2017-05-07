@@ -65,7 +65,9 @@ void RealGenotype::uniformLocalRandom(int i, float perc)
 }
 
 void RealGenotype::gaussianLocalRandom(int i, float sigma) {
-	gene[i] += stat.gaussianRand(0.0, sigma);
+	float r = stat.gaussianRand(0.0, sigma);
+	//cout << r << " ";
+	gene[i] += r;
 	if(gene[i] < LB[i])
 		gene[i] = LB[i];
 	if(gene[i] > UB[i])

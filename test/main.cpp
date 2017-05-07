@@ -7,6 +7,7 @@ void test_rosenbrock(GAOptions);
 
 int main() {
 	GAOptions opt;
+	opt.mutation.gaussianScale = 1;
 	test_uniformDist();
 	opt.mutation.type = UNIFORM_MUTATION;
 	test_real_sphere(opt);
