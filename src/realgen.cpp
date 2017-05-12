@@ -53,7 +53,7 @@ void RealGen::setOptions(GAOptions opt) {
 }
 
 void RealGen::checkOptions() {
-	cout << "\n-- checkOptions --" << endl;
+	cout << "------ checkOptions ------" << endl << endl;
 	switch (options.selection.type) {
 		case ROULETTE_WHEEL_SELECTION:
 			cout << "-> Selection: ROULETTE_WHEEL_SELECTION" << endl;

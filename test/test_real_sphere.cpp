@@ -10,49 +10,21 @@ double real_sphere(RealGenotype &g, void *par) {
 }
 
 
-void test_real_sphere(GAOptions opt) {
+void test_real_sphere(GAOptions opt, bool &converged, int &iter, double &bestFitness) {
 	cout << "================================"<<endl;
 	cout << "        Sphere benchmark" << endl;
 	cout << "================================"<<endl; 
 	
-	srand(time(NULL));
 	float LB[] = {-5.12, -5.12, -5.12, -5.12},
 				UB[] = { 5.12,  5.12,  5.12,  5.12};
-	RealGenotype exp_min(4);
-	exp_min.gene[0] = 0.0;
-	exp_min.gene[1] = 0.0;
-	exp_min.gene[2] = 0.0;
-	exp_min.gene[3] = 0.0;
+	RealGenotype expMin(4);
+	expMin.gene[0] = 0.0;
+	expMin.gene[1] = 0.0;
+	expMin.gene[2] = 0.0;
+	expMin.gene[3] = 0.0;
 
 	RealGen ga(50, 4, LB, UB, opt);
-	ga.checkOptions();
-	// Options
 	ga.setFitnessFunction(real_sphere, NULL);
-	ga.initRandom();
-
-	int generation = 0;
-	int convergence;
-	bool converged = false;
-	RealGenotype *best;
-	int N = 10000;
-	ga.setMaxGenerations(N);
-	clock_t startTime = clock(), endTime;
-	for (int i=0; i<N; i++) {
-		ga.evolve();
-		generation++;
-		best = ga.getBestChromosome();
-
-		if(best->distanceTo(exp_min) < 1e-4 && !converged) {
-			convergence = generation;
-			converged = true;
-		}
-	}
-	endTime = clock();
-	if(!converged)
-		convergence = N;
-	//cout << ga.populationToString();
-	cout << "Convergence generation: " << convergence << endl;
-	cout << "Solution: "<< best->toString() << endl;
-	cout << "Fitness = " << best->fitness << endl;
-	cout << "Time for " << N << " iterations: " << float( endTime - startTime ) / (float)CLOCKS_PER_SEC<< " s." << endl;
+	
+	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness);
 }

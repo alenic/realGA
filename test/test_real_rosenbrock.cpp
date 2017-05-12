@@ -6,50 +6,20 @@ double rosenbrock(RealGenotype &g, void *par) {
 	return 100*dx1*dx1+dx2*dx2;
 }
 
-
-void test_rosenbrock(GAOptions opt) {
+void test_rosenbrock(GAOptions opt, bool &converged, int &iter, double &bestFitness) {
 	cout << "================================"<<endl;
 	cout << "        Rosenbrock benchmark" << endl;
 	cout << "================================"<<endl; 
-	srand(time(NULL));
+
 	float LB[] = {-2048.0, -2048.0},
 				UB[] = { 2048.0,  2048.0};
 
-	RealGenotype exp_min(2);
-	exp_min.gene[0] = 1.0;
-	exp_min.gene[1] = 1.0;
+	RealGenotype expMin(2);
+	expMin.gene[0] = 1.0;
+	expMin.gene[1] = 1.0;
 
 	RealGen ga(200, 2, LB, UB, opt);
-	ga.checkOptions();
-	// Options
 	ga.setFitnessFunction(rosenbrock, NULL);
-	//ga.checkOptions();
 
-	ga.initRandom();
-
-	int generation = 0;
-	int convergence;
-	bool converged = false;
-	RealGenotype *best;
-	int N = 50000;
-	ga.setMaxGenerations(N);
-	clock_t startTime = clock(), endTime;
-	for (int i=0; i<N; i++) {
-		ga.evolve();
-		generation++;
-		best = ga.getBestChromosome();
-
-		if(best->distanceTo(exp_min) < 1e-4 && !converged) {
-			convergence = generation;
-			converged = true;
-		}
-	}
-	endTime = clock();
-	if(!converged)
-		convergence = N;
-	//cout << ga.populationToString();
-	cout << "Convergence generation: " << convergence << endl;
-	cout << "Solution: "<< best->toString() << endl;
-	cout << "Fitness = " << best->fitness << endl;
-	cout << "Time for " << N << " iterations: " << float( endTime - startTime ) / (float)CLOCKS_PER_SEC<< " s." << endl;
+	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness);
 }

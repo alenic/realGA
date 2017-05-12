@@ -1,21 +1,20 @@
 #include "testcommon.h"
-
-void test_uniformDist();
-void test_real_sphere(GAOptions);
-void test_rosenbrock(GAOptions);
-
+#define NTESTFUNC 2
 
 int main() {
+	bool converged[NTESTFUNC];
+	int iter[NTESTFUNC];
+	double bestFitness[NTESTFUNC];
 	GAOptions opt;
-	opt.mutation.gaussianScale = 1;
+
+	srand(time(NULL));
 	test_uniformDist();
-	opt.mutation.type = UNIFORM_MUTATION;
-	test_real_sphere(opt);
+
+	test_real_sphere(opt, converged[0], iter[0], bestFitness[0]);
+	test_rosenbrock(opt, converged[1], iter[1], bestFitness[1]);
+
 	opt.mutation.type = GAUSSIAN_MUTATION;
-	test_real_sphere(opt);
-	opt.mutation.type = UNIFORM_MUTATION;
-	test_rosenbrock(opt);
-	opt.mutation.type = GAUSSIAN_MUTATION;
-	test_rosenbrock(opt);
+	test_real_sphere(opt, converged[0], iter[0], bestFitness[0]);
+	test_rosenbrock(opt, converged[1], iter[1], bestFitness[1]);
 	return 0;
 }
