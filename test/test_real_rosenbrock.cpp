@@ -6,7 +6,7 @@ double rosenbrock(RealGenotype &g, void *par) {
 	return 100*dx1*dx1+dx2*dx2;
 }
 
-void test_rosenbrock(GAOptions opt, bool &converged, int &iter, double &bestFitness) {
+void test_rosenbrock(GAOptions opt, bool &converged, int &iter, double &bestFitness, float &exTime) {
 	cout << "================================"<<endl;
 	cout << "        Rosenbrock benchmark" << endl;
 	cout << "================================"<<endl; 
@@ -21,5 +21,5 @@ void test_rosenbrock(GAOptions opt, bool &converged, int &iter, double &bestFitn
 	RealGen ga(200, 2, LB, UB, opt);
 	ga.setFitnessFunction(rosenbrock, NULL);
 
-	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness);
+	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness, exTime);
 }

@@ -10,7 +10,7 @@ double real_sphere(RealGenotype &g, void *par) {
 }
 
 
-void test_real_sphere(GAOptions opt, bool &converged, int &iter, double &bestFitness) {
+void test_real_sphere(GAOptions opt, bool &converged, int &iter, double &bestFitness, float &exTime) {
 	cout << "================================"<<endl;
 	cout << "        Sphere benchmark" << endl;
 	cout << "================================"<<endl; 
@@ -26,5 +26,5 @@ void test_real_sphere(GAOptions opt, bool &converged, int &iter, double &bestFit
 	RealGen ga(50, 4, LB, UB, opt);
 	ga.setFitnessFunction(real_sphere, NULL);
 	
-	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness);
+	testRealGen(ga, 50000, 1e-4, expMin, converged, iter, bestFitness, exTime);
 }

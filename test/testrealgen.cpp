@@ -1,6 +1,6 @@
 #include "testcommon.h"
 
-void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, bool &converged, int &iter, double &bestFitness) {
+void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, bool &converged, int &iter, double &bestFitness, float &exTime) {
 	int generation = 0;
 	RealGenotype *best;
 
@@ -24,7 +24,10 @@ void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, bool
 		iter = maxIter;
 
 	bestFitness = best->fitness;
+	exTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
+	
 	cout << "Fitness"<< best->toString() << " = " << best->fitness << endl;
 	cout << "Convergence: " << iter << endl;
-	cout << "Time for " << maxIter << " iterations: " << float( endTime - startTime ) / (float)CLOCKS_PER_SEC<< " s." << endl;
+	cout << "Time for " << maxIter << " iterations: " << exTime << " s." << endl;
+	
 }

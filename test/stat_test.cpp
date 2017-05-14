@@ -1,5 +1,4 @@
 #include "testcommon.h"
-#include <math.h>
 
 float uniformChiSquared(int *a, int n, int N) {
 	// n: number of intervals 
