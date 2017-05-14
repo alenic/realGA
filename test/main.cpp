@@ -9,6 +9,7 @@ int main() {
 
 	srand(time(NULL));
 	test_uniformDist();
+	test_gaussianDist();
 
 	test_real_sphere(opt, converged[0], iter[0], bestFitness[0]);
 	test_rosenbrock(opt, converged[1], iter[1], bestFitness[1]);

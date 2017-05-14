@@ -24,10 +24,18 @@ void test_uniformDist() {
 	}
 	float chi = uniformChiSquared(a, 10, N);
 	float upper = 2*sqrt(10);
-	cout << "Chi squared value: " << chi << " <= 2*sqrt(n) = " << upper << " ? ";
+	cout << "Chi squared value: " << chi << " <= 2*sqrt(10) = " << upper << " ? ";
 	if(chi <= upper) {
 		cout << "True" << endl;
 	} else {
 		cout << "Flase" << endl;
+	}
+}
+
+void test_gaussianDist() {
+	Stat stat;
+	int N=1000;
+	for(int i=0; i<N; i++) {
+		//cout << stat.gaussianRand(0,1) << ",";
 	}
 }
