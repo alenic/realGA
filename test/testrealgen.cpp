@@ -1,33 +1,36 @@
 #include "testcommon.h"
 
-void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, bool &converged, int &iter, double &bestFitness, float &exTime) {
+void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GAResults &results) {
 	int generation = 0;
-	RealGenotype *best;
 
-	converged = false;
-	ga.checkOptions();
+	results.converged = false;
+	//ga.checkOptions();
 	ga.initRandom();
 	ga.setMaxGenerations(maxIter);
 	clock_t startTime = clock(), endTime;
 	for (int i=0; i<maxIter; i++) {
 		ga.evolve();
 		generation++;
-		best = ga.getBestChromosome();
+		results.best = ga.getBestChromosome();
 
-		if(best->distanceTo(expMin) < 1e-4 && !converged) {
-			iter = generation;
-			converged = true;
+		if(results.best->distanceTo(expMin) < 1e-4 && !results.converged) {
+			results.iter = generation;
+			results.converged = true;
+			results.exTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
 		}
 	}
 	endTime = clock();
-	if(!converged)
-		iter = maxIter;
+	results.bestFitness = results.best->fitness;
+	results.maxTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
 
-	bestFitness = best->fitness;
-	exTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
-	
+	if(!results.converged) {
+		results.iter = maxIter;
+		results.exTime = results.maxTime;
+	}
+
+	/*
 	cout << "Fitness"<< best->toString() << " = " << best->fitness << endl;
 	cout << "Convergence: " << iter << endl;
 	cout << "Time for " << maxIter << " iterations: " << exTime << " s." << endl;
-	
+	*/
 }

@@ -6,16 +6,28 @@
 #include <vector>
 #include <time.h>
 #include <math.h>
+#include <cstring>
 
 using namespace std;
 
+struct GAResults {
+	char name[40];
+	int maxIter;
+	int iter;
+	bool converged;
+	float eps;
+	double bestFitness;
+	float maxTime;
+	float exTime;
+	RealGenotype *best;
+};
 
-void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, bool &converged, int &iter, double &bestFitness, float &exTime);
+void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GAResults &results);
 
 void test_uniformDist();
 void test_gaussianDist();
-void test_real_sphere(GAOptions opt, bool &converged, int &iter, double &bestFitness, float &exTime);
-void test_rosenbrock(GAOptions opt, bool &converged, int &iter, double &bestFitness, float &exTime);
+void test_real_sphere(GAOptions opt, GAResults &results);
+void test_rosenbrock(GAOptions opt, GAResults &results);
 
 
 #endif
