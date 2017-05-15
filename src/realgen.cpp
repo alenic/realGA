@@ -234,27 +234,6 @@ string RealGen::populationToString() {
 	return os.str();
 }
 
-
-// ===================================== Init function =============================
-void RealGen::initRandom() {
-	generation=0;
-	for(int i=0; i<Np; i++) {
-		population[i].uniformRandom();
-		population[i].fitness = fitnessFcn(population[i], fitnessPar);
-	}
-	if(options.selection.sorting) {
-		sort(population.begin(), population.end());
-	}
-}
-
-void RealGen::evaluateFitness() {
-	generation=0;
-	for(int i=0; i<Np; i++) {
-		population[i].fitness = fitnessFcn(population[i], fitnessPar);
-	}
-}
-
-
 void RealGen::evolve() {
 	RealGenotype offspring(Nx);
 	offspring.LB = LB;
@@ -311,11 +290,35 @@ void RealGen::evolve() {
 		partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
 	}
 
+
+/*
+	cout << generation << " : sigma : ";
+	for(int i=0; i<Nx; i++)
+		cout << sigma[i] << " ";
+	cout << endl;
+*/
 	newPopulation.swap(population);
 	generation++;
 }
 
+// ===================================== Init function =============================
+void RealGen::initRandom() {
+	generation=0;
+	for(int i=0; i<Np; i++) {
+		population[i].uniformRandom();
+		population[i].fitness = fitnessFcn(population[i], fitnessPar);
+	}
+	if(options.selection.sorting) {
+		sort(population.begin(), population.end());
+	}
+}
 
+void RealGen::evaluateFitness() {
+	generation=0;
+	for(int i=0; i<Np; i++) {
+		population[i].fitness = fitnessFcn(population[i], fitnessPar);
+	}
+}
 
 // ================= Selection =================================
 void RealGen::rouletteWheelSelection(int &index1, int &index2) {
@@ -406,7 +409,8 @@ void RealGen::uniformMutate(RealGenotype &g, float perc) {
 void RealGen::gaussianLocalMutate(RealGenotype &g) {
 	for (size_t i=0; i<Nx; i++) {
 		if(stat.uniformRand() < options.mutation.mutationRate) {
-			sigma[i] = sigma[i]*(1.0 - (float)generation/(float)maxGenerations);
+			sigma[i] = sigma[i]*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations));
+			if(sigma[i] < 1e-5) sigma[i] = 1e-1;
 			g.gaussianLocalRandom(i, sigma[i]);
 		}
 	}

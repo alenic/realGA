@@ -12,17 +12,19 @@ void test_rosenbrock(GAOptions opt, GAResults &results) {
 	cout << "        Rosenbrock benchmark" << endl;
 	cout << "================================"<<endl; 
 	*/
-	float LB[] = {-2048.0, -2048.0},
-				UB[] = { 2048.0,  2048.0};
+	float LB[] = {-48.0, -48.0},
+				UB[] = { 48.0,  48.0};
 
 	RealGenotype expMin(2);
 	expMin.gene[0] = 1.0;
 	expMin.gene[1] = 1.0;
 
-	RealGen ga(200, 2, LB, UB, opt);
-	ga.setFitnessFunction(rosenbrock, NULL);
-
 	strcpy(results.name, "Rosenbrock");
 	results.maxIter = 50000;
+	results.Np = 200;
+	
+	RealGen ga(results.Np, 2, LB, UB, opt);
+	ga.setFitnessFunction(rosenbrock, NULL);
+
 	testRealGen(ga, results.maxIter, 1e-4, expMin, results);
 }

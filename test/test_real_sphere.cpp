@@ -24,11 +24,12 @@ void test_real_sphere(GAOptions opt, GAResults &results) {
 	expMin.gene[2] = 0.0;
 	expMin.gene[3] = 0.0;
 
-	RealGen ga(50, 4, LB, UB, opt);
-	ga.setFitnessFunction(real_sphere, NULL);
-	
 	strcpy(results.name, "Sphere");
 	results.maxIter = 50000;
+	results.Np = 50;
 	
+	RealGen ga(results.Np, 4, LB, UB, opt);
+	ga.setFitnessFunction(real_sphere, NULL);
+
 	testRealGen(ga, results.maxIter, 1e-4, expMin, results);
 }

@@ -12,6 +12,7 @@ using namespace std;
 
 struct GAResults {
 	char name[40];
+	int Np;
 	int maxIter;
 	int iter;
 	bool converged;
@@ -25,7 +26,7 @@ struct GAResults {
 void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GAResults &results);
 
 void test_uniformDist();
-void test_gaussianDist();
+void test_gaussianDist(int mean, int stDev);
 void test_real_sphere(GAOptions opt, GAResults &results);
 void test_rosenbrock(GAOptions opt, GAResults &results);
 

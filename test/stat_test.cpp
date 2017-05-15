@@ -27,14 +27,24 @@ void test_uniformDist() {
 	if(chi <= upper) {
 		cout << "True" << endl;
 	} else {
-		cout << "Flase" << endl;
+		cout << "False" << endl;
 	}
 }
 
-void test_gaussianDist() {
+void test_gaussianDist(int mean, int stDev) {
 	Stat stat;
-	int N=1000;
-	for(int i=0; i<N; i++) {
-		//cout << stat.gaussianRand(0,1) << ",";
+	const int nrolls=10000;  // number of experiments
+	const int nstars=100;    // maximum number of stars to distribute
+
+	int p[10]={};
+	for (int i=0; i<nrolls; ++i) {
+		double number = stat.gaussianRand(mean, stDev);
+		if ((number>=0.0)&&(number<10.0)) ++p[int(number)];
 	}
+	cout << "normal_distribution ("<< mean << "," << stDev << "):" << endl;
+	for (int i=0; i<10; ++i) {
+		cout << i << "-" << (i+1) << ": ";
+		cout << string(p[i]*nstars/nrolls,'*') << endl;
+	}
+
 }

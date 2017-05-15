@@ -9,7 +9,7 @@ int main() {
 
 	srand(time(NULL));
 	test_uniformDist();
-	test_gaussianDist();
+	test_gaussianDist(5.0, 2.0);
 
 	test_real_sphere(opt, results[0]);
 	test_rosenbrock(opt, results[1]);
