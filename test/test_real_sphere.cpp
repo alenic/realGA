@@ -17,7 +17,7 @@ void test_real_sphere(GAOptions opt, GAResults &results) {
 	cout << "================================"<<endl; 
 	*/
 	float LB[] = {-5.12, -5.12, -5.12, -5.12},
-				UB[] = { 5.12,  5.12,  5.12,  5.12};
+		  UB[] = { 5.12,  5.12,  5.12,  5.12};
 	RealGenotype expMin(4);
 	expMin.gene[0] = 0.0;
 	expMin.gene[1] = 0.0;

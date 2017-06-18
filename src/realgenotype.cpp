@@ -28,6 +28,12 @@ string RealGenotype::toString() {
 	return os.str();
 }
 
+void RealGenotype::bound(float *lb, float *ub) {
+	for(int i=0; i<gene.size(); i++) {
+		gene[i] = gene[i]*(ub[i] - lb[i]) + lb[i];
+	}
+}
+
 double RealGenotype::distanceTo(RealGenotype &g) {
 	double sse = 0.0;
 	for(size_t i=0; i<gene.size(); i++) {
@@ -41,44 +47,58 @@ double RealGenotype::distanceTo(RealGenotype &g) {
 void RealGenotype::uniformRandom()
 {
 	for (size_t i=0; i<gene.size(); i++) {
-		gene[i] = stat.uniformRand(LB[i], UB[i]);
+		gene[i] = stat.uniformRand();
 	}
 }
 
 void RealGenotype::uniformRandom(int i)
 {
-	gene[i] = stat.uniformRand(LB[i], UB[i]);
+	if(i >= gene.size()){
+		cerr << "ERROR: RealGenotype::uniformRandom(int i) " << endl;
+		exit(-1);
+	}
+	gene[i] = stat.uniformRand();
 }
 
 void RealGenotype::uniformLocalRandom(int i, float perc)
 {
-	float width = (UB[i] - LB[i])/ 2.0;
+	if(i >= gene.size()){
+		cerr << "ERROR: RealGenotype::uniformLocalRandom(int i, float perc) " << endl;
+		exit(-1);
+	}
+	float width = 0.5;
 	float var = width*perc*stat.uniformRand();
 
 	if(stat.uniformRand() < 0.5) {
 		gene[i] = gene[i] - var;
-		if(gene[i] < LB[i])
-			gene[i] = LB[i];
+		if(gene[i] < 0.0)
+			gene[i] = 0.0;
 	} else {
 		gene[i] = gene[i] + var;
-		if(gene[i] > UB[i])
-			gene[i] = UB[i];
+		if(gene[i] > 1.0)
+			gene[i] = 1.0;
 	}
 }
 
 void RealGenotype::gaussianLocalRandom(int i, float sigma) {
+	if(i >= gene.size()){
+		cerr << "ERROR: RealGenotype::gaussianLocalRandom(int i, float sigma) " << endl;
+		exit(-1);
+	}
+
 	float r = stat.gaussianRand(0.0, sigma);
 	//cout << r << " ";
 	gene[i] += r;
-	if(gene[i] < LB[i])
-		gene[i] = LB[i];
-	if(gene[i] > UB[i])
-		gene[i] = UB[i];
+	if(gene[i] < 0.0)
+		gene[i] = 0.0;
+	if(gene[i] > 1.0)
+		gene[i] = 1.0;
 }
 
 RealGenotype & RealGenotype::operator= ( const RealGenotype &c ) {
 	gene = c.gene;
 	fitness = c.fitness;
+	stat = c.stat;
 	return *this;
 }
 

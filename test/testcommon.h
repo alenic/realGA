@@ -20,7 +20,7 @@ struct GAResults {
 	double bestFitness;
 	float maxTime;
 	float exTime;
-	RealGenotype *best;
+	RealGenotype best;
 };
 
 void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GAResults &results);

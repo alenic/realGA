@@ -13,8 +13,6 @@ class RealGenotype {
 public:
 	vector<float> gene;
 	double fitness;
-	float *LB;
-	float *UB;
 	Stat stat;
 
 	RealGenotype();
@@ -28,6 +26,8 @@ public:
 	void uniformRandom(int);
 	void uniformLocalRandom(int, float);
 	void gaussianLocalRandom(int, float);
+
+	void bound(float *, float *);
 
 	double distanceTo(RealGenotype &);
 

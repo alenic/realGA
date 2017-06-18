@@ -10,14 +10,10 @@ RealGen::RealGen(int np, int nx, float *lb, float *ub) {
 		population.resize(Np,Nx);
 		newPopulation.resize(Np,Nx);
 	}
-	for(int i=0; i<Np; i++) {
-		population[i].LB = lb;
-		population[i].UB = ub;
-	}
 	// Initialize standars deviations or gaussian mutation
 	sigma = new float[nx];
 	for(int i=0; i<Nx; i++) {
-		sigma[i] = options.mutation.gaussianScale*(UB[i]-LB[i]);
+		sigma[i] = options.mutation.gaussianScale;
 	}
 	// Tournment indices array
 	tourIndex = NULL;
@@ -181,6 +177,12 @@ int RealGen::getGeneration() {
 }
 
 
+double RealGen::evaluateFitness(RealGenotype &x) {
+	RealGenotype x_scaled(x);
+	x_scaled.bound(LB, UB);
+	return fitnessFcn(x_scaled, fitnessPar);
+}
+
 double RealGen::getMeanFitness() {
 	double meanF = 0.0;
 	for(size_t i=0; i<Np; i++) {
@@ -189,10 +191,16 @@ double RealGen::getMeanFitness() {
 	return meanF;
 }
 
-RealGenotype *RealGen::getBestChromosome() {
-	if(options.selection.sorting)
-		return &population[0];
-	return &population[iminFitness()];
+RealGenotype RealGen::getBestChromosome() {
+	RealGenotype best;
+	if(options.selection.sorting) {
+		best = population[0];
+		best.bound(LB, UB);
+		return best;
+	}
+	best = population[iminFitness()];
+	best.bound(LB, UB);
+	return population[iminFitness()];
 }
 
 double RealGen::getBestScore() {
@@ -227,17 +235,18 @@ int RealGen::iminFitness(){
 
 string RealGen::populationToString() {
 	std::ostringstream os;
+	RealGenotype x_scaled;
 	os << "============== generation " << generation << " ===================" << endl;
 	for(int i=0; i<Np; i++) {
-		os << "[" << (i+1) << "] : "<< population[i].toString() << " -> Fitness " << population[i].fitness << endl;
+		x_scaled = population[i];
+		x_scaled.bound(LB, UB);
+		os << "[" << (i+1) << "] : "<< x_scaled.toString() << " -> Fitness " << x_scaled.fitness << endl;
 	}
 	return os.str();
 }
 
 void RealGen::evolve() {
 	RealGenotype offspring(Nx);
-	offspring.LB = LB;
-	offspring.UB = UB;
 
 	int index1, index2;
 	size_t k=0;
@@ -280,7 +289,7 @@ void RealGen::evolve() {
 		}
 		
 
-		offspring.fitness  = fitnessFcn(offspring, fitnessPar);
+		offspring.fitness  = evaluateFitness(offspring);
 
 		newPopulation[k] = offspring;
 		++k;
@@ -306,17 +315,20 @@ void RealGen::initRandom() {
 	generation=0;
 	for(int i=0; i<Np; i++) {
 		population[i].uniformRandom();
-		population[i].fitness = fitnessFcn(population[i], fitnessPar);
+		population[i].fitness = evaluateFitness(population[i]);
 	}
 	if(options.selection.sorting) {
 		sort(population.begin(), population.end());
 	}
 }
 
-void RealGen::evaluateFitness() {
+void RealGen::evaluatePopulationFitness() {
 	generation=0;
 	for(int i=0; i<Np; i++) {
-		population[i].fitness = fitnessFcn(population[i], fitnessPar);
+		population[i].fitness = evaluateFitness(population[i]);
+	}
+	if(options.selection.sorting) {
+		partial_sort(population.begin(), population.begin()+int(options.selection.elitismFactor*Np), population.end());
 	}
 }
 

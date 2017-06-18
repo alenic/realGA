@@ -13,21 +13,20 @@ void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GARe
 		generation++;
 		results.best = ga.getBestChromosome();
 
-		if(results.best->distanceTo(expMin) < 1e-4 && !results.converged) {
+		if(results.best.distanceTo(expMin) < 1e-4 && !results.converged) {
 			results.iter = generation;
 			results.converged = true;
 			results.exTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
 		}
 	}
 	endTime = clock();
-	results.bestFitness = results.best->fitness;
+	results.bestFitness = results.best.fitness;
 	results.maxTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
-
+	
 	if(!results.converged) {
 		results.iter = maxIter;
 		results.exTime = results.maxTime;
 	}
-
 	/*
 	cout << "Fitness"<< best->toString() << " = " << best->fitness << endl;
 	cout << "Convergence: " << iter << endl;

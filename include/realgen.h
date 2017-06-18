@@ -83,6 +83,7 @@ private:
 	double sumFitnessR; // Only for roulette wheel selection
 	int *tourIndex; // Only for tournment selection
 	float *sigma;
+
 public:
 	RealGen(int np, int nx, float *lb, float *ub);
 	RealGen(int np, int nx, float *lb, float *ub, GAOptions);
@@ -97,9 +98,10 @@ public:
 	void setMaxGenerations(int);
 
 	// getter
-	RealGenotype *getBestChromosome();
+	RealGenotype getBestChromosome();
 	int iminFitness();
 	int getGeneration();
+	double evaluateFitness(RealGenotype &);
 	double getMeanFitness();
 	double getBestScore();
 	string populationToString();
@@ -108,7 +110,7 @@ public:
 
 	//  ================= Initialization =================================
 	void initRandom();
-	void evaluateFitness();
+	void evaluatePopulationFitness();
 	// ================= Selection =================================
 	void rouletteWheelSelection(int &index1, int &index2);
 	double sumFitnessRoulette();

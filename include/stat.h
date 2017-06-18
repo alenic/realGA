@@ -12,8 +12,8 @@ public:
 	float gaussianRand(float m, float s);
 	int uniformIndex(int N);
 private:
-	std::random_device rd;
-	std::ranlux24 gen;
+	//std::random_device rd;
+	//std::ranlux24 gen;
 };
 
 #endif // STAT_H
