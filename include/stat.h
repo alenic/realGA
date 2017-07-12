@@ -2,7 +2,6 @@
 #define STAT_H
 #include <stdlib.h>
 #include <math.h>
-#include <random>
 
 class Stat {
 public:
