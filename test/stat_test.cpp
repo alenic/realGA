@@ -1,6 +1,10 @@
 #include "testcommon.h"
 
-float uniformChiSquared(int *a, int n, int N) {
+StatTest::StatTest() {
+	srand(time(NULL));
+}
+
+float StatTest::uniformChiSquared(int *a, int n, int N) {
 	// n: number of intervals 
 	// N: number of experiment
 	float chi = 0.0;
@@ -13,8 +17,8 @@ float uniformChiSquared(int *a, int n, int N) {
 	return chi;
 }
 
-void test_uniformDist() {
-	Stat stat;
+void StatTest::test_uniformDist() {
+	
 	int N=100000;
 	int a[] = {0,0,0,0,0,0,0,0,0,0};
 	for(int i=0; i<N; i++) {
@@ -25,14 +29,15 @@ void test_uniformDist() {
 	float upper = 2*sqrt(10);
 	cout << "Chi squared value: " << chi << " <= 2*sqrt(10) = " << upper << " ? ";
 	if(chi <= upper) {
-		cout << "True" << endl;
+		coutColor("PASSED", TEXT_GREEN);
+		cout << endl;
 	} else {
-		cout << "False" << endl;
+		coutColor("FAILED", TEXT_RED);
+		cout << endl;
 	}
 }
 
-void test_gaussianDist(int mean, int stDev) {
-	Stat stat;
+void StatTest::test_gaussianDist(int mean, int stDev) {
 	const int nrolls=10000;  // number of experiments
 	const int nstars=100;    // maximum number of stars to distribute
 
@@ -44,7 +49,12 @@ void test_gaussianDist(int mean, int stDev) {
 	cout << "normal_distribution ("<< mean << "," << stDev << "):" << endl;
 	for (int i=0; i<10; ++i) {
 		cout << i << "-" << (i+1) << ": ";
-		cout << string(p[i]*nstars/nrolls,'*') << endl;
+		cout << string(p[i] * nstars/nrolls, '*') << endl;
 	}
 
 }
+
+
+
+
+

@@ -1,15 +1,21 @@
 #include "testcommon.h"
 #define NTESTFUNC 2
-#include <stdio.h>
-
 
 int main() {
 	GAResults results[NTESTFUNC];
 	GAOptions opt;
 
-	srand(time(NULL));
-	test_uniformDist();
-	test_gaussianDist(5.0, 2.0);
+	StatTest statUT;
+	RealGenotypeTest realGenotypeUT;
+
+	cout << "==================== Stat Unit Tests ============================" << endl;
+	statUT.test_uniformDist();
+	statUT.test_gaussianDist(5.0, 2.0);
+
+	cout << "==================== RealGenotype Unit Tests ============================" << endl;
+	realGenotypeUT.test_uniformRandom();
+
+	cout << "==================== Integration Tests ============================" << endl;
 
 	test_real_sphere(opt, results[0]);
 	test_rosenbrock(opt, results[1]);

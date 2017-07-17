@@ -26,9 +26,7 @@ public:
 	void uniformRandom(int);
 	void uniformLocalRandom(int, float);
 	void gaussianLocalRandom(int, float);
-
 	void bound(float *, float *);
-
 	double distanceTo(RealGenotype &);
 
 	RealGenotype & operator= ( const RealGenotype &c );
