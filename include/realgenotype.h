@@ -1,5 +1,13 @@
-#ifndef REALGENOTYPE_H
-#define REALGENOTYPE_H
+/*
+
+realgenotype.h : real [0, 1] bounded genotype
+
+author: A. Nicolosi
+realGen project: https://github.com/alenic/realGen
+
+*/
+#ifndef REALGENOTYPE_H_
+#define REALGENOTYPE_H_
 #include "stat.h"
 #include <stdlib.h>
 #include <iostream>
@@ -34,4 +42,4 @@ public:
 	bool operator==(const RealGenotype &other) const;
 };
 
-#endif
+#endif // REALGENOTYPE_H_

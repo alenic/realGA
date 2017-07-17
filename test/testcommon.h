@@ -32,8 +32,6 @@ public:
 
 // Realgenotype Unit Tests
 class RealGenotypeTest {
-private:
-	RealGenotype g;
 public:
 	RealGenotypeTest();
 	void test_uniformRandom();

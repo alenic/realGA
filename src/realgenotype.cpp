@@ -66,18 +66,12 @@ void RealGenotype::uniformLocalRandom(int i, float perc)
 		cerr << "ERROR: RealGenotype::uniformLocalRandom(int i, float perc) " << endl;
 		exit(-1);
 	}
-	float width = 0.5;
-	float var = width*perc*stat.uniformRand();
-
-	if(stat.uniformRand() < 0.5) {
-		gene[i] = gene[i] - var;
-		if(gene[i] < 0.0)
-			gene[i] = 0.0;
-	} else {
-		gene[i] = gene[i] + var;
-		if(gene[i] > 1.0)
-			gene[i] = 1.0;
-	}
+	float d = perc*stat.uniformRand();
+	gene[i] = gene[i] + d - perc*0.5;
+	if(gene[i] < 0.0)
+		gene[i] = 0.0;
+	if(gene[i] > 1.0)
+		gene[i] = 1.0;
 }
 
 void RealGenotype::gaussianLocalRandom(int i, float sigma) {
@@ -85,9 +79,8 @@ void RealGenotype::gaussianLocalRandom(int i, float sigma) {
 		cerr << "ERROR: RealGenotype::gaussianLocalRandom(int i, float sigma) " << endl;
 		exit(-1);
 	}
-
+	
 	float r = stat.gaussianRand(0.0, sigma);
-	//cout << r << " ";
 	gene[i] += r;
 	if(gene[i] < 0.0)
 		gene[i] = 0.0;

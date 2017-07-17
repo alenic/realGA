@@ -1,5 +1,13 @@
-#ifndef STAT_H
-#define STAT_H
+/*
+
+stat.h : genetic algorithm statistics
+
+author: A. Nicolosi
+realGen project: https://github.com/alenic/realGen
+
+*/
+#ifndef STAT_H_
+#define STAT_H_
 #include <stdlib.h>
 #include <math.h>
 
@@ -10,9 +18,6 @@ public:
 	float uniformRand(float lb, float ub);
 	float gaussianRand(float m, float s);
 	int uniformIndex(int N);
-private:
-	//std::random_device rd;
-	//std::ranlux24 gen;
 };
 
-#endif // STAT_H
+#endif // STAT_H_

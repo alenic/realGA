@@ -1,3 +1,11 @@
+/*
+
+realgen.h : genetic algorithm core
+
+author: A. Nicolosi
+realGen project: https://github.com/alenic/realGen
+
+*/
 #ifndef REALGEN_H
 #define REALGEN_H
 #include <stdlib.h>

@@ -14,6 +14,7 @@ int main() {
 
 	cout << "==================== RealGenotype Unit Tests ============================" << endl;
 	realGenotypeUT.test_uniformRandom();
+	realGenotypeUT.test_uniformLocalRandom();
 
 	cout << "==================== Integration Tests ============================" << endl;
 
