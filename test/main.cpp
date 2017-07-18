@@ -1,9 +1,11 @@
 #include "testcommon.h"
-#define NTESTFUNC 2
+#define NTESTFUNC 4
 
 int main() {
 	GAResults results[NTESTFUNC];
 	GAOptions opt;
+
+	srand(time(NULL));
 
 	StatTest statUT;
 	RealGenotypeTest realGenotypeUT;
@@ -18,8 +20,10 @@ int main() {
 
 	cout << "==================== Integration Tests ============================" << endl;
 
-	test_real_sphere(opt, results[0]);
-	test_rosenbrock(opt, results[1]);
+	bench1_sphere(opt, results[0]);
+	bench2_rosenbrock(opt, results[1]);
+	bench3_flatSurface(opt, results[2]);
+	bench5_foxholes(opt, results[3]);
 
 	printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "exTime", "maxTime", "Fitness");
 	
@@ -28,8 +32,10 @@ int main() {
 	}
 
 	opt.mutation.type = GAUSSIAN_MUTATION;
-	test_real_sphere(opt, results[0]);
-	test_rosenbrock(opt, results[1]);
+	bench1_sphere(opt, results[0]);
+	bench2_rosenbrock(opt, results[1]);
+	bench3_flatSurface(opt, results[2]);
+	bench5_foxholes(opt, results[3]);
 
 	printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "maxIter", "iter", "exTime", "maxTime", "Fitness");
 

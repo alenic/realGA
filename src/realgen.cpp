@@ -17,8 +17,14 @@ RealGen::RealGen(int np, int nx, float *lb, float *ub) {
 	}
 	// Tournment indices array
 	tourIndex = NULL;
-
 	maxGenerations = 100*Nx;
+
+	// statistics
+	minFitness = -1;
+	iminFitness = -1;
+	maxFitness = -1;
+	imaxFitness = -1;
+	meanFitness = -1;
 }
 
 RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) : RealGen(np, nx, lb, ub) {
@@ -177,36 +183,29 @@ int RealGen::getGeneration() {
 }
 
 
-double RealGen::evaluateFitness(RealGenotype &x) {
-	RealGenotype x_scaled(x);
-	x_scaled.bound(LB, UB);
-	return fitnessFcn(x_scaled, fitnessPar);
+double RealGen::evalFitness(RealGenotype &x) {
+	RealGenotype g(x);
+	g.bound(LB, UB);
+	return fitnessFcn(g, fitnessPar);
 }
 
 double RealGen::getMeanFitness() {
 	double meanF = 0.0;
-	for(size_t i=0; i<Np; i++) {
-		meanF += population[i].fitness / (double)Np;
+	for(int i=0; i<Np; i++) {
+		meanF += population[i].fitness;
 	}
-	return meanF;
+	return meanF / (double)Np;
 }
 
 RealGenotype RealGen::getBestChromosome() {
 	RealGenotype best;
-	if(options.selection.sorting) {
-		best = population[0];
-		best.bound(LB, UB);
-		return best;
-	}
-	best = population[iminFitness()];
+	best = population[iminFitness];
 	best.bound(LB, UB);
-	return population[iminFitness()];
+	return best;
 }
 
-double RealGen::getBestScore() {
-	if(options.selection.sorting)
-		return population[0].fitness;
-	return population[iminFitness()].fitness;
+double RealGen::getMinFitness() {
+	return minFitness;
 }
 
 double RealGen::diversity() {  // TODO
@@ -221,16 +220,26 @@ double RealGen::diversity() {  // TODO
 	}*/
 }
 
-int RealGen::iminFitness(){
-	double minF = 100000000000;
-	int iminf=0;
+void RealGen::evalMinFitness(){
+	minFitness = population[0].fitness;
+	iminFitness = 0;
 	for(int i=0; i<Np; i++) {
-		if(population[i].fitness < minF) {
-			minF = population[i].fitness;
-			iminf = i;
+		if(population[i].fitness < minFitness) {
+			minFitness = population[i].fitness;
+			iminFitness = i;
 		}
 	}
-	return iminf;
+}
+
+void RealGen::evalMaxFitness(){
+	maxFitness = population[0].fitness;
+	imaxFitness = 0;
+	for(int i=0; i<Np; i++) {
+		if(population[i].fitness > imaxFitness) {
+			imaxFitness = population[i].fitness;
+			imaxFitness = i;
+		}
+	}
 }
 
 string RealGen::populationToString() {
@@ -261,7 +270,8 @@ void RealGen::evolve() {
 			++k;
 		}
 	} else {
-		newPopulation[k] = population[iminFitness()];
+		// Keep only the best one
+		newPopulation[k] = population[iminFitness];
 		++k;
 	}
 
@@ -289,8 +299,7 @@ void RealGen::evolve() {
 		}
 		
 
-		offspring.fitness  = evaluateFitness(offspring);
-
+		offspring.fitness  = evalFitness(offspring);
 		newPopulation[k] = offspring;
 		++k;
 	}
@@ -298,14 +307,9 @@ void RealGen::evolve() {
 	if(options.selection.sorting) {
 		partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
 	}
-
-
-/*
-	cout << generation << " : sigma : ";
-	for(int i=0; i<Nx; i++)
-		cout << sigma[i] << " ";
-	cout << endl;
-*/
+	evalMinFitness();
+	evalMaxFitness();
+	meanFitness = getMeanFitness();
 	newPopulation.swap(population);
 	generation++;
 }
@@ -315,17 +319,22 @@ void RealGen::initRandom() {
 	generation=0;
 	for(int i=0; i<Np; i++) {
 		population[i].uniformRandom();
-		population[i].fitness = evaluateFitness(population[i]);
+		population[i].fitness = evalFitness(population[i]);
 	}
 	if(options.selection.sorting) {
 		sort(population.begin(), population.end());
 	}
+
+	// evaluate statistics
+	evalMinFitness();
+	evalMaxFitness();
+	meanFitness = getMeanFitness();
 }
 
-void RealGen::evaluatePopulationFitness() {
+void RealGen::evalPopulationFitness() {
 	generation=0;
 	for(int i=0; i<Np; i++) {
-		population[i].fitness = evaluateFitness(population[i]);
+		population[i].fitness = evalFitness(population[i]);
 	}
 	if(options.selection.sorting) {
 		partial_sort(population.begin(), population.begin()+int(options.selection.elitismFactor*Np), population.end());
@@ -349,15 +358,14 @@ double RealGen::sumFitnessRoulette() {
 	for(int i=0; i<Np; i++) {
 		s += population[i].fitness;
 	}
-	sumFitnessR = Np*population[Np-1].fitness-s;
+	sumFitnessR = Np*maxFitness-s;
 }
 
 void RealGen::rouletteWheel(int &index, float stop) {
-	float fMax = population[Np-1].fitness;
 	float sumP = 0.0;
 	index = 0;
 	for(int i=0; i<Np; i++) {
-		sumP += (fMax-population[i].fitness);
+		sumP += (maxFitness-population[i].fitness);
 		if(sumP > stop) {
 			index = i;
 			break; 

@@ -56,8 +56,12 @@ struct GAResults {
 	RealGenotype best;
 };
 
-void testRealGen(RealGen &ga, int maxIter, float eps, RealGenotype &expMin, GAResults &results);
-void test_real_sphere(GAOptions opt, GAResults &results);
-void test_rosenbrock(GAOptions opt, GAResults &results);
+void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
+// Benchmarks problems
+void bench1_sphere(GAOptions opt, GAResults &results);
+void bench2_rosenbrock(GAOptions opt, GAResults &results);
+void bench3_flatSurface(GAOptions opt, GAResults &results);
+
+void bench5_foxholes(GAOptions opt, GAResults &results);
 
 #endif

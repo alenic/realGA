@@ -85,12 +85,18 @@ private:
 	void *fitnessPar;
 	int generation;
 	Stat stat;
-
 	int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
-
 	double sumFitnessR; // Only for roulette wheel selection
 	int *tourIndex; // Only for tournment selection
 	float *sigma;
+
+	double minFitness;
+	int iminFitness;
+	double maxFitness;
+	int imaxFitness;
+	double meanFitness;
+	void evalMinFitness();
+	void evalMaxFitness();
 
 public:
 	RealGen(int np, int nx, float *lb, float *ub);
@@ -107,18 +113,17 @@ public:
 
 	// getter
 	RealGenotype getBestChromosome();
-	int iminFitness();
 	int getGeneration();
-	double evaluateFitness(RealGenotype &);
+	double evalFitness(RealGenotype &);
 	double getMeanFitness();
-	double getBestScore();
+	double getMinFitness();
 	string populationToString();
 	double diversity();
 	void checkOptions();
 
 	//  ================= Initialization =================================
 	void initRandom();
-	void evaluatePopulationFitness();
+	void evalPopulationFitness();
 	// ================= Selection =================================
 	void rouletteWheelSelection(int &index1, int &index2);
 	double sumFitnessRoulette();

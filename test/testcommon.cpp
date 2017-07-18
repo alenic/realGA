@@ -13,3 +13,38 @@ void coutColor(const char * s, TextColor color) {
 		break;
 	}
 }
+
+void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
+	int generation = 0;
+
+	results.converged = false;
+	//ga.checkOptions();
+	ga.initRandom();
+	ga.setMaxGenerations(maxIter);
+	clock_t startTime = clock(), endTime;
+	for (int i=0; i<maxIter; i++) {
+		ga.evolve();
+		generation++;
+		results.best = ga.getBestChromosome();
+
+		if(results.best.fitness < eps && !results.converged) {
+			results.iter = generation;
+			results.converged = true;
+			results.exTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
+			results.bestFitness = results.best.fitness;
+		}
+	}
+	endTime = clock();
+	
+	results.maxTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
+	
+	if(!results.converged) {
+		results.iter = maxIter;
+		results.exTime = results.maxTime;
+		results.bestFitness = results.best.fitness;
+	}
+	/*
+	cout << ga.populationToString();
+	cout << "Fitness"<< results.best.toString() << " = " << results.best.fitness << endl;
+	*/
+}
