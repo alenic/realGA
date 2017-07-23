@@ -7,11 +7,11 @@ double rosenbrockFitness(RealGenotype &g, void *par) {
 }
 
 void bench2_rosenbrock(GAOptions opt, GAResults &results) {
-	float LB[] = {-48.0, -48.0},
-		  UB[] = { 48.0,  48.0};
+	float LB[] = {-2.048, -2.048},
+		  UB[] = { 2.048,  2.048};
 
 	strcpy(results.name, "Rosenbrock");
-	results.maxIter = 50000;
+	results.maxIter = 5000;
 	results.Np = 200;
 	
 	RealGen ga(results.Np, 2, LB, UB, opt);

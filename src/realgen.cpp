@@ -298,7 +298,6 @@ void RealGen::evolve() {
 			break;
 		}
 		
-
 		offspring.fitness  = evalFitness(offspring);
 		newPopulation[k] = offspring;
 		++k;
@@ -307,6 +306,17 @@ void RealGen::evolve() {
 	if(options.selection.sorting) {
 		partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
 	}
+
+	if(options.mutation.type == GAUSSIAN_MUTATION) {
+		for(int i=0; i<Nx; i++) {
+			sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations))*0.1;
+			//if(sigma[i] < 1e-5) cout << generation << endl;
+			//if(sigma[i] < 1e-5) sigma[i] = 1e-1;
+			//cout << sigma[i] << ", ";
+		}
+		//cout << endl;
+	}
+
 	evalMinFitness();
 	evalMaxFitness();
 	meanFitness = getMeanFitness();
@@ -429,8 +439,6 @@ void RealGen::uniformMutate(RealGenotype &g, float perc) {
 void RealGen::gaussianLocalMutate(RealGenotype &g) {
 	for (size_t i=0; i<Nx; i++) {
 		if(stat.uniformRand() < options.mutation.mutationRate) {
-			sigma[i] = sigma[i]*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations));
-			if(sigma[i] < 1e-5) sigma[i] = 1e-1;
 			g.gaussianLocalRandom(i, sigma[i]);
 		}
 	}

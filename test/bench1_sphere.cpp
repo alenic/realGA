@@ -15,7 +15,7 @@ void bench1_sphere(GAOptions opt, GAResults &results) {
 		  UB[] = { 5.12,  5.12,  5.12,  5.12};
 
 	strcpy(results.name, "Sphere");
-	results.maxIter = 50000;
+	results.maxIter = 5000;
 	results.Np = 50;
 	
 	RealGen ga(results.Np, 4, LB, UB, opt);

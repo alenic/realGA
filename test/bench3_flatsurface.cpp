@@ -13,7 +13,7 @@ void bench3_flatSurface(GAOptions opt, GAResults &results) {
 		  UB[] = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
 	strcpy(results.name, "Flat surface");
-	results.maxIter = 50000;
+	results.maxIter = 5000;
 	results.Np = 200;
 	
 	RealGen ga(results.Np, 5, LB, UB, opt);
