@@ -245,7 +245,7 @@ void RealGen::evalMaxFitness(){
 string RealGen::populationToString() {
 	std::ostringstream os;
 	RealGenotype x_scaled;
-	os << "============== generation " << generation << " ===================" << endl;
+	os << "============== Generation: " << generation << " ===================" << endl;
 	for(int i=0; i<Np; i++) {
 		x_scaled = population[i];
 		x_scaled.bound(LB, UB);
@@ -310,11 +310,7 @@ void RealGen::evolve() {
 	if(options.mutation.type == GAUSSIAN_MUTATION) {
 		for(int i=0; i<Nx; i++) {
 			sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations))*0.1;
-			//if(sigma[i] < 1e-5) cout << generation << endl;
-			//if(sigma[i] < 1e-5) sigma[i] = 1e-1;
-			//cout << sigma[i] << ", ";
 		}
-		//cout << endl;
 	}
 
 	evalMinFitness();

@@ -28,7 +28,8 @@ int main() {
 	printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "exTime", "maxTime", "Fitness");
 	
 	for(int i=0; i<NTESTFUNC; i++) {
-		printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f\n", results[i].name, results[i].converged, results[i].iter, results[i].maxIter, results[i].exTime, results[i].maxTime, results[i].bestFitness);
+		printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f ", results[i].name, results[i].converged, results[i].iter, results[i].maxIter, results[i].exTime, results[i].maxTime, results[i].bestFitness);
+		cout << results[i].best.toString() << endl;
 	}
 
 	opt.mutation.type = GAUSSIAN_MUTATION;
@@ -37,10 +38,11 @@ int main() {
 	bench3_flatSurface(opt, results[2]);
 	bench5_foxholes(opt, results[3]);
 
-	printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "maxIter", "iter", "exTime", "maxTime", "Fitness");
+	printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "exTime", "maxTime", "Fitness");
 
 	for(int i=0; i<NTESTFUNC; i++) {
-		printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f\n", results[i].name, results[i].converged, results[i].iter, results[i].maxIter, results[i].exTime, results[i].maxTime, results[i].bestFitness);
+		printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f ", results[i].name, results[i].converged, results[i].iter, results[i].maxIter, results[i].exTime, results[i].maxTime, results[i].bestFitness);
+		cout << results[i].best.toString() << endl;
 	}
 	return 0;
 }

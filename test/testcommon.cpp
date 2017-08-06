@@ -29,9 +29,10 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
 
 		if(results.best.fitness < eps && !results.converged) {
 			results.iter = generation;
-			results.converged = true;
 			results.exTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
 			results.bestFitness = results.best.fitness;
+			results.best = ga.getBestChromosome();
+			results.converged = true;
 		}
 	}
 	endTime = clock();
@@ -42,9 +43,6 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
 		results.iter = maxIter;
 		results.exTime = results.maxTime;
 		results.bestFitness = results.best.fitness;
+		results.best = ga.getBestChromosome();
 	}
-	/*
-	cout << ga.populationToString();
-	cout << "Fitness"<< results.best.toString() << " = " << results.best.fitness << endl;
-	*/
 }
