@@ -209,15 +209,20 @@ double RealGen::getMinFitness() {
 }
 
 double RealGen::diversity() {  // TODO
-	/*
-	// Calculate centroid
+	double I = 0.0;
+	// Compute the centroid
 	for(size_t j=0; j<Nx; j++) {
-		double c = 0.0;
+		double ci = 0.0;
 		for(int i=0; i<Np; i++) {
-			c += population[i].gene[j];
+			ci += population[i].gene[j];
 		}
-		c /= Np;
-	}*/
+		ci /= Np;
+		for(int i=0; i<Np; i++) {
+			double dx = population[i].gene[j] - ci;
+			I += dx*dx;
+		}
+	}
+	return I;
 }
 
 void RealGen::evalMinFitness(){
