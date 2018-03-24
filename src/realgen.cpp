@@ -342,6 +342,35 @@ void RealGen::initRandom() {
 	meanFitness = getMeanFitness();
 }
 
+
+void RealGen::initMutate(vector<float> &gene, float sigma) {
+	generation=0;
+	RealGenotype g(Nx);
+	for(int i=0; i<Nx; i++) {
+		if(gene[i] > UB[i]) gene[i] = UB[i];
+		if(gene[i] < LB[i]) gene[i] = LB[i];
+		g.gene[i] = (gene[i]-LB[i])/(UB[i]-LB[i]);
+	}
+	population[0] = g;
+	population[0].fitness = evalFitness(population[0]);
+	for(int i=1; i<Np; i++) {
+		population[i] = g;
+		for(int j=0; j<Nx; ++j) {
+			population[i].gaussianLocalRandom(j, sigma);
+		}
+		population[i].fitness = evalFitness(population[i]);
+	}
+	if(options.selection.sorting) {
+		sort(population.begin(), population.end());
+	}
+
+	// evaluate statistics
+	evalMinFitness();
+	evalMaxFitness();
+	meanFitness = getMeanFitness();
+}
+
+
 void RealGen::evalPopulationFitness() {
 	generation=0;
 	for(int i=0; i<Np; i++) {

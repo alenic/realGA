@@ -124,6 +124,7 @@ public:
 	//  ================= Initialization =================================
 	void initRandom();
 	void evalPopulationFitness();
+	void initMutate(vector<float> &gene, float sigma);
 	// ================= Selection =================================
 	void rouletteWheelSelection(int &index1, int &index2);
 	double sumFitnessRoulette();
