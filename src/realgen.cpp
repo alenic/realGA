@@ -176,6 +176,10 @@ void RealGen::setMaxGenerations(int maxG) {
 }
 
 
+void RealGen::setSeed(unsigned int seed) {
+	stat.setSeed(seed);
+}
+
 // ========================================= Getter ======================================
 
 int RealGen::getGeneration() {

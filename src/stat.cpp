@@ -5,8 +5,6 @@ Stat::Stat() {
 }
 
 float Stat::uniformRand() {
-	//std::uniform_real_distribution<> dist(0.0, 1.0);
-	//return dist(gen);
 	return (float)rand()/(RAND_MAX + 1.0); 
 }
 
@@ -14,6 +12,9 @@ int Stat::uniformIndex(int N) {
 	return rand() % N;
 }
 
+void Stat::setSeed(unsigned int seed) {
+	srand(seed);
+}
 
 float Stat::uniformRand(float lb, float ub) {
 	return (ub-lb)*uniformRand() + lb;

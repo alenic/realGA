@@ -73,7 +73,7 @@ struct GAOptions {
 };
 
 class RealGen {
-private:
+protected:
 	vector <RealGenotype> population;
 	vector <RealGenotype> newPopulation;
 	size_t Np;
@@ -110,6 +110,7 @@ public:
 	void setPopulationSize(int);
 	void setOptions(GAOptions opt);
 	void setMaxGenerations(int);
+	void setSeed(unsigned int);
 
 	// getter
 	RealGenotype getBestChromosome();
@@ -138,7 +139,7 @@ public:
 	void uniformMutate(RealGenotype &g, float perc);
 	void gaussianLocalMutate(RealGenotype &);
 	// ====================================================================
-	void evolve();
+	virtual void evolve();
 };
 
 #endif // REALGEN_H

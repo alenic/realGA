@@ -18,6 +18,8 @@ public:
 	float uniformRand(float lb, float ub);
 	float gaussianRand(float m, float s);
 	int uniformIndex(int N);
+
+	void setSeed(unsigned int seed);
 };
 
 #endif // STAT_H_

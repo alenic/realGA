@@ -20,11 +20,11 @@ RealGenotype::~RealGenotype() {
 
 string RealGenotype::toString() {
 	std::ostringstream os;
-	os << "(";
-	for(int i=0; i<gene.size(); i++) {
+	os << "[";
+	for(int i=0; i<gene.size()-1; i++) {
 		os << gene[i] << ",";
 	}
-	os << ")";
+	os << gene[gene.size()-1] << "]";
 	return os.str();
 }
 
