@@ -2,7 +2,7 @@
 Fast implementation of Genetic Algorithm only for real genotype, useful for nonlinear constrained and unconstrained optimization problems.
 This library implements only real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers:
 
-| gene 1 | gene 2 |   ...  | Gene N |
+| gene 1 | gene 2 |   ...  | gene N |
 | ------ | ------ | ------ | ------ |
 
 where every gene can be limited by a real lower and upper bound
@@ -59,5 +59,10 @@ int main(int argc,  char** argv) {
 }
 
   ```
-  # Basics
-  The main class of the realGen library is realGen
+  
+  It can be compiled and linked statically with the command (after INSTALL step)
+  ```
+  g++ -std=c++11 -I$(REALGEN_INCLUDE_FOLDERS) -o readme.bin readme.cpp $(REALGEN_LIB_FOLDER)/librealgen.a
+  ```
+  
+
