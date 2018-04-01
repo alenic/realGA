@@ -1,5 +1,17 @@
 # realGen
 Fast implementation of Genetic Algorithm only for real genotype, useful for nonlinear constrained and unconstrained optimization problems.
+This library implements only real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers:
+
+| gene 1 | gene 2 |   ...  | Gene N |
+| ------ | ------ | ------ | ------ |
+
+where every gene can be limited by a real lower and upper bound
+
+LB_i <= gene_i <= UB_i
+
+for _i=1,...,N_
+
+
 
 ## INSTALL
 ```
@@ -9,7 +21,7 @@ $ make
 ```
 # Quick start
 
-First of all you have to define a fitness function to minimize, and just pass it as function pointer to the RealGen class with the method setFitnessFunction:
+You can find the following code example inside examples/readme.cpp
 
 ```c++
 #include <iostream>
@@ -47,4 +59,5 @@ int main(int argc,  char** argv) {
 }
 
   ```
-  
+  # Basics
+  The main class of the realGen library is realGen
