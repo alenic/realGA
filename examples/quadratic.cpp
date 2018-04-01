@@ -1,6 +1,6 @@
 #include <iostream>
 #include <time.h>
-#include "realgenmultithread.h"
+#include "realgen.h"
 
 #define N_SAMPLE 1000
 

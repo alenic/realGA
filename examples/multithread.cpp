@@ -4,9 +4,17 @@
 #include <sys/time.h>
 #include "realgenmultithread.h"
 
-#define N_SAMPLE 1000
+#define N_SAMPLE 5000
 
 using namespace std;
+
+typedef unsigned long long timestamp_t;
+static timestamp_t
+get_timestamp () {
+  struct timeval now;
+  gettimeofday (&now, NULL);
+  return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
+}
 
 float LB[] = {-5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0};  // Lower bound of genes
 float UB[] = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};  // Upper bound of genes
@@ -68,82 +76,73 @@ void generateData() {
   }
 }
 
-void optimize(unsigned int seed) {
+void optimize(unsigned int seed, unsigned int nThreads) {
   // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
   GAOptions opt;
   opt.mutation.type = GAUSSIAN_MUTATION;
   opt.mutation.mutationRate = 0.05;
   opt.mutation.gaussianScale = 1;
   opt.mutation.gaussianShrink = 1;
+
+  RealGen *ga;
   
-  RealGen ga(203, 10, LB, UB, opt);
-  ga.setFitnessFunction(myFitnessFunction, NULL);
-  ga.setMaxGenerations(1500);
-  ga.setSeed(seed);
-  // Init population with uniform random
+  if (nThreads==1) {
+    ga = new RealGen(203, 10, LB, UB, opt);
+  } else {
+    ga = new RealGenMultithread(203, 10, LB, UB, opt, nThreads);
+  }
   
-  ga.initRandom();
-  // Evolve the population for 100 times
+  ga->setFitnessFunction(myFitnessFunction, NULL);
+  ga->setMaxGenerations(1500);
+  ga->setSeed(seed);
+
+  // Init population with uniform random genes between LB and UB
+  ga->initRandom();
+  // Evolve the population for 1500 times
   for (int i=0; i<1500; i++) {
-    ga.evolve();
-    RealGenotype best = ga.getBestChromosome();
+    ga->evolve();
+    RealGenotype best = ga->getBestChromosome();
   }
   // get the best score function (the minimum)
-  RealGenotype best = ga.getBestChromosome();
+  RealGenotype best = ga->getBestChromosome();
   // Print results
-  //cout << ga.populationToString(); // print all the population
   cout << "Best solution: "<< best.toString() << endl;
   cout << "Best Fitness value = " << best.fitness << endl;
+  delete ga;
 }
 
-
-void optimizeMultithread(unsigned int seed) {
-  // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-  GAOptions opt;
-  opt.mutation.type = GAUSSIAN_MUTATION;
-  opt.mutation.mutationRate = 0.05;
-  opt.mutation.gaussianScale = 1;
-  opt.mutation.gaussianShrink = 1;
-  
-  RealGenMultithread ga(203, 10, LB, UB, opt, 4);
-  ga.setFitnessFunction(myFitnessFunction, NULL);
-  ga.setMaxGenerations(1500);
-  ga.setSeed(seed);
-  // Init population with uniform random
-  ga.initRandom();
-  // Evolve the population for 100 times
-  for (int i=0; i<1500; i++) {
-    ga.evolve();
-    RealGenotype best = ga.getBestChromosome();
-  }
-  // get the best score function (the minimum)
-  RealGenotype best = ga.getBestChromosome();
-  // Print results
-  //cout << ga.populationToString(); // print all the population
-  cout << "Best solution: "<< best.toString() << endl;
-  cout << "Best Fitness value = " << best.fitness << endl;
-}
 
 int main(int argc,  char** argv) {
-  struct timeval start_time;
-  struct timeval end_time;
-  srand(1);
+  timestamp_t t0, t1;
+  unsigned int seed = 45;
+
+  // Used for generate A matrix and b vector
   generateData();
   
-  //gettimeofday(&start_time, NULL);
   cout << "Single optimization...."<< endl;
-  optimize(3);
-  optimize(4);
-  //gettimeofday(&end_time, NULL); 
-  //cout << "Eapsed Time: " << end_time.tv_usec-start_time.tv_usec << endl;
+  t0 = get_timestamp();
+  optimize(seed, 1);
+  t1 = get_timestamp();
+  cout << "Eapsed Time: " << (t1-t0)/1000000.0L << endl;
   
+  cout << "Multithread optimization (2 Threads)...."<< endl;
+  t0 = get_timestamp();
+  optimize(seed, 2);
+  t1 = get_timestamp();
+  cout << "Eapsed Time: " << (t1-t0)/1000000.0L << endl;
   
-  cout << "Multithread optimization...."<< endl;
-  gettimeofday(&start_time, NULL);
-  optimizeMultithread(3);
-  gettimeofday(&end_time, NULL);
-  cout << "Eapsed Time: " << end_time.tv_usec-start_time.tv_usec << endl;
-  
+  cout << "Multithread optimization (4 Threads)...."<< endl;
+  t0 = get_timestamp();
+  optimize(seed, 4);
+  t1 = get_timestamp();
+  cout << "Eapsed Time: " << (t1-t0)/1000000.0L << endl;
+
+  cout << "Multithread optimization (8 Threads)...."<< endl;
+  t0 = get_timestamp();
+  optimize(seed, 8);
+  t1 = get_timestamp();
+  cout << "Eapsed Time: " << (t1-t0)/1000000.0L << endl;
+
   return 0;
 }
 
