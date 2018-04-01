@@ -71,13 +71,13 @@ $(LOCAL_LIB_PATH)/$(LIB_SO_TARGET): $(LOCAL_OBJECT_FILES)
 test: $(LOCAL_TEST_PATH)/$(TEST_EXEC)
 
 test/$(TEST_EXEC): $(LOCAL_TEST_PATH)/*.cpp $(LOCAL_LIB_PATH)/$(LIB_A_TARGET) ./include/*.h
-	$(CPP) $(CPPFLAGS) -o $(LOCAL_TEST_PATH)/$(TEST_EXEC) $(LOCAL_TEST_PATH)/*.cpp -I$(LOCAL_INCLUDE_PATH) $(LOCAL_LIB_PATH)/$(LIB_A_TARGET)
+	$(CPP) $(CPPFLAGS) -o $(LOCAL_TEST_PATH)/$(TEST_EXEC) $(LOCAL_TEST_PATH)/*.cpp -I$(LOCAL_INCLUDE_PATH) $(LOCAL_LIB_PATH)/$(LIB_A_TARGET) -lpthread
 	@echo "****************** Test: $(TEST_EXEC) [OK] ******************"
 
 
 # Building examples
 ./examples/%.bin: ./examples/%.cpp
-	$(CPP) $(CPPFLAGS) -I$(LOCAL_INCLUDE_PATH) -o $@ $< $(LOCAL_LIB_PATH)/$(LIB_A_TARGET)
+	$(CPP) $(CPPFLAGS) -I$(LOCAL_INCLUDE_PATH) -o $@ $< $(LOCAL_LIB_PATH)/$(LIB_A_TARGET) -lpthread
 	@echo "****************** Examples [OK] ******************"
 
 
