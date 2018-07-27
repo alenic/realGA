@@ -397,7 +397,7 @@ void RealGen::rouletteWheelSelection(int &index1, int &index2) {
 	}
 }
 
-double RealGen::sumFitnessRoulette() {
+void RealGen::sumFitnessRoulette() {
 	double s=0.0;
 	for(int i=0; i<Np; i++) {
 		s += population[i].fitness;

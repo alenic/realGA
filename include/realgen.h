@@ -128,7 +128,7 @@ public:
 	void initMutate(vector<float> &gene, float sigma);
 	// ================= Selection =================================
 	void rouletteWheelSelection(int &index1, int &index2);
-	double sumFitnessRoulette();
+	void sumFitnessRoulette();
 	void rouletteWheel(int &index, float stop);
 	void tournmentSelection(int p, int &index1, int &index2);
 	void tournmentSelect(int p, int &index);
