@@ -8,7 +8,10 @@ where every gene x_i can be bounded by
 
 for i = 1,...,N
 
+Real Gen is available for
 
+* Windows 7/10
+* Linux
 
 ## INSTALL
 
@@ -24,7 +27,7 @@ Use CMake to compile it.
 ### Windows
 
 ```
-cd relGen
+cd realGen
 mkdir build
 cd build
 cmake ..
@@ -40,7 +43,7 @@ cmake -G "Visual Studio 14 2015 Win64" ..
 ### Linux
 
 ```
-cd relGen
+cd realGen
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
