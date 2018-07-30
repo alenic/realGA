@@ -1,45 +1,50 @@
-# realGen
-Fast implementation of Genetic Algorithm only for real genotype, useful for nonlinear constrained and unconstrained optimization problems.
-This library implements only real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers:
+# Real Gen
+Fast implementation of Genetic Algorithm for nonlinear constrained and unconstrained optimization problems.
+This library implements only real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers (x_1, x_2, ... , x_n)
 
-| gene 1 | gene 2 |   ...  | gene N |
-| ------ | ------ | ------ | ------ |
+where every gene x_i can be bounded by
 
-where every gene can be limited by a real lower and upper bound
+* LB_i <= x_i <= UB_i
 
-LB_i <= gene_i <= UB_i
-
-for _i=1,...,N_
+for i = 1,...,N
 
 
 
 ## INSTALL
+
+Download the repository with the command
+
 ```
-> git clone https://github.com/alenic/realGen.git
-> cd relGen
-> mkdir build
-> cd build
+git clone https://github.com/alenic/realGen.git
 ```
 
-Use CMake for compile:
+Use CMake to compile it.
+
 
 ### Windows
 
 ```
-> cmake ..
-> MSBuild.exe .\realGen.sln /p:Configuration={Release|Debug}
+cd relGen
+mkdir build
+cd build
+cmake ..
+MSBuild.exe .\realGen.sln /p:Configuration={Release|Debug}
 ```
 
-For Win64 use the command
+If you want to use Win64 compiler use CMake as follows
 
 ```
-> cmake -G "Visual Studio 14 2015 Win64" ..
+cmake -G "Visual Studio 14 2015 Win64" ..
 ```
 
 ### Linux
+
 ```
-> cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
-> make
+cd relGen
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
+make
 ```
 
 # Quick start
