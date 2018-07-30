@@ -3,27 +3,50 @@
 // Constructors
 RealGenMultithread::RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nt) : RealGen(np, nx, lb, ub) {
 	nThread = nt;
-	localThread = new pthread_t[nThread]; 
+#ifdef _WIN32
+	localThread = new HANDLE[nThread];
+#else
+	localThread = new pthread_t[nThread];
+#endif
 }
 
 RealGenMultithread::RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt, unsigned int nt) : RealGen(np, nx, lb, ub, opt) {
 	nThread = nt;
-	localThread = new pthread_t[nThread]; 
+#ifdef _WIN32
+	localThread = new HANDLE[nThread];
+#else
+	localThread = new pthread_t[nThread];
+#endif
 }
 
 RealGenMultithread::~RealGenMultithread() {
 	delete []localThread;
 }
 
+#ifdef _WIN32
+unsigned __stdcall RealGenMultithread::evaluatePopulationThread(void *params)
+{
+	struct thread_params *tp;
+	tp = (struct thread_params *) params;
+	RealGenMultithread * ga = tp->ga;
+	for (int k = tp->startIndex; k<tp->startIndex + tp->neval; ++k) {
+		ga->newPopulation[k].fitness = ga->evalFitness(ga->newPopulation[k]);
+	}
+	return 0;
+}
+#else
 void *RealGenMultithread::evaluatePopulationThread(void *params) {
 	struct thread_params *tp;
 	tp = (struct thread_params *) params;
 	RealGenMultithread * ga = tp->ga;
-	for(int k=tp->startIndex; k<tp->startIndex+tp->neval; ++k) {
+	for (int k = tp->startIndex; k<tp->startIndex + tp->neval; ++k) {
 		ga->newPopulation[k].fitness = ga->evalFitness(ga->newPopulation[k]);
 	}
 	pthread_exit(NULL);
 }
+#endif
+
+
 
 void RealGenMultithread::evolve() {
 	RealGenotype offspring(Nx);
@@ -84,15 +107,25 @@ void RealGenMultithread::evolve() {
 			localThreadParam[i].neval = interval;
 		}
 		localThreadParam[i].ga = this;
+#ifdef _WIN32
+		unsigned threadID;
+		localThread[i] = (HANDLE)_beginthreadex(0, 0, &RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i], 0, &threadID);
+#else
 		rc = pthread_create(&localThread[i], NULL, RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i]);
 		if (rc) {
 			cerr << "Error:unable to create thread," << rc << endl;
 			exit(-1);
 		}
+#endif
+
 	}
 
 	for(int i=0; i<nThread; ++i) {
+#ifdef _WIN32
+		WaitForSingleObject(localThread[i], INFINITE);
+#else
 		pthread_join(localThread[i], NULL);
+#endif
 	}
 
 

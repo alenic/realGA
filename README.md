@@ -15,10 +15,33 @@ for _i=1,...,N_
 
 ## INSTALL
 ```
-$ git clone https://github.com/alenic/realGen.git
-$ cd realGen
-$ make
+> git clone https://github.com/alenic/realGen.git
+> cd relGen
+> mkdir build
+> cd build
 ```
+
+Use CMake for compile:
+
+### Windows
+
+```
+> cmake ..
+> MSBuild.exe .\realGen.sln /p:Configuration={Release|Debug}
+```
+
+For Win64 use the command
+
+```
+> cmake -G "Visual Studio 14 2015 Win64" ..
+```
+
+### Linux
+```
+> cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
+> make
+```
+
 # Quick start
 
 You can find the following code example inside examples/readme.cpp

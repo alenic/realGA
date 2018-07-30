@@ -8,7 +8,12 @@
 #include <sstream>
 #include <math.h>
 #include <stdio.h>
-#include <pthread.h>
+#ifdef _WIN32
+	#include <Windows.h>
+	#include <process.h>
+#else
+	#include <pthread.h>
+#endif
 
 #include "realgenotype.h"
 #include "stat.h"
@@ -19,12 +24,22 @@
 class RealGenMultithread: public RealGen {
 private:
 	unsigned int nThread;
+#ifdef _WIN32
+	HANDLE *localThread;
+#else
 	pthread_t *localThread;
+#endif
 public:
 	RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nThread);
 	RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt,  unsigned int nThread);
 	~RealGenMultithread();
+
+#ifdef _WIN32
+	static unsigned __stdcall evaluatePopulationThread(void *params);
+#else
 	static void *evaluatePopulationThread(void *params);
+#endif
+	
 	void evolve();
 };
 
