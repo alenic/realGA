@@ -9,63 +9,63 @@ typedef enum { UNIFORM_CROSSOVER=0, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER 
 typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION} MutationType;
 
 struct SelectionOpt {
-	SelectionType type;
-	int tournmentP;
-	bool sorting;
-	float elitismFactor;
+  SelectionType type;
+  int tournmentP;
+  bool sorting;
+  float elitismFactor;
 };
 
 struct CrossoverOpt {
-	CrossoverType type;
-	unsigned int index1;
-	unsigned int index2;
+  CrossoverType type;
+  unsigned int index1;
+  unsigned int index2;
 };
 
 struct MutationOpt {
-	MutationType type;
-	float uniformPerc;
-	float mutationRate;
-	float gaussianScale;
-	float gaussianShrink;
+  MutationType type;
+  float uniformPerc;
+  float mutationRate;
+  float gaussianScale;
+  float gaussianShrink;
 }; 
 
 struct GAOptions {
-	SelectionOpt selection;
-	CrossoverOpt crossover;
-	MutationOpt mutation;
-	bool verbose;
+  SelectionOpt selection;
+  CrossoverOpt crossover;
+  MutationOpt mutation;
+  bool verbose;
 
-	GAOptions() {
-		selection.type = ROULETTE_WHEEL_SELECTION;
-		selection.tournmentP = 4;
-		selection.sorting = true;
-		selection.elitismFactor = 0.1;
+  GAOptions() {
+    selection.type = ROULETTE_WHEEL_SELECTION;
+    selection.tournmentP = 4;
+    selection.sorting = true;
+    selection.elitismFactor = 0.1;
 
-		crossover.type = UNIFORM_CROSSOVER;
-		crossover.index1 = 0;
-		crossover.index2 = 0;
+    crossover.type = UNIFORM_CROSSOVER;
+    crossover.index1 = 0;
+    crossover.index2 = 0;
 
-		mutation.type = UNIFORM_MUTATION;
-		mutation.uniformPerc = 0.25;
+    mutation.type = UNIFORM_MUTATION;
+    mutation.uniformPerc = 0.25;
 
-		mutation.mutationRate = 0.1;
+    mutation.mutationRate = 0.1;
 
-		mutation.gaussianScale = 1.0;
-		mutation.gaussianShrink = 1.0;
+    mutation.gaussianScale = 1.0;
+    mutation.gaussianShrink = 1.0;
 
-		verbose = false;
-	}
+    verbose = false;
+  }
 };
 
 class RealGenOptions {
 public:
-	RealGenOptions();
-	~RealGenOptions();
+  RealGenOptions();
+  ~RealGenOptions();
 
-	void setOption(string option, float value);
+  void setOption(string option, float value);
 
 private:
-	GAOptions opt;
+  GAOptions opt;
 };
 
 

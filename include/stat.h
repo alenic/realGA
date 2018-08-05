@@ -13,13 +13,13 @@ realGen project: https://github.com/alenic/realGen
 
 class Stat {
 public:
-	Stat();
-	float uniformRand();
-	float uniformRand(float lb, float ub);
-	float gaussianRand(float m, float s);
-	int uniformIndex(int N);
+  Stat();
+  float uniformRand();
+  float uniformRand(float lb, float ub);
+  float gaussianRand(float m, float s);
+  int uniformIndex(int N);
 
-	void setSeed(unsigned int seed);
+  void setSeed(unsigned int seed);
 };
 
 #endif // STAT_H_

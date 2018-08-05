@@ -9,10 +9,10 @@
 #include <math.h>
 #include <stdio.h>
 #ifdef _WIN32
-	#include <Windows.h>
-	#include <process.h>
+  #include <Windows.h>
+  #include <process.h>
 #else
-	#include <pthread.h>
+  #include <pthread.h>
 #endif
 
 #include "realgenotype.h"
@@ -23,31 +23,31 @@
 
 class RealGenMultithread: public RealGen {
 private:
-	unsigned int nThread;
+  unsigned int nThread;
 #ifdef _WIN32
-	HANDLE *localThread;
+  HANDLE *localThread;
 #else
-	pthread_t *localThread;
+  pthread_t *localThread;
 #endif
 public:
-	RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nThread);
-	RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt,  unsigned int nThread);
-	~RealGenMultithread();
+  RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nThread);
+  RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt,  unsigned int nThread);
+  ~RealGenMultithread();
 
 #ifdef _WIN32
-	static unsigned __stdcall evaluatePopulationThread(void *params);
+  static unsigned __stdcall evaluatePopulationThread(void *params);
 #else
-	static void *evaluatePopulationThread(void *params);
+  static void *evaluatePopulationThread(void *params);
 #endif
-	
-	void evolve();
+  
+  void evolve();
 };
 
 
 struct thread_params {
-	int startIndex;
-	unsigned int neval;
-	RealGenMultithread *ga;
+  int startIndex;
+  unsigned int neval;
+  RealGenMultithread *ga;
 };
 
 

@@ -24,72 +24,72 @@ using namespace std;
 
 class RealGen {
 protected:
-	vector <RealGenotype> population;
-	vector <RealGenotype> newPopulation;
-	size_t Np;
-	size_t Nx;
-	float *LB;
-	float *UB;
-	GAOptions options;
-	double (*fitnessFcn)(RealGenotype &, void *);
-	void *fitnessPar;
-	int generation;
-	Stat stat;
-	int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
-	double sumFitnessR; // Only for roulette wheel selection
-	int *tourIndex; // Only for tournment selection
-	float *sigma;
+  vector <RealGenotype> population;
+  vector <RealGenotype> newPopulation;
+  size_t Np;
+  size_t Nx;
+  float *LB;
+  float *UB;
+  GAOptions options;
+  double (*fitnessFcn)(RealGenotype &, void *);
+  void *fitnessPar;
+  int generation;
+  Stat stat;
+  int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
+  double sumFitnessR; // Only for roulette wheel selection
+  int *tourIndex; // Only for tournment selection
+  float *sigma;
 
-	double minFitness;
-	int iminFitness;
-	double maxFitness;
-	int imaxFitness;
-	double meanFitness;
-	void evalMinFitness();
-	void evalMaxFitness();
+  double minFitness;
+  int iminFitness;
+  double maxFitness;
+  int imaxFitness;
+  double meanFitness;
+  void evalMinFitness();
+  void evalMaxFitness();
 
 public:
-	RealGen(int np, int nx, float *lb, float *ub);
-	RealGen(int np, int nx, float *lb, float *ub, GAOptions);
-	~RealGen();
-	// Setter
-	void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
-	void setSorting(bool);
-	void setMutationRate(float);
-	void setElitismFactor(float);
-	void setPopulationSize(int);
-	void setOptions(GAOptions opt);
-	void setMaxGenerations(int);
-	void setSeed(unsigned int);
+  RealGen(int np, int nx, float *lb, float *ub);
+  RealGen(int np, int nx, float *lb, float *ub, GAOptions);
+  ~RealGen();
+  // Setter
+  void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
+  void setSorting(bool);
+  void setMutationRate(float);
+  void setElitismFactor(float);
+  void setPopulationSize(int);
+  void setOptions(GAOptions opt);
+  void setMaxGenerations(int);
+  void setSeed(unsigned int);
 
-	// getter
-	RealGenotype getBestChromosome();
-	int getGeneration();
-	double evalFitness(RealGenotype &);
-	double getMeanFitness();
-	double getMinFitness();
-	string populationToString();
-	double diversity();
-	void checkOptions();
+  // getter
+  RealGenotype getBestChromosome();
+  int getGeneration();
+  double evalFitness(RealGenotype &);
+  double getMeanFitness();
+  double getMinFitness();
+  string populationToString();
+  double diversity();
+  void checkOptions();
 
-	//  ================= Initialization =================================
-	void initRandom();
-	void evalPopulationFitness();
-	void initMutate(vector<float> &gene, float sigma);
-	// ================= Selection =================================
-	void rouletteWheelSelection(int &index1, int &index2);
-	void sumFitnessRoulette();
-	void rouletteWheel(int &index, float stop);
-	void tournmentSelection(int p, int &index1, int &index2);
-	void tournmentSelect(int p, int &index);
-	//==================================== Crossover ==================
-	void crossoverUniform(int index1, int index2, RealGenotype &c);
-	void crossoverFixed(int index1, int index2, RealGenotype &c, int n);
-	//===================================== Mutation ======================
-	void uniformMutate(RealGenotype &g, float perc);
-	void gaussianMutate(RealGenotype &);
-	// ====================================================================
-	virtual void evolve();
+  //  ================= Initialization =================================
+  void initRandom();
+  void evalPopulationFitness();
+  void initMutate(vector<float> &gene, float sigma);
+  // ================= Selection =================================
+  void rouletteWheelSelection(int &index1, int &index2);
+  void sumFitnessRoulette();
+  void rouletteWheel(int &index, float stop);
+  void tournmentSelection(int p, int &index1, int &index2);
+  void tournmentSelect(int p, int &index);
+  //==================================== Crossover ==================
+  void crossoverUniform(int index1, int index2, RealGenotype &c);
+  void crossoverFixed(int index1, int index2, RealGenotype &c, int n);
+  //===================================== Mutation ======================
+  void uniformMutate(RealGenotype &g, float perc);
+  void gaussianMutate(RealGenotype &);
+  // ====================================================================
+  virtual void evolve();
 };
 
 #endif // REALGEN_H
