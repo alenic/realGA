@@ -74,7 +74,7 @@ int main(int argc,  char** argv) {
   options.setGenesNumber(2);      // Number of genes in a chromosome
   options.setPopulationSize(50);  // Number of chromosomes in the population
   options.setBounds(LB, UB);      // LB and UB are mandatory
-  options.setVerbose(true);       // If Verbose is true, manny prints will appear
+  options.setVerbose(true);       // If Verbose is true, many prints will appear
   options.setFitnessFunction(myFitnessFunction, NULL);
   // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
   RealGen ga(options);
