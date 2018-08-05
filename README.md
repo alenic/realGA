@@ -13,6 +13,8 @@ Real Gen is available for
 * Windows 7/10
 * Linux
 
+See the <a href='docs/index.md'>documentations</a> for more informations.
+
 ## INSTALL
 
 Download the repository with the command
