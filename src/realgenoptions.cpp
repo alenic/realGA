@@ -5,38 +5,37 @@ RealGenOptions::RealGenOptions() {
 
 }
 
-~RealGenOptions::RealGenOptions() {
+RealGenOptions::~RealGenOptions() {
 
 }
 
 
 void RealGenOptions::setOption(string option, float value) {
-  switch (option) {
-    case "verbose":
-      break;
-    case "selection_type":
-      break;
-    case "selection_tournment_number":
-      break;
-    case "selection_sorting":
-      break;
-    case "selection_elitism_factor":
-      break;
-    case "crossover_type":
-      break;
-    case "crossover_index1":
-      break;
-    case "crossover_index2":
-      break;
-    case "mutation_type":
-      break;
-    case "mutation_uniform_percentage":
-      break;
-    case "mutation_rate":
-      break;
-    case "mutation_gaussian_scale":
-      break;
-    case "mutation_gaussian_shrink":
-      break;
-  };
+
+  if (option == "verbose") {
+  }
+  if (option == "selection_type") {
+  }
+  if (option == "selection_tournment_number") {
+  }
+  if (option == "selection_sorting") {
+  }
+  if (option == "selection_elitism_factor") {
+  }
+  if (option == "crossover_type") {
+  }
+  if (option == "crossover_index1") {
+  }
+  if (option == "crossover_index2") {
+  }
+  if (option == "mutation_type") {
+  }
+  if (option == "mutation_uniform_percentage") {
+  }
+  if (option == "mutation_rate") {
+  }
+  if (option == "mutation_gaussian_scale") {
+  }
+  if (option == "mutation_gaussian_shrink") {
+  }
 }
