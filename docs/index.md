@@ -2,16 +2,9 @@
 Real Gen was born for solves bound constrained minimization problems applied to AI (Artificial Intelligence) bots.
 This is a fast implementation focuses only on real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers (x_1, x_2, ... , x_n)
 
-where every gene x_i can be bounded by
+The following picture introduce the terminology of genetic algorithms
 
-* LB_i <= x_i <= UB_i
-
-for i = 1,...,N
-
-Real Gen is available for
-
-* Windows 7/10
-* Linux
+![Geneti algorithm terminology](img/terminology.jpg "Genetic Algorithm Terminology")
 
 ## Table of contents
 
