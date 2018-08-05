@@ -88,7 +88,7 @@ void RealGenMultithread::evolve() {
 				uniformMutate(offspring, options.mutation.uniformPerc);
 			break;
 			case GAUSSIAN_MUTATION:
-				gaussianLocalMutate(offspring);
+				gaussianMutate(offspring);
 			break;
 		}
 		

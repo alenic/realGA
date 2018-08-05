@@ -18,59 +18,9 @@ realGen project: https://github.com/alenic/realGen
 #include <stdio.h>
 #include "realgenotype.h"
 #include "stat.h"
+#include "realgenoptions.h"
 
 using namespace std;
-
-typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNMENT_SELECTION } SelectionType;
-typedef enum { UNIFORM_CROSSOVER=0, FIXED_CROSSOVER, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
-typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION} MutationType;
-
-struct SelectionOpt {
-	SelectionType type;
-	int tournmentP;
-	bool sorting;
-	float elitismFactor;
-};
-
-struct CrossoverOpt {
-	CrossoverType type;
-	int fixedIndex;
-};
-
-struct MutationOpt {
-	MutationType type;
-	float uniformPerc;
-	float mutationRate;
-	float gaussianScale;
-	float gaussianShrink;
-}; 
-
-struct GAOptions {
-	SelectionOpt selection;
-	CrossoverOpt crossover;
-	MutationOpt mutation;
-	bool verbose;
-
-	GAOptions() {
-		selection.type = ROULETTE_WHEEL_SELECTION;
-		selection.tournmentP = 4;
-		selection.sorting = true;
-		selection.elitismFactor = 0.1;
-
-		crossover.type = UNIFORM_CROSSOVER;
-		crossover.fixedIndex = 0;
-
-		mutation.type = UNIFORM_MUTATION;
-		mutation.uniformPerc = 0.25;
-
-		mutation.mutationRate = 0.1;
-
-		mutation.gaussianScale = 1.0;
-		mutation.gaussianShrink = 1.0;
-
-		verbose = false;
-	}
-};
 
 class RealGen {
 protected:
@@ -137,7 +87,7 @@ public:
 	void crossoverFixed(int index1, int index2, RealGenotype &c, int n);
 	//===================================== Mutation ======================
 	void uniformMutate(RealGenotype &g, float perc);
-	void gaussianLocalMutate(RealGenotype &);
+	void gaussianMutate(RealGenotype &);
 	// ====================================================================
 	virtual void evolve();
 };
