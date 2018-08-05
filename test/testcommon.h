@@ -58,10 +58,10 @@ struct GAResults {
 
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
 // Benchmarks problems
-void bench1_sphere(GAOptions opt, GAResults &results);
-void bench2_rosenbrock(GAOptions opt, GAResults &results);
-void bench3_flatSurface(GAOptions opt, GAResults &results);
+void bench1_sphere(RealGenOptions opt, GAResults &results);
+void bench2_rosenbrock(RealGenOptions opt, GAResults &results);
+void bench3_flatSurface(RealGenOptions opt, GAResults &results);
 
-void bench5_foxholes(GAOptions opt, GAResults &results);
+void bench5_foxholes(RealGenOptions opt, GAResults &results);
 
 #endif

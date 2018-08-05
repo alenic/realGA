@@ -1,43 +1,21 @@
 #include "realgen.h"
 
 // Constructors
-RealGen::RealGen(int np, int nx, float *lb, float *ub) {
-  Np = np;
-  Nx = nx;
-  LB = lb;
-  UB = ub;
-  if(Np != population.size()) {
-    population.resize(Np,Nx);
-    newPopulation.resize(Np,Nx);
-  }
-  // Initialize standars deviations or gaussian mutation
-  sigma = new float[nx];
-  for(int i=0; i<Nx; i++) {
-    sigma[i] = options.mutation.gaussianScale;
-  }
-  // Tournment indices array
-  tourIndex = NULL;
-  maxGenerations = 100*Nx;
-
+RealGen::RealGen(RealGenOptions opt) {
+  tourIndex = nullptr;
   // statistics
   minFitness = -1;
   iminFitness = -1;
   maxFitness = -1;
   imaxFitness = -1;
   meanFitness = -1;
-}
-
-RealGen::RealGen(int np, int nx, float *lb, float *ub, GAOptions opt) : RealGen(np, nx, lb, ub) {
-  setOptions(opt);
-
-  if(options.verbose) {
-    checkOptions();
-  }
+  
+  setOptions(opt.getOptions());
 }
 
 // Destructor
 RealGen::~RealGen() {
-  if(tourIndex) {
+  if(tourIndex != nullptr) {
     delete []tourIndex;
   }
   delete [] sigma;
@@ -46,11 +24,30 @@ RealGen::~RealGen() {
 
 void RealGen::setOptions(GAOptions opt) {
   options = opt;
-  if (tourIndex) {
-    delete []tourIndex;
-    tourIndex = new int[options.selection.tournmentP];
-  } else {
-    tourIndex = new int[options.selection.tournmentP];
+  Np = options.populationSize;
+  Nx = options.genesNumber;
+  LB = options.lowerBounds;
+  UB = options.upperBounds;
+  if (Np != population.size()) {
+	  population.resize(Np, Nx);
+	  newPopulation.resize(Np, Nx);
+  }
+  // Initialize standars deviations or gaussian mutation
+  sigma = new float[Nx];
+  for (int i = 0; i<Nx; i++) {
+	  sigma[i] = options.mutation.gaussianScale;
+  }
+  // Tournament indices array
+  if (tourIndex != nullptr) {
+    delete[]tourIndex;
+  }
+  tourIndex = new int[options.selection.tournamentP];
+  maxGenerations = opt.maxGenerations;
+
+  setFitnessFunction(options.fitnessFcn, options.fitnessPar);
+
+  if (options.verbose) {
+	  checkOptions();
   }
 }
 
@@ -60,11 +57,11 @@ void RealGen::checkOptions() {
     case ROULETTE_WHEEL_SELECTION:
       cout << "-> Selection: ROULETTE_WHEEL_SELECTION" << endl;
     break;
-    case TOURNMENT_SELECTION:
-      if(options.selection.tournmentP >= 2 && options.selection.tournmentP <= Np) {
-        cout << "-> Selection: TOURNMENT_SELECTION : tournmentP = " << options.selection.tournmentP << endl;
+    case TOURNAMENT_SELECTION:
+      if(options.selection.tournamentP >= 2 && options.selection.tournamentP <= Np) {
+        cout << "-> Selection: TOURNAMENT_SELECTION : tournamentP = " << options.selection.tournamentP << endl;
       } else {
-        cerr << "ERROR: options.selection.tournmentP must be an unsigned number between 2 and Np" << endl;
+        cerr << "ERROR: options.selection.tournamentP must be an unsigned number between 2 and Np" << endl;
         exit(-1);
       }
     break;
@@ -296,8 +293,8 @@ void RealGen::evolve() {
       case ROULETTE_WHEEL_SELECTION:
         rouletteWheelSelection(index1, index2);
       break;
-      case TOURNMENT_SELECTION:
-        tournmentSelection(options.selection.tournmentP, index1, index2);
+      case TOURNAMENT_SELECTION:
+        tournamentSelection(options.selection.tournamentP, index1, index2);
       break;
     }
     
@@ -423,9 +420,9 @@ void RealGen::rouletteWheel(int &index, float stop) {
   }
 }
 
-void RealGen::tournmentSelection(int p, int &index1, int &index2) {
-  tournmentSelect(p, index1);
-  tournmentSelect(p, index2);
+void RealGen::tournamentSelection(int p, int &index1, int &index2) {
+  tournamentSelect(p, index1);
+  tournamentSelect(p, index2);
   if(index1 == index2) {
     if(index1 != Np-1)
       index2 = index1 + 1;
@@ -434,7 +431,7 @@ void RealGen::tournmentSelection(int p, int &index1, int &index2) {
   }
 }
 
-void RealGen::tournmentSelect(int p, int &iMin) {
+void RealGen::tournamentSelect(int p, int &iMin) {
   iMin = 0;
   double fMin = population[0].fitness;
   for(int i=0; i<p; i++) {

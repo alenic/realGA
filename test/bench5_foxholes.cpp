@@ -12,15 +12,21 @@ double foxholesFitness(RealGenotype &g, void *par) {
   return 1/500.0 + 1.0/sum1;
 }
 
-void bench5_foxholes(GAOptions opt, GAResults &results) {
+void bench5_foxholes(RealGenOptions opt, GAResults &results) {
   float LB[] = {-65536, -65536},
       UB[] = { 65536,  65536};
 
   strcpy(results.name, "Foxholes");
   results.maxIter = 5000;
   results.Np = 200;
-  
-  RealGen ga(results.Np, 2, LB, UB, opt);
+
+  opt.setPopulationSize(results.Np);
+  opt.setGenesNumber(2);
+  opt.setBounds(LB, UB);
+  opt.setFitnessFunction(foxholesFitness, NULL);
+
+
+  RealGen ga(opt);
   float A[50] = {-32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, 
            -32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 32, 32, 32, 32, 32, 16, 16, 16, 16, 16};
   ga.setFitnessFunction(foxholesFitness, A);

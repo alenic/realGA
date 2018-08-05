@@ -15,8 +15,6 @@
   #include <pthread.h>
 #endif
 
-#include "realgenotype.h"
-#include "stat.h"
 #include "realgen.h"
 
 
@@ -30,8 +28,7 @@ private:
   pthread_t *localThread;
 #endif
 public:
-  RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nThread);
-  RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt,  unsigned int nThread);
+  RealGenMultithread(RealGenOptions opt, unsigned int nThread);
   ~RealGenMultithread();
 
 #ifdef _WIN32

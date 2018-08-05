@@ -69,10 +69,16 @@ double myFitnessFunction(RealGenotype &g, void *par) {
 int main(int argc,  char** argv) {
   float LB[] = {-5.0, -5.0};  // Lower bound of genes
   float UB[] = { 5.0,  5.0};  // Upper bound of genes
-  
+
+  RealGenOptions options;
+  options.setGenesNumber(2);      // Number of genes in a chromosome
+  options.setPopulationSize(50);  // Number of chromosomes in the population
+  options.setBounds(LB, UB);      // LB and UB are mandatory
+  options.setVerbose(true);       // If Verbose is true, manny prints will appear
+  options.setFitnessFunction(myFitnessFunction, NULL);
   // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-  RealGen ga(50, 2, LB, UB);
-  ga.setFitnessFunction(myFitnessFunction, NULL);
+  RealGen ga(options);
+  
   // Init population with uniform random
   ga.initRandom();
   // Evolve the population for 100 times

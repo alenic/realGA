@@ -130,23 +130,24 @@ void generateData() {
 }
 
 void optimize(unsigned int seed, unsigned int nThreads) {
-  // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-  GAOptions opt;
-  opt.mutation.type = GAUSSIAN_MUTATION;
-  opt.mutation.mutationRate = 0.05;
-  opt.mutation.gaussianScale = 1;
-  opt.mutation.gaussianShrink = 1;
+  RealGenOptions options;
+  options.setGenesNumber(10);
+  options.setPopulationSize(200);
+  options.setBounds(LB, UB);
+  options.setFitnessFunction(myFitnessFunction, NULL);
+  options.setMaxGenerations(1500);
+  options.setMutationType("gaussian");
+  options.setMutationRate(0.05);
+  options.setMutationGaussianScaleShrink(1, 1);
 
   RealGen *ga;
   
   if (nThreads==1) {
-    ga = new RealGen(203, 10, LB, UB, opt);
+    ga = new RealGen(options);
   } else {
-    ga = new RealGenMultithread(203, 10, LB, UB, opt, nThreads);
+    ga = new RealGenMultithread(options, nThreads);
   }
   
-  ga->setFitnessFunction(myFitnessFunction, NULL);
-  ga->setMaxGenerations(1500);
   ga->setSeed(seed);
 
   // Init population with uniform random genes between LB and UB

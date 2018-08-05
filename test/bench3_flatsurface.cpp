@@ -8,16 +8,20 @@ double flatSurfaceFitness(RealGenotype &g, void *par) {
   return fitness;
 }
 
-void bench3_flatSurface(GAOptions opt, GAResults &results) {
+void bench3_flatSurface(RealGenOptions opt, GAResults &results) {
   float LB[] = {-5.12, -5.12, -5.12, -5.12, -5.12},
       UB[] = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
   strcpy(results.name, "Flat surface");
   results.maxIter = 5000;
   results.Np = 200;
-  
-  RealGen ga(results.Np, 5, LB, UB, opt);
-  ga.setFitnessFunction(flatSurfaceFitness, NULL);
+
+  opt.setPopulationSize(results.Np);
+  opt.setGenesNumber(5);
+  opt.setBounds(LB, UB);
+  opt.setFitnessFunction(flatSurfaceFitness, NULL);  
+
+  RealGen ga(opt);
 
   testRealGen(ga, results.maxIter, 1, results);
 }

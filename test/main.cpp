@@ -3,7 +3,7 @@
 
 int main() {
   GAResults results[NTESTFUNC];
-  GAOptions opt;
+  RealGenOptions opt;
 
   srand(time(NULL));
 
@@ -25,6 +25,7 @@ int main() {
   bench3_flatSurface(opt, results[2]);
   bench5_foxholes(opt, results[3]);
 
+  printf("Mutation type = Uniform\n");
   printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "exTime", "maxTime", "Fitness");
   
   for(int i=0; i<NTESTFUNC; i++) {
@@ -32,12 +33,13 @@ int main() {
     cout << results[i].best.toString() << endl;
   }
 
-  opt.mutation.type = GAUSSIAN_MUTATION;
+  opt.setMutationType("gaussian");
   bench1_sphere(opt, results[0]);
   bench2_rosenbrock(opt, results[1]);
   bench3_flatSurface(opt, results[2]);
   bench5_foxholes(opt, results[3]);
 
+  printf("Mutation type = Gaussian\n");
   printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "exTime", "maxTime", "Fitness");
 
   for(int i=0; i<NTESTFUNC; i++) {

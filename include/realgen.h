@@ -26,18 +26,18 @@ class RealGen {
 protected:
   vector <RealGenotype> population;
   vector <RealGenotype> newPopulation;
+  GAOptions options;
   size_t Np;
   size_t Nx;
   float *LB;
   float *UB;
-  GAOptions options;
   double (*fitnessFcn)(RealGenotype &, void *);
   void *fitnessPar;
   int generation;
   Stat stat;
   int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
   double sumFitnessR; // Only for roulette wheel selection
-  int *tourIndex; // Only for tournment selection
+  int *tourIndex; // Only for tournament selection
   float *sigma;
 
   double minFitness;
@@ -49,8 +49,7 @@ protected:
   void evalMaxFitness();
 
 public:
-  RealGen(int np, int nx, float *lb, float *ub);
-  RealGen(int np, int nx, float *lb, float *ub, GAOptions);
+  RealGen(RealGenOptions opt);
   ~RealGen();
   // Setter
   void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
@@ -80,8 +79,8 @@ public:
   void rouletteWheelSelection(int &index1, int &index2);
   void sumFitnessRoulette();
   void rouletteWheel(int &index, float stop);
-  void tournmentSelection(int p, int &index1, int &index2);
-  void tournmentSelect(int p, int &index);
+  void tournamentSelection(int p, int &index1, int &index2);
+  void tournamentSelect(int p, int &index);
   //==================================== Crossover ==================
   void crossoverUniform(int index1, int index2, RealGenotype &c);
   void crossoverFixed(int index1, int index2, RealGenotype &c, int n);

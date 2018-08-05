@@ -6,7 +6,7 @@ double rosenbrockFitness(RealGenotype &g, void *par) {
   return 100.0*dx1*dx1+dx2*dx2;
 }
 
-void bench2_rosenbrock(GAOptions opt, GAResults &results) {
+void bench2_rosenbrock(RealGenOptions opt, GAResults &results) {
   float LB[] = {-2.048, -2.048},
       UB[] = { 2.048,  2.048};
 
@@ -14,8 +14,11 @@ void bench2_rosenbrock(GAOptions opt, GAResults &results) {
   results.maxIter = 5000;
   results.Np = 200;
   
-  RealGen ga(results.Np, 2, LB, UB, opt);
-  ga.setFitnessFunction(rosenbrockFitness, NULL);
+  opt.setPopulationSize(results.Np);
+  opt.setGenesNumber(2);
+  opt.setBounds(LB, UB);
+  opt.setFitnessFunction(rosenbrockFitness, NULL);
+  RealGen ga(opt);
 
   testRealGen(ga, results.maxIter, 1e-4, results);
 }

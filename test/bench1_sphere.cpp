@@ -10,7 +10,7 @@ double sphereFitness(RealGenotype &g, void *par) {
 }
 
 
-void bench1_sphere(GAOptions opt, GAResults &results) {
+void bench1_sphere(RealGenOptions opt, GAResults &results) {
   float LB[] = {-5.12, -5.12, -5.12, -5.12},
       UB[] = { 5.12,  5.12,  5.12,  5.12};
 
@@ -18,8 +18,11 @@ void bench1_sphere(GAOptions opt, GAResults &results) {
   results.maxIter = 5000;
   results.Np = 50;
   
-  RealGen ga(results.Np, 4, LB, UB, opt);
-  ga.setFitnessFunction(sphereFitness, NULL);
+  opt.setPopulationSize(results.Np);
+  opt.setGenesNumber(4);
+  opt.setBounds(LB, UB);
+  opt.setFitnessFunction(sphereFitness, NULL);
+  RealGen ga(opt);
 
   testRealGen(ga, results.maxIter, 1e-4, results);
 }

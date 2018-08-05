@@ -6,9 +6,6 @@
 
 using namespace std;
 
-float LB[] = {-5.0, -5.0};  // Lower bound of genes
-float UB[] = { 5.0,  5.0};  // Upper bound of genes
-
 double myFitnessFunction(RealGenotype &g, void *par) {
   double f = 0.0;
   double dx1 = g.gene[0]-2.5,
@@ -16,18 +13,22 @@ double myFitnessFunction(RealGenotype &g, void *par) {
   return dx1*dx1+dx2*dx2;
 }
 
-
 int main(int argc,  char** argv) {
+  float LB[] = {-5.0, -5.0};  // Lower bound of genes
+  float UB[] = { 5.0,  5.0};  // Upper bound of genes
+  RealGenOptions options;
+  options.setGenesNumber(2);
+  options.setPopulationSize(200);
+  options.setBounds(LB, UB);
+  options.setVerbose(true);
+  options.setFitnessFunction(myFitnessFunction, NULL);
+  options.setMaxGenerations(200);
+  options.setMutationType("gaussian");
+  options.setMutationRate(0.05);
+  options.setMutationGaussianScaleShrink(1, 1);
   // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-  GAOptions opt;
-  opt.mutation.type = GAUSSIAN_MUTATION;
-  opt.mutation.mutationRate = 0.05;
-  opt.mutation.gaussianScale = 1;
-  opt.mutation.gaussianShrink = 1;
-  
-  RealGen ga(200, 2, LB, UB, opt);
-  ga.setFitnessFunction(myFitnessFunction, NULL);
-  ga.setMaxGenerations(200);
+  RealGen ga(options);
+
   // Init population with uniform random
   ga.initRandom();
   // Evolve the population for 100 times

@@ -1,16 +1,18 @@
 #ifndef REALGENOPTIONS_H
 #define REALGENOPTIONS_H
 #include <string>
+#include <iostream>
+#include "realgenotype.h"
 
 using namespace std;
 
-typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNMENT_SELECTION } SelectionType;
+typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNAMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=0, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
 typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION} MutationType;
 
 struct SelectionOpt {
   SelectionType type;
-  int tournmentP;
+  int tournamentP;
   bool sorting;
   float elitismFactor;
 };
@@ -27,43 +29,59 @@ struct MutationOpt {
   float mutationRate;
   float gaussianScale;
   float gaussianShrink;
-}; 
+};
 
+/*
+  Backend option struct
+*/
 struct GAOptions {
   SelectionOpt selection;
   CrossoverOpt crossover;
   MutationOpt mutation;
   bool verbose;
-
-  GAOptions() {
-    selection.type = ROULETTE_WHEEL_SELECTION;
-    selection.tournmentP = 4;
-    selection.sorting = true;
-    selection.elitismFactor = 0.1;
-
-    crossover.type = UNIFORM_CROSSOVER;
-    crossover.index1 = 0;
-    crossover.index2 = 0;
-
-    mutation.type = UNIFORM_MUTATION;
-    mutation.uniformPerc = 0.25;
-
-    mutation.mutationRate = 0.1;
-
-    mutation.gaussianScale = 1.0;
-    mutation.gaussianShrink = 1.0;
-
-    verbose = false;
-  }
+  size_t genesNumber;
+  size_t populationSize;
+  float *lowerBounds;
+  float *upperBounds;
+  double (*fitnessFcn)(RealGenotype &, void *);
+  void *fitnessPar;
+  size_t maxGenerations;
+  GAOptions();
 };
 
+/*
+  Class used for option settings
+*/
 class RealGenOptions {
 public:
   RealGenOptions();
   ~RealGenOptions();
 
-  void setOption(string option, float value);
+  void setVerbose(bool value);
 
+  void setPopulationSize(size_t np);
+  void setGenesNumber(size_t nx);
+  void setLowerBounds(float *lb);
+  void setUpperBounds(float *ub);
+  void setBounds(float *lb, float *ub);
+  void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
+  void setMaxGenerations(size_t value);
+
+  void setSelectionType(string value);
+  void setSelectionTournamentP(size_t value);
+  void setSorting(bool value);
+  void setElitismFactor(float value);
+
+  void setMutationType(string value);
+  void setUniformMutationPercentage(float value);
+  void setMutationRate(float value);
+  void setMutationGaussianScaleShrink(float scale, float shrink);
+
+  void setCrossoverType(string value);
+  void setSinglePointCrossoverIndex(size_t value);
+  void setTwoPointCrossoverIndexes(size_t i1, size_t i2);
+
+  GAOptions getOptions(void);
 private:
   GAOptions opt;
 };

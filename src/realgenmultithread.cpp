@@ -1,7 +1,7 @@
 #include "realgenmultithread.h"
 
 // Constructors
-RealGenMultithread::RealGenMultithread(int np, int nx, float *lb, float *ub, unsigned int nt) : RealGen(np, nx, lb, ub) {
+RealGenMultithread::RealGenMultithread(RealGenOptions opt, unsigned int nt) : RealGen(opt) {
   nThread = nt;
 #ifdef _WIN32
   localThread = new HANDLE[nThread];
@@ -10,14 +10,6 @@ RealGenMultithread::RealGenMultithread(int np, int nx, float *lb, float *ub, uns
 #endif
 }
 
-RealGenMultithread::RealGenMultithread(int np, int nx, float *lb, float *ub, GAOptions opt, unsigned int nt) : RealGen(np, nx, lb, ub, opt) {
-  nThread = nt;
-#ifdef _WIN32
-  localThread = new HANDLE[nThread];
-#else
-  localThread = new pthread_t[nThread];
-#endif
-}
 
 RealGenMultithread::~RealGenMultithread() {
   delete []localThread;
@@ -75,8 +67,8 @@ void RealGenMultithread::evolve() {
       case ROULETTE_WHEEL_SELECTION:
         rouletteWheelSelection(index1, index2);
       break;
-      case TOURNMENT_SELECTION:
-        tournmentSelection(options.selection.tournmentP, index1, index2);
+      case TOURNAMENT_SELECTION:
+        tournamentSelection(options.selection.tournamentP, index1, index2);
       break;
     }
     
