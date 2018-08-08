@@ -1,12 +1,23 @@
 # Real Gen
-Fast implementation of Genetic Algorithm for nonlinear constrained and unconstrained optimization problems.
-This library implements only real genotype, it means that a **solution** of the problem must be an N-dimensional array of **float** numbers (x_1, x_2, ... , x_n)
+Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.<br>
+The **Fitness** function is a function, defined by the user, that must be minimized. The Fitness, usually is a nonlinear Loss Function, that depends on a solution of the problem, this 'solution' is called **chromosome**.<br>
+A chromosome, is composed by n components called **genes**.<br>
+Every genes, are simply real numbers, and then, a chromosome can be view as a vector of real numbers. In this view, the Fitness is just a nonlinear multivariate function.
 
-where every gene x_i can be bounded by
+If x is the cromosome then
 
-* LB_i <= x_i <= UB_i
+![genotype](docs/img/x_vec.png)
 
-for i = 1,...,N
+x_i are the genes (for i =1,...,n). <br>
+
+Every genes x_i are bounded by two real value: 
+
+* LB_i <= x_i <= UB_i,  for i = 1,...,n.
+
+A **genetic algorithm** is a probabilistic method for find the minimum of the Fitness function, and it solves the problem
+
+![genotype](docs/img/minimum.png)
+
 
 Real Gen is available for
 
@@ -15,7 +26,7 @@ Real Gen is available for
 
 See the <a href='docs/index.md'>documentations</a> for more informations.
 
-## INSTALL
+## Install
 
 Download the repository with the command
 
