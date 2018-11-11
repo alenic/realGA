@@ -29,12 +29,11 @@ protected:
   GAOptions options;
   size_t Np;
   size_t Nx;
-  float *LB;
-  float *UB;
+
   double (*fitnessFcn)(RealGenotype &, void *);
   void *fitnessPar;
   int generation;
-  Stat stat;
+
   int maxGenerations;  // Maximum number of generations (default: 100*number of variables)
   double sumFitnessR; // Only for roulette wheel selection
   int *tourIndex; // Only for tournament selection
@@ -44,12 +43,11 @@ protected:
   int iminFitness;
   double maxFitness;
   int imaxFitness;
-  double meanFitness;
   void evalMinFitness();
   void evalMaxFitness();
 
 public:
-  RealGen(RealGenOptions opt);
+  RealGen(RealGenOptions &opt);
   ~RealGen();
   // Setter
   void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
@@ -57,7 +55,7 @@ public:
   void setMutationRate(float);
   void setElitismFactor(float);
   void setPopulationSize(int);
-  void setOptions(GAOptions opt);
+  void setOptions(RealGenOptions &opt);
   void setMaxGenerations(int);
   void setSeed(unsigned int);
 
@@ -68,8 +66,11 @@ public:
   double getMeanFitness();
   double getMinFitness();
   string populationToString();
-  double diversity();
+  double getDiversity();
   void checkOptions();
+  // For debug
+  bool checkChromosome(RealGenotype &chromosome);
+  void checkPopulation();
 
   //  ================= Initialization =================================
   void initRandom();

@@ -10,16 +10,18 @@ realGen project: https://github.com/alenic/realGen
 #define STAT_H_
 #include <stdlib.h>
 #include <math.h>
+#include <iostream>
+#include <limits>
+
+using namespace std;
 
 class Stat {
 public:
-  Stat();
-  float uniformRand();
-  float uniformRand(float lb, float ub);
-  float gaussianRand(float m, float s);
-  int uniformIndex(int N);
-
-  void setSeed(unsigned int seed);
+  static float uniformRand();
+  static float uniformRand(float lb, float ub);
+  static float gaussianRand(float m, float s);
+  static int uniformIndex(int N);
+  static void setSeed(unsigned int seed);
 };
 
 #endif // STAT_H_

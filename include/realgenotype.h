@@ -21,7 +21,9 @@ class RealGenotype {
 public:
   vector<float> gene;
   double fitness;
-  Stat stat;
+
+  float *LB;
+  float *UB;
 
   RealGenotype();
   RealGenotype(int n);
@@ -30,11 +32,11 @@ public:
   
   string toString();
 
+  void setBounds(float *lb, float* ub);
   void uniformRandom();
   void uniformRandom(int);
   void uniformLocalRandom(int, float);
   void gaussianLocalRandom(int, float);
-  void bound(float *, float *);
   double distanceTo(RealGenotype &);
 
   RealGenotype & operator= ( const RealGenotype &c );

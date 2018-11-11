@@ -7,14 +7,21 @@ RealGenotypeTest::RealGenotypeTest() {
 void RealGenotypeTest::test_uniformRandom() {
   cout << "RealGenotypeTest::test_uniformRandom" << endl;
   // bound test
-  cout << "|---> [0,1] - bound test: ";
+  cout << "|---> bound test: ";
   RealGenotype g;
+  float LB[40];
+  float UB[40];
+  for (int i = 0; i < 40; ++i) {
+    LB[i] = 100 * rand() - 50;
+    UB[i] = LB[i] + 10;
+  }
+  g.setBounds(LB, UB);
   bool fail = false;
   for(int n=1; n<=40 && !fail; n++) {
     g.gene.resize(n);
     g.uniformRandom();
     for(int i=0; i<n; i++) {
-      if(g.gene[i] < 0.0 || g.gene[i] > 1.0) {
+      if(g.gene[i] < LB [i] || g.gene[i] > UB[i]) {
         fail = true;
         break;
       }
@@ -35,6 +42,10 @@ void RealGenotypeTest::test_uniformLocalRandom() {
   // Test the interval bound
   cout << "|---> 0.5 +- 0.2*rand() - : ";
   RealGenotype g(1);
+  float LB[] = { 0.0 };
+  float UB[] = { 1.0 };
+
+  g.setBounds(LB, UB);
   bool fail = false;
   float minValue = 1.0;
   float maxValue = 0.0;

@@ -1,11 +1,8 @@
 #include "stat.h"
 
-Stat::Stat() {
-  //gen.seed(rd());
-}
-
 float Stat::uniformRand() {
-  return (float)rand()/(RAND_MAX + 1.0); 
+  float r = (float)rand() / (RAND_MAX + 1.0);
+  return r;
 }
 
 int Stat::uniformIndex(int N) {
@@ -22,11 +19,12 @@ float Stat::uniformRand(float lb, float ub) {
 
 /* mean m, standard deviation s */
 float Stat::gaussianRand(float m, float s) {
+  
   float x1, x2, w, y1;
   static float y2;
   static int use_last = 0;
 
-  if (use_last)            /* use value from previous call */
+  if (use_last)       
   {
     y1 = y2;
     use_last = 0;
@@ -44,6 +42,6 @@ float Stat::gaussianRand(float m, float s) {
     y2 = x2 * w;
     use_last = 1;
   }
-
+  
   return( m + y1 * s );
 }

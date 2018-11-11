@@ -6,16 +6,25 @@ RealGenotype::RealGenotype() {
 }
 
 RealGenotype::RealGenotype(int n) {
+
 	gene.resize(n);
 }
 
 RealGenotype::RealGenotype(const RealGenotype &c) {
 	gene = c.gene;
 	fitness = c.fitness;
+  LB = c.LB;
+  UB = c.UB;
 }
 
 RealGenotype::~RealGenotype() {
 
+}
+
+
+void RealGenotype::setBounds(float *lb, float* ub) {
+  LB = lb;
+  UB = ub;
 }
 
 string RealGenotype::toString() {
@@ -26,12 +35,6 @@ string RealGenotype::toString() {
 	}
 	os << gene[gene.size()-1] << "]";
 	return os.str();
-}
-
-void RealGenotype::bound(float *lb, float *ub) {
-	for(int i=0; i<gene.size(); i++) {
-		gene[i] = gene[i]*(ub[i] - lb[i]) + lb[i];
-	}
 }
 
 double RealGenotype::distanceTo(RealGenotype &g) {
@@ -47,7 +50,7 @@ double RealGenotype::distanceTo(RealGenotype &g) {
 void RealGenotype::uniformRandom()
 {
 	for (size_t i=0; i<gene.size(); i++) {
-		gene[i] = stat.uniformRand();
+    gene[i] = Stat::uniformRand(LB[i], UB[i]);
 	}
 }
 
@@ -57,7 +60,7 @@ void RealGenotype::uniformRandom(int i)
 		cerr << "ERROR: RealGenotype::uniformRandom(int i) " << endl;
 		exit(-1);
 	}
-	gene[i] = stat.uniformRand();
+	gene[i] = Stat::uniformRand(LB[i], UB[i]);
 }
 
 void RealGenotype::uniformLocalRandom(int i, float perc)
@@ -66,12 +69,14 @@ void RealGenotype::uniformLocalRandom(int i, float perc)
 		cerr << "ERROR: RealGenotype::uniformLocalRandom(int i, float perc) " << endl;
 		exit(-1);
 	}
-	float d = perc*stat.uniformRand();
-	gene[i] = gene[i] + d - perc*0.5;
-	if(gene[i] < 0.0)
-		gene[i] = 0.0;
-	if(gene[i] > 1.0)
-		gene[i] = 1.0;
+	float fraction = perc*(Stat::uniformRand()-0.5)*(UB[i]-LB[i]);
+  // Mutate
+	gene[i] += fraction;
+
+	if(gene[i] < LB[i])
+		gene[i] = LB[i];
+	if(gene[i] > UB[i])
+		gene[i] = UB[i];
 }
 
 void RealGenotype::gaussianLocalRandom(int i, float sigma) {
@@ -80,18 +85,25 @@ void RealGenotype::gaussianLocalRandom(int i, float sigma) {
 		exit(-1);
 	}
 	
-	float r = stat.gaussianRand(0.0, sigma);
+	float r = Stat::gaussianRand(0.0, sigma)*(UB[i]-LB[i]);
+  if (isnan(r) || isinf(r)) {
+    cerr << "gaussianLocalRandom error!  r=" << r << endl;
+    r = 0.0;
+  }
+
+  // Mutate
 	gene[i] += r;
-	if(gene[i] < 0.0)
-		gene[i] = 0.0;
-	if(gene[i] > 1.0)
-		gene[i] = 1.0;
+  if (gene[i] < LB[i])
+    gene[i] = LB[i];
+  if (gene[i] > UB[i])
+    gene[i] = UB[i];
 }
 
 RealGenotype & RealGenotype::operator= ( const RealGenotype &c ) {
 	gene = c.gene;
 	fitness = c.fitness;
-	stat = c.stat;
+  LB = c.LB;
+  UB = c.UB;
 	return *this;
 }
 

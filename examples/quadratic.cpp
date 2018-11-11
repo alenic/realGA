@@ -34,7 +34,7 @@ int main(int argc,  char** argv) {
   // Evolve the population for 100 times
   for (int i=0; i<100; i++) {
     ga.evolve();
-    cout << "Diversity " << ga.diversity() << endl;
+    cout << "Diversity " << ga.getDiversity() << endl;
   }
   // get the best score function (the minimum)
   RealGenotype best = ga.getBestChromosome();

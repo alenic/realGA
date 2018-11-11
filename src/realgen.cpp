@@ -1,16 +1,15 @@
 #include "realgen.h"
 
 // Constructors
-RealGen::RealGen(RealGenOptions opt) {
+RealGen::RealGen(RealGenOptions &opt) {
   tourIndex = nullptr;
   // statistics
   minFitness = -1;
   iminFitness = -1;
   maxFitness = -1;
   imaxFitness = -1;
-  meanFitness = -1;
   
-  setOptions(opt.getOptions());
+  setOptions(opt);
 }
 
 // Destructor
@@ -22,16 +21,21 @@ RealGen::~RealGen() {
 }
 
 
-void RealGen::setOptions(GAOptions opt) {
-  options = opt;
+void RealGen::setOptions(RealGenOptions &opt) {
+  options = opt.getOptions();
   Np = options.populationSize;
   Nx = options.genesNumber;
-  LB = options.lowerBounds;
-  UB = options.upperBounds;
+
   if (Np != population.size()) {
 	  population.resize(Np, Nx);
 	  newPopulation.resize(Np, Nx);
   }
+  // Set bounds to all chromosomes
+  for (size_t i = 0; i < population.size(); ++i) {
+    population[i].setBounds(options.lowerBounds, options.upperBounds);
+    newPopulation[i].setBounds(options.lowerBounds, options.upperBounds);
+  }
+
   // Initialize standars deviations or gaussian mutation
   sigma = new float[Nx];
   for (int i = 0; i<Nx; i++) {
@@ -42,7 +46,7 @@ void RealGen::setOptions(GAOptions opt) {
     delete[]tourIndex;
   }
   tourIndex = new int[options.selection.tournamentP];
-  maxGenerations = opt.maxGenerations;
+  maxGenerations = options.maxGenerations;
 
   setFitnessFunction(options.fitnessFcn, options.fitnessPar);
 
@@ -180,7 +184,7 @@ void RealGen::setMaxGenerations(int maxG) {
 
 
 void RealGen::setSeed(unsigned int seed) {
-  stat.setSeed(seed);
+  Stat::setSeed(seed);
 }
 
 // ========================================= Getter ======================================
@@ -191,9 +195,7 @@ int RealGen::getGeneration() {
 
 
 double RealGen::evalFitness(RealGenotype &x) {
-  RealGenotype g(x);
-  g.bound(LB, UB);
-  return fitnessFcn(g, fitnessPar);
+  return fitnessFcn(x, fitnessPar);
 }
 
 double RealGen::getMeanFitness() {
@@ -207,7 +209,6 @@ double RealGen::getMeanFitness() {
 RealGenotype RealGen::getBestChromosome() {
   RealGenotype best;
   best = population[iminFitness];
-  best.bound(LB, UB);
   return best;
 }
 
@@ -215,7 +216,7 @@ double RealGen::getMinFitness() {
   return minFitness;
 }
 
-double RealGen::diversity() {  // TODO
+double RealGen::getDiversity() {  // TO Test
   double I = 0.0;
   // Compute the centroid
   for(size_t j=0; j<Nx; j++) {
@@ -235,7 +236,7 @@ double RealGen::diversity() {  // TODO
 void RealGen::evalMinFitness(){
   minFitness = population[0].fitness;
   iminFitness = 0;
-  for(int i=0; i<Np; i++) {
+  for(int i=1; i<Np; i++) {
     if(population[i].fitness < minFitness) {
       minFitness = population[i].fitness;
       iminFitness = i;
@@ -246,9 +247,9 @@ void RealGen::evalMinFitness(){
 void RealGen::evalMaxFitness(){
   maxFitness = population[0].fitness;
   imaxFitness = 0;
-  for(int i=0; i<Np; i++) {
-    if(population[i].fitness > imaxFitness) {
-      imaxFitness = population[i].fitness;
+  for(int i=1; i<Np; i++) {
+    if(population[i].fitness > maxFitness) {
+      maxFitness = population[i].fitness;
       imaxFitness = i;
     }
   }
@@ -256,20 +257,57 @@ void RealGen::evalMaxFitness(){
 
 string RealGen::populationToString() {
   std::ostringstream os;
-  RealGenotype x_scaled;
+  RealGenotype x;
   os << "============== Generation: " << generation << " ===================" << endl;
   for(int i=0; i<Np; i++) {
-    x_scaled = population[i];
-    x_scaled.bound(LB, UB);
-    os << "[" << (i+1) << "] : "<< x_scaled.toString() << " -> Fitness " << x_scaled.fitness << endl;
+    x = population[i];
+    os << "[" << (i+1) << "] : "<< x.toString() << " -> Fitness " << x.fitness << endl;
   }
   return os.str();
 }
 
+
+bool RealGen::checkChromosome(RealGenotype &chromosome) {
+  for (int j = 0; j < Nx; ++j) {
+    if (isnan(chromosome.gene[j]) || isinf(chromosome.gene[j]) ){
+      cout << "checkGene Failed:" << endl;
+      cout << chromosome.toString() << endl;
+      cout << " has gene[" << j << "] = " << chromosome.gene[j] << " not normal" << endl;
+      return false;
+    }
+    if (chromosome.gene[j] < options.lowerBounds[j]) {
+      cout << "checkGene Failed:" << endl;
+      cout << chromosome.toString() << endl;
+      cout << " has gene[" << j << "] = " << chromosome.gene[j] << " < LB = " << options.lowerBounds[j] << endl;
+      return false;
+    }
+    if (chromosome.gene[j] > options.upperBounds[j]) {
+      cout << "checkGene Failed:" << endl;
+      cout << chromosome.toString() << endl;
+      cout << " has gene[" << j << "] = " << chromosome.gene[j] << " > UB = " << options.upperBounds[j] << endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+
+void RealGen::checkPopulation() {
+  for (int i = 0; i < Np; i++) {
+    if (!checkChromosome(population[i])) {
+      cout << "checkPopulation Failed: Chromosome " << i << endl;
+      exit(-1);
+    }
+  }
+}
+
+
+// ==================================================== Evolve ====================================================
 void RealGen::evolve() {
   RealGenotype offspring(Nx);
+  offspring.setBounds(options.lowerBounds, options.upperBounds);
 
-  int index1, index2;
+  int index1 = 0, index2 = 1;
   size_t k=0;
 
   if(options.selection.type == ROULETTE_WHEEL_SELECTION) {
@@ -277,7 +315,7 @@ void RealGen::evolve() {
   }
 
   if(options.selection.sorting) {
-    while(k< options.selection.elitismFactor*Np) {
+    while (k < (int)(options.selection.elitismFactor*Np)) {
       newPopulation[k] = population[k];
       ++k;
     }
@@ -300,6 +338,7 @@ void RealGen::evolve() {
     
     // Crossover
     crossoverUniform(index1, index2, offspring);
+
     // Mutation
     switch(options.mutation.type) {
       case UNIFORM_MUTATION:
@@ -309,13 +348,14 @@ void RealGen::evolve() {
         gaussianMutate(offspring);
       break;
     }
-    
+
     offspring.fitness  = evalFitness(offspring);
     newPopulation[k] = offspring;
     ++k;
   }
 
   if(options.selection.sorting) {
+    //sort(newPopulation.begin(), newPopulation.end());
     partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
   }
 
@@ -325,10 +365,11 @@ void RealGen::evolve() {
     }
   }
 
+  population = newPopulation;
+
   evalMinFitness();
   evalMaxFitness();
-  meanFitness = getMeanFitness();
-  newPopulation.swap(population);
+
   generation++;
 }
 
@@ -346,17 +387,23 @@ void RealGen::initRandom() {
   // evaluate statistics
   evalMinFitness();
   evalMaxFitness();
-  meanFitness = getMeanFitness();
 }
 
 
 void RealGen::initMutate(vector<float> &gene, float sigma) {
   generation=0;
   RealGenotype g(Nx);
+  g.setBounds(options.lowerBounds, options.upperBounds);
   for(int i=0; i<Nx; i++) {
-    if(gene[i] > UB[i]) gene[i] = UB[i];
-    if(gene[i] < LB[i]) gene[i] = LB[i];
-    g.gene[i] = (gene[i]-LB[i])/(UB[i]-LB[i]);
+    if (gene[i] < options.lowerBounds[i]) {
+      cerr << "initMutate error, gene[" << i << "] violate lowerBounds[" << i << "] = " << options.lowerBounds[i] << endl;
+      exit(-1);
+    }
+    if (gene[i] > options.upperBounds[i]) {
+      cerr << "initMutate error, gene[" << i << "] violate upperBounds[" << i << "] = " << options.upperBounds[i] << endl;
+      exit(-1);
+    }
+    g.gene[i] = gene[i];
   }
   population[0] = g;
   population[0].fitness = evalFitness(population[0]);
@@ -374,7 +421,6 @@ void RealGen::initMutate(vector<float> &gene, float sigma) {
   // evaluate statistics
   evalMinFitness();
   evalMaxFitness();
-  meanFitness = getMeanFitness();
 }
 
 
@@ -384,14 +430,15 @@ void RealGen::evalPopulationFitness() {
     population[i].fitness = evalFitness(population[i]);
   }
   if(options.selection.sorting) {
+    //sort(population.begin(), population.end());
     partial_sort(population.begin(), population.begin()+int(options.selection.elitismFactor*Np), population.end());
   }
 }
 
 // ================= Selection =================================
 void RealGen::rouletteWheelSelection(int &index1, int &index2) {
-  rouletteWheel(index1, sumFitnessR*stat.uniformRand());
-  rouletteWheel(index2, sumFitnessR*stat.uniformRand());
+  rouletteWheel(index1, sumFitnessR*Stat::uniformRand());
+  rouletteWheel(index2, sumFitnessR*Stat::uniformRand());
   if(index1 == index2) {
     if(index1 != Np-1)
       index2 = index1 + 1;
@@ -435,7 +482,7 @@ void RealGen::tournamentSelect(int p, int &iMin) {
   iMin = 0;
   double fMin = population[0].fitness;
   for(int i=0; i<p; i++) {
-    tourIndex[i] = stat.uniformIndex(Np);
+    tourIndex[i] = Stat::uniformIndex(Np);
   }
   for(int i=0; i<p; i++) {
     double f=population[tourIndex[i]].fitness;
@@ -447,11 +494,19 @@ void RealGen::tournamentSelect(int p, int &iMin) {
 }
 //==================================== Crossover ==================
 void RealGen::crossoverUniform(int index1, int index2, RealGenotype &c) {
-  for(size_t i=0; i<Nx; i++) {
-    if(stat.uniformRand()<0.5) {
-      c.gene[i] = population[index1].gene[i];
+  if (index1 < 0 || index1 >= Np) {
+    cerr << "crossoverUniform error: index1 = " << index1 << endl;
+    exit(-1);
+  }
+  if (index2 < 0 || index2 >= Np) {
+    cerr << "crossoverUniform error: index2 = " << index2 << endl;
+    exit(-1);
+  }
+  for(size_t j=0; j<Nx; j++) {
+    if(Stat::uniformRand()<0.5) {
+      c.gene[j] = population[index1].gene[j];
     } else {
-      c.gene[i] = population[index2].gene[i];
+      c.gene[j] = population[index2].gene[j];
     }
   }
 }
@@ -467,16 +522,16 @@ void RealGen::crossoverFixed(int index1, int index2, RealGenotype &c, int n) {
 //===================================== Mutation ======================
 void RealGen::uniformMutate(RealGenotype &g, float perc) {
   for (size_t i=0; i<Nx; i++) {
-    if(stat.uniformRand() < options.mutation.mutationRate) {
+    if(Stat::uniformRand() < options.mutation.mutationRate) {
       g.uniformLocalRandom(i, perc);
     }
   }
 }
 
 void RealGen::gaussianMutate(RealGenotype &g) {
-  for (size_t i=0; i<Nx; i++) {
-    if(stat.uniformRand() < options.mutation.mutationRate) {
-      g.gaussianLocalRandom(i, sigma[i]);
+  for (size_t j=0; j<Nx; j++) {
+    if(Stat::uniformRand() < options.mutation.mutationRate) {
+      g.gaussianLocalRandom(j, sigma[j]);
     }
   }
 }
