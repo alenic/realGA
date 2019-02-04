@@ -110,7 +110,7 @@ int main(int argc,  char** argv) {
 
   ```
   
-  It can be compiled and linked statically with the command (after INSTALL step)
+Compile with
   ```
   g++ -std=c++11 -I$(REALGEN_INCLUDE_FOLDERS) -o readme.bin readme.cpp $(REALGEN_LIB_FOLDER)/librealgen.a
   ```
