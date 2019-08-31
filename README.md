@@ -1,8 +1,7 @@
 # Real Gen
 Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.<br>
-The **Fitness** function is a function, defined by the user, that must be minimized. The Fitness, usually is a nonlinear Loss Function, that depends on a solution of the problem, this 'solution' is called **chromosome**.<br>
-A chromosome, is composed by n components called **genes**.<br>
-Every genes, are simply real numbers, and then, a chromosome can be view as a vector of real numbers. In this view, the Fitness is just a nonlinear multivariate function.
+The **Fitness** function is a nonlinear function, defined by the user, that must be minimized.<br>
+A chromosome, in this library, is simply composed by n real numbers called **genes**, then a chromosome is a real vector of dimension n, and a gene is a component of the vector.
 
 If x is the cromosome then
 
@@ -18,12 +17,6 @@ A **genetic algorithm** is a probabilistic method for find the minimum of the Fi
 
 ![genotype](docs/img/minimum.png)
 
-
-Real Gen is available for
-
-* Windows 7/10
-* Linux
-
 See the <a href='docs/index.md'>documentations</a> for more informations.
 
 ## Install
@@ -34,20 +27,24 @@ Download the repository with the command
 git clone https://github.com/alenic/realGen.git
 ```
 
-Use CMake to compile it.
-
-
-### Windows
+Create the forlder build for cmake:
 
 ```
 cd realGen
 mkdir build
 cd build
+```
+
+Use CMake to compile it:
+
+### Windows (Visual Studio 14)
+
+```
 cmake ..
 MSBuild.exe .\realGen.sln /p:Configuration={Release|Debug}
 ```
 
-If you want to use Win64 compiler use CMake as follows
+If you want to use Win64 compiler use the command:
 
 ```
 cmake -G "Visual Studio 14 2015 Win64" ..
@@ -56,9 +53,6 @@ cmake -G "Visual Studio 14 2015 Win64" ..
 ### Linux
 
 ```
-cd realGen
-mkdir build
-cd build
 cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
 make
 ```
