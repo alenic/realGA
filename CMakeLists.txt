@@ -10,7 +10,6 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -O2")
 include_directories(include)
 
 # Source file
-#file(GLOB SOURCES src/realgen.cpp src/realgenotype.cpp src/stat.cpp)
 file(GLOB SOURCES "src/*.cpp")
 
 # Shared library

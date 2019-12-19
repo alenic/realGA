@@ -19,6 +19,7 @@ realGen project: https://github.com/alenic/realGen
 #include "realgenotype.h"
 #include "stat.h"
 #include "realgenoptions.h"
+#include "fitnessfunction.h"
 
 using namespace std;
 
@@ -30,7 +31,7 @@ protected:
   size_t Np;
   size_t Nx;
 
-  double (*fitnessFcn)(RealGenotype &, void *);
+  FitnessFunction *fitnessFcn;
   void *fitnessPar;
   int generation;
 
@@ -50,7 +51,7 @@ public:
   RealGen(RealGenOptions &opt);
   ~RealGen();
   // Setter
-  void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
+  void setFitnessFunction(FitnessFunction *f);
   void setSorting(bool);
   void setMutationRate(float);
   void setElitismFactor(float);
@@ -62,7 +63,7 @@ public:
   // getter
   RealGenotype getBestChromosome();
   int getGeneration();
-  double evalFitness(RealGenotype &);
+  double evalFitness(const RealGenotype &);
   double getMeanFitness();
   double getMinFitness();
   string populationToString();

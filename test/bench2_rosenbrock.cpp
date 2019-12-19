@@ -1,15 +1,22 @@
 #include "testcommon.h"
+#include "fitnessfunction.h"
 
-double rosenbrockFitness(RealGenotype &g, void *par) {
-  double dx1 = g.gene[0]*g.gene[0]-g.gene[1];
-  double dx2 = 1.0 - g.gene[0];
-  return 100.0*dx1*dx1+dx2*dx2;
-}
+class RosenbrockFitness : public FitnessFunction {
+public:
+  RosenbrockFitness() {}
+
+  double eval(const RealGenotype &g) {
+    double dx1 = g.gene[0]*g.gene[0]-g.gene[1];
+    double dx2 = 1.0 - g.gene[0];
+    return 100.0*dx1*dx1+dx2*dx2;
+    }
+};
 
 void bench2_rosenbrock(RealGenOptions opt, GAResults &results) {
   float LB[] = {-2.048, -2.048},
       UB[] = { 2.048,  2.048};
 
+  RosenbrockFitness *myFitnessFunction = new RosenbrockFitness();
   strcpy(results.name, "Rosenbrock");
   results.maxIter = 5000;
   results.Np = 200;
@@ -17,8 +24,10 @@ void bench2_rosenbrock(RealGenOptions opt, GAResults &results) {
   opt.setPopulationSize(results.Np);
   opt.setGenesNumber(2);
   opt.setBounds(LB, UB);
-  opt.setFitnessFunction(rosenbrockFitness, NULL);
+  opt.setFitnessFunction(myFitnessFunction);
   RealGen ga(opt);
 
   testRealGen(ga, results.maxIter, 1e-4, results);
+
+  delete myFitnessFunction;
 }

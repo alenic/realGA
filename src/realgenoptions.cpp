@@ -61,9 +61,8 @@ void RealGenOptions::setBounds(float *lb, float *ub) {
   opt.upperBounds = ub;
 }
 
-void RealGenOptions::setFitnessFunction(double (*f)(RealGenotype &, void *), void *par) {
-  opt.fitnessFcn = f;
-  opt.fitnessPar = par;
+void RealGenOptions::setFitnessFunction(FitnessFunction *f) {
+  opt.fitnessFcnPtr = f;
 }
 
 void RealGenOptions::setMaxGenerations(size_t value) {

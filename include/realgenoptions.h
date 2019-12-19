@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include "realgenotype.h"
+#include "fitnessfunction.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ struct GAOptions {
   size_t populationSize;
   float *lowerBounds;
   float *upperBounds;
-  double (*fitnessFcn)(RealGenotype &, void *);
+  FitnessFunction *fitnessFcnPtr;
   void *fitnessPar;
   size_t maxGenerations;
   GAOptions();
@@ -64,7 +65,7 @@ public:
   void setLowerBounds(float *lb);
   void setUpperBounds(float *ub);
   void setBounds(float *lb, float *ub);
-  void setFitnessFunction(double (*f)(RealGenotype &, void *), void *);
+  void setFitnessFunction(FitnessFunction *f);
   void setMaxGenerations(size_t value);
 
   void setSelectionType(string value);

@@ -8,6 +8,7 @@ RealGen::RealGen(RealGenOptions &opt) {
   iminFitness = -1;
   maxFitness = -1;
   imaxFitness = -1;
+  fitnessFcn = nullptr;
   
   setOptions(opt);
 }
@@ -48,7 +49,7 @@ void RealGen::setOptions(RealGenOptions &opt) {
   tourIndex = new int[options.selection.tournamentP];
   maxGenerations = options.maxGenerations;
 
-  setFitnessFunction(options.fitnessFcn, options.fitnessPar);
+  setFitnessFunction(options.fitnessFcnPtr);
 
   if (options.verbose) {
 	  checkOptions();
@@ -141,9 +142,8 @@ void RealGen::checkOptions() {
 }
 
 // ========================================= Setter ======================================
-void RealGen::setFitnessFunction(double (*f)(RealGenotype &, void *), void *par) {
+void RealGen::setFitnessFunction(FitnessFunction *f) {
   fitnessFcn = f;
-  fitnessPar = par;
 }
 
 void RealGen::setSorting(bool value) {
@@ -194,8 +194,8 @@ int RealGen::getGeneration() {
 }
 
 
-double RealGen::evalFitness(RealGenotype &x) {
-  return fitnessFcn(x, fitnessPar);
+double RealGen::evalFitness(const RealGenotype &x) {
+  return fitnessFcn->eval(x);
 }
 
 double RealGen::getMeanFitness() {
