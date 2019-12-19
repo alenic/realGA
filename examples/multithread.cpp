@@ -195,7 +195,7 @@ int main(int argc,  char** argv) {
   
   cout << "Single optimization...."<< endl;
   t0 = get_timestamp();
-  optimize(seed, 2);
+  optimize(seed, 1);
   t1 = get_timestamp();
   cout << "Eapsed Time: " << (t1-t0)/1000000.0L << endl;
   

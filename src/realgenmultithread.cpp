@@ -31,7 +31,7 @@ void *RealGenMultithread::evaluatePopulationThread(void *params) {
   struct thread_params *tp;
   tp = (struct thread_params *) params;
   RealGenMultithread * ga = tp->ga;
-  for (int k = tp->startIndex; k<tp->startIndex + tp->neval; ++k) {
+  for (int k = tp->startIndex; k < (tp->startIndex+tp->neval) && (k < tp->ga->Np); ++k) {
     ga->newPopulation[k].fitness = ga->evalFitness(ga->newPopulation[k]);
   }
   pthread_exit(NULL);
@@ -95,14 +95,9 @@ void RealGenMultithread::evolve() {
   thread_params *localThreadParam = new thread_params[nThread];
   for (int i = 0; i < nThread; ++i) {
     localThreadParam[i].startIndex = elitismIndex + interval*i;
-    if (i == nThread - 1) {
-      localThreadParam[i].neval = 2 * interval;
-    } else {
-      localThreadParam[i].neval = interval;
-    }
+    localThreadParam[i].neval = interval;
     localThreadParam[i].ga = this;
-  }
-  for (int i = 0; i < nThread; ++i) {
+
 #ifdef _WIN32
     unsigned threadID;
     localThread[i] = (HANDLE)_beginthreadex(0, 0, &RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i], 0, &threadID);
@@ -114,7 +109,6 @@ void RealGenMultithread::evolve() {
       exit(-1);
     }
 #endif
-
   }
 
   for(int i=0; i<nThread; ++i) {
