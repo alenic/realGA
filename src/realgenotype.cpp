@@ -1,12 +1,9 @@
 #include "realgenotype.h"
+#include <sstream>
 #include <math.h>
 
-RealGenotype::RealGenotype() {
-
-}
 
 RealGenotype::RealGenotype(int n) {
-
 	gene.resize(n);
 }
 
@@ -22,7 +19,7 @@ RealGenotype::~RealGenotype() {
 }
 
 
-void RealGenotype::setBounds(float *lb, float* ub) {
+void RealGenotype::setBounds(const vector<float> &lb, const vector<float> &ub) {
   LB = lb;
   UB = ub;
 }

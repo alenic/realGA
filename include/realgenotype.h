@@ -6,14 +6,14 @@ author: A. Nicolosi
 realGen project: https://github.com/alenic/realGen
 
 */
-#ifndef REALGENOTYPE_H_
-#define REALGENOTYPE_H_
+#ifndef REALGENOTYPE_H
+#define REALGENOTYPE_H
 #include "stat.h"
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
 #include <string>
-#include <sstream>
+
 
 using namespace std;
 
@@ -22,17 +22,16 @@ public:
   vector<float> gene;
   double fitness;
 
-  float *LB;
-  float *UB;
+  vector<float> LB;
+  vector<float> UB;
 
-  RealGenotype();
   RealGenotype(int n);
   RealGenotype(const RealGenotype &c);
   ~RealGenotype();
   
   string toString();
 
-  void setBounds(float *lb, float* ub);
+  void setBounds(const vector<float> &lb, const vector<float> &ub);
   void uniformRandom();
   void uniformRandom(int);
   void uniformLocalRandom(int, float);
@@ -44,4 +43,4 @@ public:
   bool operator==(const RealGenotype &other) const;
 };
 
-#endif // REALGENOTYPE_H_
+#endif // REALGENOTYPE_H

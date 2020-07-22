@@ -19,8 +19,8 @@ public:
 
 
 void bench1_sphere(RealGenOptions opt, GAResults &results) {
-  float LB[] = {-5.12, -5.12, -5.12, -5.12},
-      UB[] = { 5.12,  5.12,  5.12,  5.12};
+  vector<float> LB = { -5.12, -5.12, -5.12, -5.12 };
+  vector<float> UB = { 5.12,  5.12,  5.12,  5.12};
 
   SphereFitness *myFitnessFunction = new SphereFitness();
   strcpy(results.name, "Sphere");
@@ -28,7 +28,7 @@ void bench1_sphere(RealGenOptions opt, GAResults &results) {
   results.Np = 50;
   
   opt.setPopulationSize(results.Np);
-  opt.setGenesNumber(4);
+  opt.setSolutionSize(4);
   opt.setBounds(LB, UB);
   opt.setFitnessFunction(myFitnessFunction);
   RealGen ga(opt);

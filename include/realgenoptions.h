@@ -42,8 +42,8 @@ struct GAOptions {
   bool verbose;
   size_t genesNumber;
   size_t populationSize;
-  float *lowerBounds;
-  float *upperBounds;
+  vector<float> lowerBounds;
+  vector<float> upperBounds;
   FitnessFunction *fitnessFcnPtr;
   void *fitnessPar;
   size_t maxGenerations;
@@ -61,10 +61,10 @@ public:
   void setVerbose(bool value);
 
   void setPopulationSize(size_t np);
-  void setGenesNumber(size_t nx);
-  void setLowerBounds(float *lb);
-  void setUpperBounds(float *ub);
-  void setBounds(float *lb, float *ub);
+  void setSolutionSize(size_t nx);
+  void setLowerBounds(const vector<float> &lb);
+  void setUpperBounds(const vector<float> &ub);
+  void setBounds(const vector<float> &lb, const vector<float> &ub);
   void setFitnessFunction(FitnessFunction *f);
   void setMaxGenerations(size_t value);
 
@@ -84,8 +84,12 @@ public:
 
   GAOptions getOptions(void);
 private:
+  size_t mPopulationSize;
+
+
+
   GAOptions opt;
 };
 
 
-#endif
+#endif //REALGENOPTIONS_H

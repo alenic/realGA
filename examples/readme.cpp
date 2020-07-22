@@ -16,11 +16,11 @@ public:
 
 
 int main(int argc,  char** argv) {
-  float LB[] = {-5.0, -5.0};  // Lower bound of genes
-  float UB[] = { 5.0,  5.0};  // Upper bound of genes
+  vector<float> LB = {-5.0, -5.0};  // Lower bound of genes
+  vector<float> UB = { 5.0,  5.0};  // Upper bound of genes
   QuadraticFitness *myFitnessFunction = new QuadraticFitness();
   RealGenOptions options;
-  options.setGenesNumber(2);
+  options.setSolutionSize(2);
   options.setPopulationSize(50);
   options.setBounds(LB, UB);
   options.setVerbose(true);

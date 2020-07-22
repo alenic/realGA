@@ -16,8 +16,8 @@ public:
 
 
 void bench3_flatSurface(RealGenOptions opt, GAResults &results) {
-  float LB[] = {-5.12, -5.12, -5.12, -5.12, -5.12},
-      UB[] = { 5.12,  5.12,  5.12,  5.12,  5.12};
+  vector<float> LB = { -5.12, -5.12, -5.12, -5.12, -5.12 };
+  vector<float> UB = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
   FlatSurfaceFitness *myFitnessFunction = new FlatSurfaceFitness();
   strcpy(results.name, "Flat surface");
@@ -25,7 +25,7 @@ void bench3_flatSurface(RealGenOptions opt, GAResults &results) {
   results.Np = 200;
 
   opt.setPopulationSize(results.Np);
-  opt.setGenesNumber(5);
+  opt.setSolutionSize(5);
   opt.setBounds(LB, UB);
   opt.setFitnessFunction(myFitnessFunction);  
 

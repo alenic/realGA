@@ -13,8 +13,8 @@ public:
 };
 
 void bench2_rosenbrock(RealGenOptions opt, GAResults &results) {
-  float LB[] = {-2.048, -2.048},
-      UB[] = { 2.048,  2.048};
+  vector<float> LB = { -2.048, -2.048 };
+  vector<float> UB = { 2.048,  2.048};
 
   RosenbrockFitness *myFitnessFunction = new RosenbrockFitness();
   strcpy(results.name, "Rosenbrock");
@@ -22,7 +22,7 @@ void bench2_rosenbrock(RealGenOptions opt, GAResults &results) {
   results.Np = 200;
   
   opt.setPopulationSize(results.Np);
-  opt.setGenesNumber(2);
+  opt.setSolutionSize(2);
   opt.setBounds(LB, UB);
   opt.setFitnessFunction(myFitnessFunction);
   RealGen ga(opt);

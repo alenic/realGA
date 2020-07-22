@@ -143,8 +143,8 @@ timestamp_t get_timestamp() {
   return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
 }
 
-float LB[] = {-5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0};  // Lower bound of genes
-float UB[] = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};  // Upper bound of genes
+vector<float> LB = {-5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0};  // Lower bound of genes
+vector<float> UB = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};  // Upper bound of genes
 
 
 
@@ -152,7 +152,7 @@ float UB[] = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};  // U
 void optimize(unsigned int seed, unsigned int nThreads) {
   RealGenOptions options;
   MyFitnessFunction *myFitnessFunction = new MyFitnessFunction();
-  options.setGenesNumber(10);
+  options.setSolutionSize(10);
   options.setPopulationSize(200);
   options.setBounds(LB, UB);
   options.setFitnessFunction(myFitnessFunction);

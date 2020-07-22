@@ -9,8 +9,8 @@ void RealGenotypeTest::test_uniformRandom() {
   // bound test
   cout << "|---> bound test: ";
   RealGenotype g;
-  float LB[40];
-  float UB[40];
+  vector<float> LB(40);
+  vector<float> UB(40);
   for (int i = 0; i < 40; ++i) {
     LB[i] = 100 * rand() - 50;
     UB[i] = LB[i] + 10;
@@ -42,8 +42,8 @@ void RealGenotypeTest::test_uniformLocalRandom() {
   // Test the interval bound
   cout << "|---> 0.5 +- 0.2*rand() - : ";
   RealGenotype g(1);
-  float LB[] = { 0.0 };
-  float UB[] = { 1.0 };
+  vector<float> LB = { 0.0 };
+  vector<float> UB = { 1.0 };
 
   g.setBounds(LB, UB);
   bool fail = false;

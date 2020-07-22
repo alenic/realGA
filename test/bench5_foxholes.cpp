@@ -24,9 +24,9 @@ private:
 
 
 void bench5_foxholes(RealGenOptions opt, GAResults &results) {
-  float LB[] = {-65536, -65536},
-      UB[] = { 65536,  65536};
-  float A[50] = {-32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, 
+  vector<float> LB = { -65536, -65536 };
+  vector<float> UB = { 65536,  65536};
+  float A[] = {-32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, 
            -32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 32, 32, 32, 32, 32, 16, 16, 16, 16, 16};
   FoxholesFitness *myFitnessFunction = new FoxholesFitness(A);
   
@@ -35,7 +35,7 @@ void bench5_foxholes(RealGenOptions opt, GAResults &results) {
   results.Np = 200;
 
   opt.setPopulationSize(results.Np);
-  opt.setGenesNumber(2);
+  opt.setSolutionSize(2);
   opt.setBounds(LB, UB);
   opt.setFitnessFunction(myFitnessFunction);
 

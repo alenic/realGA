@@ -7,9 +7,6 @@ GAOptions::GAOptions() {
 RealGenOptions::RealGenOptions() {
   opt.populationSize = 100;
 
-  opt.lowerBounds = NULL;
-  opt.upperBounds = NULL;
-
   opt.maxGenerations = 100 * opt.populationSize;
 
   opt.selection.type = ROULETTE_WHEEL_SELECTION;
@@ -44,19 +41,19 @@ void RealGenOptions::setPopulationSize(size_t value) {
   opt.populationSize = value;
 }
 
-void RealGenOptions::setGenesNumber(size_t value) {
+void RealGenOptions::setSolutionSize(size_t value) {
   opt.genesNumber = value;
 }
 
-void RealGenOptions::setLowerBounds(float *value) {
-  opt.lowerBounds = value;
+void RealGenOptions::setLowerBounds(const vector<float> &lb) {
+  opt.lowerBounds = lb;
 }
 
-void RealGenOptions::setUpperBounds(float *value) {
-  opt.upperBounds = value;
+void RealGenOptions::setUpperBounds(const vector<float> &ub) {
+  opt.upperBounds = ub;
 }
 
-void RealGenOptions::setBounds(float *lb, float *ub) {
+void RealGenOptions::setBounds(const vector<float> &lb, const vector<float> &ub) {
   opt.lowerBounds = lb;
   opt.upperBounds = ub;
 }
