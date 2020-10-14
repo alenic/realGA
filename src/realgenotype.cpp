@@ -3,6 +3,10 @@
 #include <math.h>
 
 
+RealGenotype::RealGenotype() {
+
+}
+
 RealGenotype::RealGenotype(int n) {
 	gene.resize(n);
 }
@@ -10,8 +14,8 @@ RealGenotype::RealGenotype(int n) {
 RealGenotype::RealGenotype(const RealGenotype &c) {
 	gene = c.gene;
 	fitness = c.fitness;
-  LB = c.LB;
-  UB = c.UB;
+	LB = c.LB;
+	UB = c.UB;
 }
 
 RealGenotype::~RealGenotype() {

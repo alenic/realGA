@@ -25,6 +25,7 @@ public:
   vector<float> LB;
   vector<float> UB;
 
+  RealGenotype();
   RealGenotype(int n);
   RealGenotype(const RealGenotype &c);
   ~RealGenotype();
