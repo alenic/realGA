@@ -362,6 +362,9 @@ void RealGen::evolve() {
   if(options.mutation.type == GAUSSIAN_MUTATION) {
     for(int i=0; i<Nx; i++) {
       sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations));
+      if (sigma[i] <= 0) {
+        sigma[i] = 0;
+      }
     }
   }
 
