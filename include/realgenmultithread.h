@@ -43,7 +43,7 @@ public:
 
 struct thread_params {
   int startIndex;
-  unsigned int neval;
+  int endIndex;
   RealGenMultithread *ga;
 };
 

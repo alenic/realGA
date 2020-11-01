@@ -308,6 +308,7 @@ void RealGen::evolve() {
   offspring.setBounds(options.lowerBounds, options.upperBounds);
 
   int index1 = 0, index2 = 1;
+  int elitismIndex = (int)(options.selection.elitismFactor*Np);
   size_t k=0;
 
   if(options.selection.type == ROULETTE_WHEEL_SELECTION) {
@@ -315,7 +316,7 @@ void RealGen::evolve() {
   }
 
   if(options.selection.sorting) {
-    while (k < (int)(options.selection.elitismFactor*Np)) {
+    while (k < elitismIndex) {
       newPopulation[k] = population[k];
       ++k;
     }
@@ -355,13 +356,12 @@ void RealGen::evolve() {
   }
 
   if(options.selection.sorting) {
-    //sort(newPopulation.begin(), newPopulation.end());
-    partial_sort(newPopulation.begin(), newPopulation.begin()+int(options.selection.elitismFactor*Np), newPopulation.end());
+    partial_sort(newPopulation.begin(), newPopulation.begin()+elitismIndex, newPopulation.end());
   }
 
   if(options.mutation.type == GAUSSIAN_MUTATION) {
     for(int i=0; i<Nx; i++) {
-      sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations))*0.1;
+      sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations));
     }
   }
 
@@ -396,11 +396,11 @@ void RealGen::initMutate(vector<float> &gene, float sigma) {
   g.setBounds(options.lowerBounds, options.upperBounds);
   for(int i=0; i<Nx; i++) {
     if (gene[i] < options.lowerBounds[i]) {
-      cerr << "initMutate error, gene[" << i << "] violate lowerBounds[" << i << "] = " << options.lowerBounds[i] << endl;
+      cerr << "initMutate error, gene[" << i << "]="<< gene[i] <<" violate lowerBounds[" << i << "] = " << options.lowerBounds[i] << endl;
       exit(-1);
     }
     if (gene[i] > options.upperBounds[i]) {
-      cerr << "initMutate error, gene[" << i << "] violate upperBounds[" << i << "] = " << options.upperBounds[i] << endl;
+      cerr << "initMutate error, gene[" << i << "]="<< gene[i] <<" violate upperBounds[" << i << "] = " << options.upperBounds[i] << endl;
       exit(-1);
     }
     g.gene[i] = gene[i];

@@ -30,6 +30,7 @@ void RealGenotype::setBounds(const vector<float> &lb, const vector<float> &ub) {
 
 string RealGenotype::toString() {
 	std::ostringstream os;
+	os.precision(20);
 	os << "[";
 	for(int i=0; i<gene.size()-1; i++) {
 		os << gene[i] << ",";
@@ -86,7 +87,7 @@ void RealGenotype::gaussianLocalRandom(int i, float sigma) {
 		exit(-1);
 	}
 	
-	float r = Stat::gaussianRand(0.0, sigma)*(UB[i]-LB[i]);
+	float r = Stat::gaussianRand(0.0, sigma*(UB[i]-LB[i])/2.0f);
   if (isnan(r) || isinf(r)) {
     cerr << "gaussianLocalRandom error!  r=" << r << endl;
     r = 0.0;

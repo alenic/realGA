@@ -31,7 +31,8 @@ void *RealGenMultithread::evaluatePopulationThread(void *params) {
   struct thread_params *tp;
   tp = (struct thread_params *) params;
   RealGenMultithread * ga = tp->ga;
-  for (int k = tp->startIndex; k < (tp->startIndex+tp->neval) && (k < tp->ga->Np); ++k) {
+
+  for (int k = tp->startIndex; k < tp->endIndex; ++k) {
     ga->newPopulation[k].fitness = ga->evalFitness(ga->newPopulation[k]);
   }
   pthread_exit(NULL);
@@ -90,14 +91,16 @@ void RealGenMultithread::evolve() {
     ++k;
   }
   
-  int interval = floor((float)(Np-elitismIndex)/(float)nThread);
+  int interval = ceil((float)(Np-elitismIndex)/(float)nThread);
 
-  thread_params *localThreadParam = new thread_params[nThread];
+  thread_params localThreadParam[nThread];
+  
   for (int i = 0; i < nThread; ++i) {
     localThreadParam[i].startIndex = elitismIndex + interval*i;
-    localThreadParam[i].neval = interval;
+    localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)Np);
     localThreadParam[i].ga = this;
-
+  
+  
 #ifdef _WIN32
     unsigned threadID;
     localThread[i] = (HANDLE)_beginthreadex(0, 0, &RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i], 0, &threadID);
@@ -119,15 +122,13 @@ void RealGenMultithread::evolve() {
 #endif
   }
 
-  delete[] localThreadParam;
-
   if(options.selection.sorting) {
     partial_sort(newPopulation.begin(), newPopulation.begin()+elitismIndex, newPopulation.end());
   }
 
   if(options.mutation.type == GAUSSIAN_MUTATION) {
     for(int i=0; i<Nx; i++) {
-      sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations))*0.1;
+      sigma[i] = options.mutation.gaussianScale*(1.0 - options.mutation.gaussianShrink*((float)generation/(float)maxGenerations));
     }
   }
 
