@@ -11,84 +11,59 @@ typedef enum { ROULETTE_WHEEL_SELECTION=0, TOURNAMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=0, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
 typedef enum { UNIFORM_MUTATION=0, GAUSSIAN_MUTATION} MutationType;
 
-struct SelectionOpt {
-  SelectionType type;
-  int tournamentP;
-  bool sorting;
-  float elitismFactor;
-};
-
-struct CrossoverOpt {
-  CrossoverType type;
-  unsigned int index1;
-  unsigned int index2;
-};
-
-struct MutationOpt {
-  MutationType type;
-  float uniformPerc;
-  float mutationRate;
-  float gaussianScale;
-  float gaussianShrink;
-};
-
-/*
-  Backend option struct
-*/
-struct GAOptions {
-  SelectionOpt selection;
-  CrossoverOpt crossover;
-  MutationOpt mutation;
-  bool verbose;
-  size_t genesNumber;
-  size_t populationSize;
-  vector<float> lowerBounds;
-  vector<float> upperBounds;
-  FitnessFunction *fitnessFcnPtr;
-  void *fitnessPar;
-  size_t maxGenerations;
-  GAOptions();
-};
-
 /*
   Class used for option settings
 */
 class RealGenOptions {
 public:
-  RealGenOptions();
-  ~RealGenOptions();
+    RealGenOptions();
+    ~RealGenOptions();
 
-  void setVerbose(bool value);
+    void setPopulationSize(int np);
+    void setChromosomeSize(int nx);
+    void setLowerBounds(const vector<float> &lb);
+    void setUpperBounds(const vector<float> &ub);
+    void setBounds(const vector<float> &lb, const vector<float> &ub);
+    void setMaxGenerations(int value);
 
-  void setPopulationSize(size_t np);
-  void setSolutionSize(size_t nx);
-  void setLowerBounds(const vector<float> &lb);
-  void setUpperBounds(const vector<float> &ub);
-  void setBounds(const vector<float> &lb, const vector<float> &ub);
-  void setFitnessFunction(FitnessFunction *f);
-  void setMaxGenerations(size_t value);
+    void setSelectionType(string value);
+    void setSelectionTournamentP(int value);
+    void setSorting(bool value);
+    void setElitismFactor(float value);
 
-  void setSelectionType(string value);
-  void setSelectionTournamentP(size_t value);
-  void setSorting(bool value);
-  void setElitismFactor(float value);
+    void setMutationType(string value);
+    void setUniformMutationPercentage(float value);
+    void setMutationRate(float value);
+    void setMutationGaussianScaleShrink(float scale, float shrink);
 
-  void setMutationType(string value);
-  void setUniformMutationPercentage(float value);
-  void setMutationRate(float value);
-  void setMutationGaussianScaleShrink(float scale, float shrink);
+    void setCrossoverType(string value);
+    void setSinglePointCrossoverIndex(int value);
+    void setTwoPointCrossoverIndexes(int i1, int i2);
 
-  void setCrossoverType(string value);
-  void setSinglePointCrossoverIndex(size_t value);
-  void setTwoPointCrossoverIndexes(size_t i1, size_t i2);
+public:
+    int populationSize;
+    //SelectionOpt
+    SelectionType selectionType;
+    int selectionTournamentP;
+    bool selectionSorting;
+    float selectionElitismFactor;
 
-  GAOptions getOptions(void);
-private:
-  size_t mPopulationSize;
+    //CrossoverOpt
+    CrossoverType crossoverType;
+    unsigned int crossoverIndex1;
+    unsigned int crossoverIndex2;
 
+    // MutationOpt
+    MutationType mutationType;
+    float mutationUniformPerc;
+    float mutationRate;
+    float mutationGaussianScale;
+    float mutationGaussianShrink;
 
-
-  GAOptions opt;
+    int chromosomeSize;
+    vector<float> lowerBounds;
+    vector<float> upperBounds;
+    int maxGenerations;
 };
 
 

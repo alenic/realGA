@@ -12,8 +12,9 @@ realGen project: https://github.com/alenic/realGen
 #include "realgenotype.h"
 
 class FitnessFunction {
-  public:
-  virtual double eval(const RealGenotype &x) = 0;
+public:
+    virtual double eval(const RealGenotype &x) = 0;
+    virtual ~FitnessFunction() {};
 };
 
 

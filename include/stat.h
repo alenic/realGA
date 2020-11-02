@@ -17,11 +17,11 @@ using namespace std;
 
 class Stat {
 public:
-  static float uniformRand();
-  static float uniformRand(float lb, float ub);
-  static float gaussianRand(float m, float s);
-  static int uniformIndex(int N);
-  static void setSeed(unsigned int seed);
+    static float uniformRand();
+    static float uniformRand(float lb, float ub);
+    static float gaussianRand(float m, float s);
+    static int uniformIndex(int N);
+    static void setSeed(unsigned int seed);
 };
 
 #endif // STAT_H_
