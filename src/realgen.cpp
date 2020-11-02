@@ -187,6 +187,22 @@ void RealGen::setSeed(unsigned int seed) {
   Stat::setSeed(seed);
 }
 
+void RealGen::setPopulation(int index, RealGenotype &chromosome) {
+  if (index >= Np) {
+    cerr << "ERROR: setPopulation: index " << index << " is out of range [0," << Np << "]" << endl;
+  } else {
+    population[index] = chromosome;
+  }
+}
+
+void RealGen::setPopulation(vector<RealGenotype>  &new_population) {
+  if (population.size() != Np) {
+    cerr << "ERROR: setPopulation: size of population " << population.size() << " is not the same as Np = " << Np << endl;
+  } else {
+    population = new_population;
+  }
+}
+
 // ========================================= Getter ======================================
 
 int RealGen::getGeneration() {
@@ -231,6 +247,10 @@ double RealGen::getDiversity() {  // TO Test
     }
   }
   return I;
+}
+
+vector<RealGenotype> RealGen::getPopulation() {
+  return population;
 }
 
 void RealGen::evalMinFitness(){

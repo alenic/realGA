@@ -47,6 +47,8 @@ protected:
   void evalMinFitness();
   void evalMaxFitness();
 
+  
+
 public:
   RealGen(RealGenOptions &opt);
   ~RealGen();
@@ -60,6 +62,8 @@ public:
   void setMaxGenerations(int);
   void setSeed(unsigned int);
 
+  void setPopulation(int index, RealGenotype &chromosome);
+  void setPopulation(vector<RealGenotype>  &new_population);
   // getter
   RealGenotype getBestChromosome();
   int getGeneration();
@@ -69,6 +73,8 @@ public:
   string populationToString();
   double getDiversity();
   void checkOptions();
+  vector<RealGenotype> getPopulation();
+  
   // For debug
   bool checkChromosome(RealGenotype &chromosome);
   void checkPopulation();
