@@ -30,7 +30,7 @@ void RealGenotype::setBounds(const vector<float> &lb, const vector<float> &ub) {
 
 string RealGenotype::toString() {
     std::ostringstream os;
-    os.precision(20);
+    os.precision(10);
     os << "[";
     for(int i=0; i<gene.size()-1; i++) {
         os << gene[i] << ",";

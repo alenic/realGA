@@ -1,7 +1,8 @@
 #include "realgen.h"
 
 // Constructors
-RealGen::RealGen(RealGenOptions &opt) {
+RealGen::RealGen()
+{
     mTourIndex = nullptr;
     // statistics
     mMinFitness = -1;
@@ -9,7 +10,11 @@ RealGen::RealGen(RealGenOptions &opt) {
     mMaxFitness = -1;
     mIndexMaxFitness = -1;
     mFitnessFcn = nullptr;
+    mVerbose = false;
 
+}
+
+RealGen::RealGen(RealGenOptions &opt) : RealGen() {
     setOptions(opt);
 }
 

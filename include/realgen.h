@@ -25,6 +25,7 @@ using namespace std;
 
 class RealGen {
 public:
+    RealGen();
     RealGen(RealGenOptions &opt);
     ~RealGen();
     // Setter
