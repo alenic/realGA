@@ -366,7 +366,15 @@ void RealGen::evolve() {
         }
 
         // Crossover
-        crossoverUniform(index1, index2, offspring);
+        switch(mOptions.crossoverType) {
+            case UNIFORM_CROSSOVER:
+                crossoverUniform(index1, index2, offspring);
+                break;
+            case SINGLE_POINT_CROSSOVER:
+                crossoverFixed(index1, index2, offspring, mOptions.crossoverIndex1);
+                break;
+        }
+        
 
         // Mutation
         switch(mOptions.mutationType) {
