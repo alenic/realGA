@@ -1,25 +1,15 @@
 # Real Gen
-Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.<br>
-The **Fitness** function is a nonlinear function, defined by the user, that must be minimized.<br>
-A chromosome, in this library, is simply composed by n real numbers called **genes**, then a chromosome is a real vector of dimension n, and a gene is a component of the vector.
+Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.
 
-If x is the cromosome then
+* $F(x)$ represents the **fitness function**, a non-linear function defined by the user. The objective is to identify the *minimum value* of this function.
+* $x = (x_1, x_2, ..., x_n)$ is the input of the fitness function and is called **chromosome**
+* $x_i$ is the i-th component of the chromosome $x$ is called **gene**
+* $L=(l_1, l_2, ... , l_n)$ and $U=(u_1, u_2, ... , u_n)$ are the **lower** and **upper** bounds respectively of the chromosome, specifying the range within which the gene values must fall: $l_i \le x_i \le u_i$
+* A **genetic algorithm** is a probabilistic optimization method employed to discover the minimum of a fitness function. It effectively addresses the following problem:
 
-![genotype](docs/img/x_vec.png)
+$$x^* = \arg \min_{L \le x \le U} F(x)$$
 
-x_i are the genes (for i =1,...,n). <br>
-
-Every genes x_i are bounded by two real value: 
-
-* LB_i <= x_i <= UB_i,  for i = 1,...,n.
-
-A **genetic algorithm** is a probabilistic method for find the minimum of the Fitness function, and it solves the problem
-
-![genotype](docs/img/minimum.png)
-
-See the <a href='docs/index.md'>documentations</a> for more informations.
-
-## Install
+# Install
 
 Download the repository with the command
 
@@ -35,13 +25,20 @@ mkdir build
 cd build
 ```
 
-Use CMake to compile it:
+Use CMake to build the library 
 
-### Windows (Visual Studio 14)
+## Linux
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+
+## Windows (Visual Studio 14)
 
 ```
 cmake ..
-MSBuild.exe .\realGen.sln /p:Configuration={Release|Debug}
+MSBuild.exe .\realGen.sln /p:Configuration=Release
 ```
 
 If you want to use Win64 compiler use the command:
@@ -50,12 +47,17 @@ If you want to use Win64 compiler use the command:
 cmake -G "Visual Studio 14 2015 Win64" ..
 ```
 
-### Linux
+It will generates the library librealgen.a into the folder build
 
+
+# Compile
+Use the following command to compile a .cpp file that use librealgen.a:
 ```
-cmake -DCMAKE_BUILD_TYPE={Release|Debug} ..
-make
+g++ -std=c++11 -I$(REALGEN_INCLUDE_FOLDER) -o readme.bin readme.cpp $(REALGEN_LIB_FOLDER)/librealgen.a
 ```
+
+* REALGEN_INCLUDE_FOLDERS is the folder of include files, (the **include** folder)
+* REALGEN_LIB_FOLDER is the folder where the librealgen.a file was generated 
 
 # Quick start
 
@@ -110,11 +112,6 @@ int main(int argc,  char** argv) {
     return 0;
 }
 
-  ```
-  
-Compile with
-  ```
-  g++ -std=c++11 -I$(REALGEN_INCLUDE_FOLDERS) -o readme.bin readme.cpp $(REALGEN_LIB_FOLDER)/librealgen.a
   ```
   
 
