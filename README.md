@@ -47,8 +47,14 @@ If you want to use Win64 compiler use the command:
 cmake -G "Visual Studio 14 2015 Win64" ..
 ```
 
-It will generates the library librealgen.a into the folder build
+It will generates the static library librealgen.a and the share library librealgen_shared.so into the folder build/Libs
 
+# Test
+To test you can execute the test_main program:
+
+```
+realGen/build > ./Tests/test_main
+```
 
 # Compile
 Use the following command to compile a .cpp file that use librealgen.a:
