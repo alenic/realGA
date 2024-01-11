@@ -5,6 +5,7 @@
 #include <string>
 #include <time.h>
 #include <math.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ enum TextColor {
 
 void coutColor(const char * s, TextColor color);
 
-// Stat Unit Tests
+// Statistics Tests
 class StatTest {
 private:
     Stat stat;
@@ -28,7 +29,7 @@ public:
 };
 
 
-// Realchromosome Unit Tests
+// Realchromosome Tests
 class RealChromosomeTest {
 public:
     RealChromosomeTest();
@@ -37,6 +38,14 @@ public:
     void test_randGaussianPerc();
     void test_bound();
     void test_distanceTo();
+};
+
+// Selection Tests
+class SelectionTests {
+public:
+    SelectionTests();
+    void test_RWsearchIndexBinarySearch();
+    void test_RWselect();
 };
 
 
@@ -54,12 +63,14 @@ struct GAResults {
     RealChromosome best;
 };
 
+void printDistribution(vector<float> &x);
+
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
 
 // Benchmark
 void benchmark(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize);
 
-// Test Problems
+// Problems
 void sphere_problem(RealGenOptions opt, GAResults &results);
 void rosenbrock_problem(RealGenOptions opt, GAResults &results);
 void flatSurface_problem(RealGenOptions opt, GAResults &results);

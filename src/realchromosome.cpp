@@ -11,7 +11,7 @@ website: https://github.com/alenic
 
 RealChromosome::RealChromosome()
 {
-
+    fitness = 0.0;
 }
 
 RealChromosome::RealChromosome(int n)
@@ -32,6 +32,25 @@ RealChromosome::~RealChromosome()
 
 }
 
+RealChromosome & RealChromosome::operator= ( const RealChromosome &c ) {
+    gene = c.gene;
+    fitness = c.fitness;
+    LB = c.LB;
+    UB = c.UB;
+    return *this;
+}
+
+bool RealChromosome::operator<(const RealChromosome &c) const {
+    return fitness < c.fitness;
+}
+
+bool RealChromosome::operator==(const RealChromosome &other) const {
+    if(gene.size() != other.gene.size()) return false;
+    for(int i=0; i<other.gene.size(); i++) {
+        if(gene[i] != other.gene[i]) return false;
+    }
+    return true;
+}
 
 void RealChromosome::setBounds(const vector<float> &lb, const vector<float> &ub)
 {
@@ -112,22 +131,4 @@ void RealChromosome::randGaussianPerc(int i, float sigma) {
         gene[i] = UB[i];
 }
 
-RealChromosome & RealChromosome::operator= ( const RealChromosome &c ) {
-    gene = c.gene;
-    fitness = c.fitness;
-    LB = c.LB;
-    UB = c.UB;
-    return *this;
-}
 
-bool RealChromosome::operator<(const RealChromosome &c) const {
-    return fitness < c.fitness;
-}
-
-bool RealChromosome::operator==(const RealChromosome &other) const {
-    if(gene.size() != other.gene.size()) return false;
-    for(int i=0; i<other.gene.size(); i++) {
-        if(gene[i] != other.gene[i]) return false;
-    }
-    return true;
-}

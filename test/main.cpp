@@ -7,8 +7,9 @@ int main() {
 
     StatTest statUT;
     RealChromosomeTest realChromosomeUT;
+    SelectionTests selectionUT;
 
-    cout << "==================== Stat Test ============================" << endl;
+    cout << "==================== Statistical Test ============================" << endl;
     statUT.test_uniformDist();
     statUT.test_gaussianDist(5.0, 2.0);
 
@@ -16,6 +17,10 @@ int main() {
     realChromosomeUT.test_randUniform();
     realChromosomeUT.test_randUniformPerc();
 
+    cout << "==================== Selection Test ============================" << endl;
+    selectionUT.test_RWsearchIndexBinarySearch();
+    selectionUT.test_RWselect();
+    exit(-1);
     cout << "==================== GA Test ============================" << endl;
 
     sphere_problem(opt, results[0]);

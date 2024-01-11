@@ -93,7 +93,7 @@ int main(int argc,  char** argv) {
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random
-    ga.initRandom();
+    ga.popInitRandUniform();
     // Evolve the population for 100 times
     for (int i=0; i<100; i++) {
         ga.evolve();

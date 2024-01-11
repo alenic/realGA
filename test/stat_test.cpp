@@ -18,6 +18,7 @@ float StatTest::uniformChiSquared(int *a, int n, int N) {
     return chi;
 }
 
+
 void StatTest::test_uniformDist() {
     int N=100000;
     int a[] = {0,0,0,0,0,0,0,0,0,0};

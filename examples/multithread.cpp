@@ -176,7 +176,7 @@ void optimize(unsigned int seed, unsigned int nThreads) {
 
 
     // Init population with uniform random genes between LB and UB
-    ga->initRandom();
+    ga->popInitRandUniform();
     // Evolve the population for 1500 times
     for (int i=0; i<1500; i++) {
         ga->evolve();

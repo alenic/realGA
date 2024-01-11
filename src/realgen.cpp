@@ -16,6 +16,7 @@ RealGen::RealGen()
     mIndexMaxFitness = 0;
     mFitnessFcn = nullptr;
     mGeneration = 0;
+    mSelectionAlgorithm = nullptr;
 }
 
 RealGen::~RealGen()
@@ -24,10 +25,12 @@ RealGen::~RealGen()
     if(mTourIndex != nullptr) {
         delete []mTourIndex;
     }
+
     if (mOptions.mutationType == GAUSSIAN_MUTATION) {
         delete [] mSigma;
     }
     
+    delete mSelectionAlgorithm;
 }
 
 void RealGen::checkOptions()
@@ -121,6 +124,7 @@ void RealGen::resetPopulation()
         mNewPopulation.clear();
         mPopulation.resize(mOptions.populationSize, mOptions.chromosomeSize);
         mNewPopulation.resize(mOptions.populationSize, mOptions.chromosomeSize);
+        mFitnessValues.resize(mOptions.populationSize);
     }
     // Check if chromosomeSize has changed
     if(mPopulation.size() != 0) {
@@ -129,6 +133,7 @@ void RealGen::resetPopulation()
             mNewPopulation.clear();
             mPopulation.resize(mOptions.populationSize, mOptions.chromosomeSize);
             mNewPopulation.resize(mOptions.populationSize, mOptions.chromosomeSize);
+            mFitnessValues.resize(mOptions.populationSize);
         }
     }
 }
@@ -185,13 +190,19 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
             resetGaussianMutationSigma();
         }
         
-        // Reset tournament selection
-        if (mOptions.selectionType == TOURNAMENT_SELECTION) {
+        // Allocate the selection algorithm
+        switch(mOptions.selectionType) {
+            case ROULETTE_WHEEL_SELECTION:
+                mSelectionAlgorithm = new RouletteWheelSelection(mOptions.populationSize);
+                break;
+            case TOURNAMENT_SELECTION:
             if (mTourIndex != nullptr) {
                 delete []mTourIndex;
                 mTourIndex = new int[mOptions.selectionTournamentP];
             }
+            break;
         }
+
 
         if (mOptions.verbose) {
             checkOptions();
@@ -204,6 +215,8 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
         mMaxFitness = -1;
         mIndexMaxFitness = 0;
         mGeneration = 0;
+
+        
     }
 
 
@@ -215,10 +228,16 @@ void RealGen::setFitnessFunction(FitnessFunction *f)
     mFitnessFcn = f;
 }
 
+void RealGen::fillFitnessValues() {
+    for(int i=0; i<mPopulation.size(); i++) {
+        mFitnessValues[i] = mPopulation[i].fitness;
+    }
+}
+
 void RealGen::setChromosomeInPopulation(unsigned int index, RealChromosome &chromosome)
 {
     if (index >= mOptions.populationSize) {
-        cerr << "ERROR: setPopulation: index " << index << " is out of range [0," << mOptions.populationSize << ")" << endl;
+        cerr << "ERROR: setChromosomeInPopulation: index " << index << " is out of range [0," << mOptions.populationSize << ")" << endl;
     } else {
         mPopulation[index] = chromosome;
     }
@@ -247,7 +266,7 @@ float RealGen::evalFitness(const RealChromosome &x) {
 float RealGen::getMeanFitness() {
     float meanF = 0.0;
     for(int i=0; i<mOptions.populationSize; i++) {
-        meanF += mPopulation[i].fitness;
+        meanF += mFitnessValues[i];
     }
     return meanF / (float)mOptions.populationSize;
 }
@@ -284,22 +303,22 @@ vector<RealChromosome> RealGen::getPopulation() {
 }
 
 void RealGen::evalMinFitness(){
-    mMinFitness = mPopulation[0].fitness;
+    mMinFitness = mFitnessValues[0];
     mIndexMinFitness = 0;
     for(int i=1; i<mOptions.populationSize; i++) {
-        if(mPopulation[i].fitness < mMinFitness) {
-            mMinFitness = mPopulation[i].fitness;
+        if(mFitnessValues[i] < mMinFitness) {
+            mMinFitness = mFitnessValues[i];
             mIndexMinFitness = i;
         }
     }
 }
 
 void RealGen::evalMaxFitness(){
-    mMaxFitness = mPopulation[0].fitness;
+    mMaxFitness = mFitnessValues[0];
     mIndexMaxFitness = 0;
     for(int i=1; i<mOptions.populationSize; i++) {
-        if(mPopulation[i].fitness > mMaxFitness) {
-            mMaxFitness = mPopulation[i].fitness;
+        if(mFitnessValues[i] > mMaxFitness) {
+            mMaxFitness = mFitnessValues[i];
             mIndexMaxFitness = i;
         }
     }
@@ -354,17 +373,19 @@ void RealGen::checkPopulation() {
 
 // ==================================================== Evolve ====================================================
 void RealGen::evolve() {
+    // Allocate offspring (a new gene)
     RealChromosome offspring(mOptions.chromosomeSize);
     offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
-    int index1 = 0, index2 = 1;
-    int elitismIndex = (int)(mOptions.selectionElitismFactor*mOptions.populationSize);
+    int selectedIndexA, selectedIndexB;
+    int elitismIndex = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
     int k=0;
 
-    if(mOptions.selectionType == ROULETTE_WHEEL_SELECTION) {
-        sumFitnessRoulette();
-    }
+    // Fill fitness values vector
+    fillFitnessValues();
+    mSelectionAlgorithm->init(mFitnessValues);
 
+    // Keep the 0:elitismIndex elements in the new population
     while (k < elitismIndex) {
         mNewPopulation[k] = mPopulation[k];
         ++k;
@@ -373,33 +394,34 @@ void RealGen::evolve() {
     while(k < mOptions.populationSize) {
         // Selection
         switch(mOptions.selectionType) {
-        case ROULETTE_WHEEL_SELECTION:
-            rouletteWheelSelection(index1, index2);
-            break;
-        case TOURNAMENT_SELECTION:
-            tournamentSelection(mOptions.selectionTournamentP, index1, index2);
-            break;
+            case ROULETTE_WHEEL_SELECTION:
+                // Choose index A and B from population according to roulette wheel selection strategy
+                mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
+                break;
+            case TOURNAMENT_SELECTION:
+                tournamentSelection(mOptions.selectionTournamentP, selectedIndexA, selectedIndexB);
+                break;
         }
 
         // Crossover
         switch(mOptions.crossoverType) {
             case UNIFORM_CROSSOVER:
-                crossoverUniform(index1, index2, offspring);
+                crossoverUniform(selectedIndexA, selectedIndexB, offspring);
                 break;
             case SINGLE_POINT_CROSSOVER:
-                crossoverFixed(index1, index2, offspring, mOptions.crossoverIndex1);
+                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverIndex1);
                 break;
         }
         
 
         // Mutation
         switch(mOptions.mutationType) {
-        case UNIFORM_MUTATION:
-            uniformMutate(offspring, mOptions.mutationUniformPerc);
-            break;
-        case GAUSSIAN_MUTATION:
-            gaussianMutate(offspring);
-            break;
+            case UNIFORM_MUTATION:
+                uniformMutate(offspring, mOptions.mutationUniformPerc);
+                break;
+            case GAUSSIAN_MUTATION:
+                gaussianMutate(offspring);
+                break;
         }
 
         offspring.fitness  = evalFitness(offspring);
@@ -431,7 +453,7 @@ void RealGen::evolve() {
 }
 
 // ===================================== Init function =============================
-void RealGen::initRandom() {
+void RealGen::popInitRandUniform() {
     for(int i=0; i<mOptions.populationSize; i++) {
         mPopulation[i].randUniform();
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
@@ -445,18 +467,10 @@ void RealGen::initRandom() {
 }
 
 
-void RealGen::initMutate(vector<float> &gene, float sigma) {
+void RealGen::popInitGaussianMutate(vector<float> &gene, float sigma) {
     RealChromosome g(mOptions.chromosomeSize);
     g.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
     for(int i=0; i<mOptions.chromosomeSize; i++) {
-        if (gene[i] < mOptions.lowerBounds[i]) {
-            cerr << "initMutate error, gene[" << i << "]="<< gene[i] <<" violate lowerBounds[" << i << "] = " << mOptions.lowerBounds[i] << endl;
-            exit(-1);
-        }
-        if (gene[i] > mOptions.upperBounds[i]) {
-            cerr << "initMutate error, gene[" << i << "]="<< gene[i] <<" violate upperBounds[" << i << "] = " << mOptions.upperBounds[i] << endl;
-            exit(-1);
-        }
         g.gene[i] = gene[i];
     }
     mPopulation[0] = g;

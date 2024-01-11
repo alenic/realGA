@@ -37,7 +37,7 @@ int main(int argc,  char** argv) {
 
 
     // Init population with uniform random
-    ga.initRandom();
+    ga.popInitRandUniform();
     // Evolve the population for 100 times
     for (int i=0; i<100; i++) {
         ga.evolve();

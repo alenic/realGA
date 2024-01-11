@@ -18,6 +18,7 @@ website: https://github.com/alenic
 #include "stat.h"
 #include "realgenoptions.h"
 #include "fitnessfunction.h"
+#include "selection.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
     void setChromosomeInPopulation(unsigned int index, RealChromosome &chromosome);
     void setPopulation(vector<RealChromosome>  &population);
 
+    void fillFitnessValues();
     void resetPopulation();
     void resetGaussianMutationSigma();
 
@@ -49,31 +51,33 @@ public:
     bool checkChromosome(RealChromosome &chromosome);
     void checkPopulation();
 
-    //  ================= Initialization =================================
-    void initRandom();
+    // Initialization
+    void popInitRandUniform();
     void evalPopulationFitness();
-    void initMutate(vector<float> &gene, float mSigma);
-    // ================= Selection =================================
+    void popInitGaussianMutate(vector<float> &gene, float mSigma);
+    // Selection
     void rouletteWheelSelection(int &index1, int &index2);
     void sumFitnessRoulette();
     void rouletteWheel(int &index, float stop);
     void tournamentSelection(int p, int &index1, int &index2);
     void tournamentSelect(int p, int &index);
-    //==================================== Crossover ==================
+    // Crossover
     void crossoverUniform(int index1, int index2, RealChromosome &c);
     void crossoverFixed(int index1, int index2, RealChromosome &c, int n);
-    //===================================== Mutation ======================
+    // Mutation
     void uniformMutate(RealChromosome &g, float perc);
     void gaussianMutate(RealChromosome &);
-    // ====================================================================
+
     virtual void evolve();
 
 protected:
     vector <RealChromosome> mPopulation;
     vector <RealChromosome> mNewPopulation;
     RealGenOptions mOptions;
-
     FitnessFunction *mFitnessFcn;
+
+    Selection *mSelectionAlgorithm;
+    vector<float> mFitnessValues;
 
     // State
     int mGeneration;

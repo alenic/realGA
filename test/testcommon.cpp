@@ -12,6 +12,25 @@ void coutColor(const char * s, TextColor color) {
         cout << "\033[33m" << s << "\033[0m";
         break;
     }
+    cout << endl;
+}
+
+
+void printDistribution(vector<float> &x) {
+    int nstars = 100;
+    int p[10]={};
+    float minV = *std::min_element(x.begin(), x.end());
+    float maxV = *std::max_element(x.begin(), x.end());
+    for (int i=0; i<x.size(); ++i) {
+        float value = 10*(x[i] - minV)/ (maxV - minV);
+        ++p[int(value)];
+    }
+    cout << "Histogram" << endl;
+    for (int i=0; i<10; ++i) {
+        cout << i << "-" << (i+1) << ": ";
+        cout << string(p[i] * nstars/x.size(), '*') << endl;
+    }
+    cout << endl;
 }
 
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
@@ -19,7 +38,7 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
 
     results.converged = false;
     //ga.checkOptions();
-    ga.initRandom();
+    ga.popInitRandUniform();
     clock_t startTime = clock(), endTime;
     for (int i=0; i<maxIter; i++) {
         ga.evolve();
