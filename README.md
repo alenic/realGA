@@ -1,4 +1,8 @@
-# Real Gen
+# RealGen
+
+
+![image](./images/logo.png)
+
 Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.
 
 * $F(x)$ represents the **fitness function**, a non-linear function defined by the user. The objective is to identify the *minimum value* of this function.
