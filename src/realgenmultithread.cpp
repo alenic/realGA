@@ -47,51 +47,62 @@ void *RealGenMultithread::evaluatePopulationThread(void *params) {
 
 
 void RealGenMultithread::evolve() {
+    // Allocate offspring (a new gene)
     RealChromosome offspring(mOptions.chromosomeSize);
     offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
-    int index1=0, index2=1;
-    int elitismIndex = (int)(mOptions.selectionElitismFactor*mOptions.populationSize);
+    int selectedIndexA, selectedIndexB;
+    int elitismIndex = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
     int k=0;
 
-    if(mOptions.selectionType == ROULETTE_WHEEL_SELECTION) {
-        sumFitnessRoulette();
-    }
+    // Fill fitness values vector
+    fillFitnessValues();
+    mSelectionAlgorithm->init(mFitnessValues);
 
+    // Keep the 0:elitismIndex elements in the new population
     while (k < elitismIndex) {
         mNewPopulation[k] = mPopulation[k];
         ++k;
     }
 
-    while(k < mOptions.populationSize) {
+     while(k < mOptions.populationSize) {
         // Selection
         switch(mOptions.selectionType) {
-        case ROULETTE_WHEEL_SELECTION:
-            rouletteWheelSelection(index1, index2);
-            break;
-        case TOURNAMENT_SELECTION:
-            tournamentSelection(mOptions.selectionTournamentP, index1, index2);
-            break;
+            case ROULETTE_WHEEL_SELECTION:
+                // Choose index A and B from population according to roulette wheel selection strategy
+                mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
+                break;
+            case TOURNAMENT_SELECTION:
+                tournamentSelection(mOptions.selectionTournamentP, selectedIndexA, selectedIndexB);
+                break;
         }
 
         // Crossover
-        crossoverUniform(index1, index2, offspring);
+        switch(mOptions.crossoverType) {
+            case UNIFORM_CROSSOVER:
+                crossoverUniform(selectedIndexA, selectedIndexB, offspring);
+                break;
+            case SINGLE_POINT_CROSSOVER:
+                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverIndex1);
+                break;
+        }
+        
+
         // Mutation
         switch(mOptions.mutationType) {
-        case UNIFORM_MUTATION:
-            uniformMutate(offspring, mOptions.mutationUniformPerc);
-            break;
-        case GAUSSIAN_MUTATION:
-            gaussianMutate(offspring);
-            break;
+            case UNIFORM_MUTATION:
+                uniformMutate(offspring, mOptions.mutationUniformPerc);
+                break;
+            case GAUSSIAN_MUTATION:
+                gaussianMutate(offspring);
+                break;
         }
-
         mNewPopulation[k] = offspring;
         ++k;
     }
 
-    int interval = ceil((float)(mOptions.populationSize-elitismIndex)/(float)nThread);
 
+    int interval = ceil((float)(mOptions.populationSize-elitismIndex)/(float)nThread);
     thread_params localThreadParam[nThread];
 
     for (int i = 0; i < nThread; ++i) {
@@ -138,9 +149,5 @@ void RealGenMultithread::evolve() {
     }
 
     mPopulation = mNewPopulation;
-
-    evalMinFitness();
-    evalMaxFitness();
-
     mGeneration++;
 }

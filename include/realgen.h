@@ -40,10 +40,10 @@ public:
     RealChromosome getBestChromosome();
     int getGeneration();
     float evalFitness(const RealChromosome &);
-    float getMeanFitness();
-    float getMinFitness();
+
     string populationToString();
-    float getDiversity();
+    
+    //float getDiversity();  // -> TODO
     void checkOptions();
     vector<RealChromosome> getPopulation();
 
@@ -56,9 +56,6 @@ public:
     void evalPopulationFitness();
     void popInitGaussianMutate(vector<float> &gene, float mSigma);
     // Selection
-    void rouletteWheelSelection(int &index1, int &index2);
-    void sumFitnessRoulette();
-    void rouletteWheel(int &index, float stop);
     void tournamentSelection(int p, int &index1, int &index2);
     void tournamentSelect(int p, int &index);
     // Crossover
@@ -88,14 +85,6 @@ protected:
     int *mTourIndex;
     // Gaussian Mutation
     float *mSigma;
-
-    float mMinFitness;
-    int mIndexMinFitness;
-    float mMaxFitness;
-    int mIndexMaxFitness;
-
-    void evalMinFitness();
-    void evalMaxFitness();
 };
 
 #endif // REALGEN_H

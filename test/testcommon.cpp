@@ -17,20 +17,26 @@ void coutColor(const char * s, TextColor color) {
 
 
 void printDistribution(vector<float> &x) {
-    int nstars = 100;
-    int p[10]={};
+    int nstars = 400;
+    int bins = 20;
+    int *freq = (int *)calloc(bins, sizeof(int));
+
     float minV = *std::min_element(x.begin(), x.end());
     float maxV = *std::max_element(x.begin(), x.end());
+    float delta = maxV - minV;
+
     for (int i=0; i<x.size(); ++i) {
-        float value = 10*(x[i] - minV)/ (maxV - minV);
-        ++p[int(value)];
+        float value = bins*(x[i] - minV) / delta;
+        ++freq[int(value)];
     }
+
     cout << "Histogram" << endl;
-    for (int i=0; i<10; ++i) {
-        cout << i << "-" << (i+1) << ": ";
-        cout << string(p[i] * nstars/x.size(), '*') << endl;
+    for (int i=0; i<bins; ++i) {
+        cout << ": ";
+        cout << string(freq[i] * nstars/x.size(), '*') << endl;
     }
     cout << endl;
+    free(freq);
 }
 
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {

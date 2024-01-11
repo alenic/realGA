@@ -15,13 +15,14 @@ website: https://github.com/alenic
 
 using namespace std;
 
+// Abstract class
 class Selection {
 public:
     virtual void init(vector<float> &fitnessValues) = 0;
     virtual void select(vector<float> &fitnessValues, int &index1, int &index2) = 0;
 };
 
-
+// Roulette-Wheel selection strategy
 class RouletteWheelSelection: public Selection {
 public:
     RouletteWheelSelection(int populationSize);
@@ -34,6 +35,8 @@ public:
     int searchIndexBinarySearch(vector<float> arr, float x);
 private:
     vector<float> mCumulativeFitness;
+
+    float mCumSum;
 };
 
 #endif // SELECTION_H

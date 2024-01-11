@@ -4,6 +4,7 @@
 
 RouletteWheelSelection::RouletteWheelSelection(int populationSize) {
     mCumulativeFitness.resize(populationSize);
+    mCumSum = 0;
 }
 
 RouletteWheelSelection::~RouletteWheelSelection() {
@@ -13,17 +14,22 @@ RouletteWheelSelection::~RouletteWheelSelection() {
 void RouletteWheelSelection::computeCumulativeValues(vector<float> &fitnessValues)
 // call this function before the internal loop of evolve
 {
-    float cumSum = 0.0;
     unsigned int n = mCumulativeFitness.size();
-
-    // Compute the maximum
-    float maxValue = *std::max_element(fitnessValues.begin(), fitnessValues.end());
- 
-    // Compute cumulative vector (is inverted because we want to minimize)
+    float minValue = fitnessValues[0];
+    float maxValue = fitnessValues[0];
+    // compute minimum and maximum
     for(int i=0; i<n; i++) {
-        float value = fitnessValues[i];
-        cumSum += (maxValue - fitnessValues[i]);
-        mCumulativeFitness[i] = cumSum;
+        float v = fitnessValues[i];
+        if(v < minValue) minValue = v;
+        if(v > maxValue) maxValue = v;
+    }
+
+    float delta = maxValue - minValue;
+    mCumSum = 0.0;
+    for(int i=0; i<n; i++) {
+        // cumsum += 1 - minmax normalization
+        mCumSum += 1.0f - (fitnessValues[i] - minValue) / delta;
+        mCumulativeFitness[i] = mCumSum;
     }
 }
 
@@ -33,11 +39,10 @@ void RouletteWheelSelection::init(vector<float> &fitnessValues) {
 
 void RouletteWheelSelection::select(vector<float> &fitnessValues, int &index1, int &index2) {
     unsigned int n = mCumulativeFitness.size();
-    float maxCumulative = mCumulativeFitness[n-1];
     float cumulative1, cumulative2;
-
-    cumulative1 = maxCumulative * Stat::randUniform();
-    cumulative2 = maxCumulative * Stat::randUniform();
+    
+    cumulative1 = mCumSum * Stat::randUniform();
+    cumulative2 = mCumSum * Stat::randUniform();
 
     index1 = searchIndexBinarySearch(mCumulativeFitness, cumulative1);
     index2 = searchIndexBinarySearch(mCumulativeFitness, cumulative2);

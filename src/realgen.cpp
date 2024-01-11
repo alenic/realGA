@@ -11,9 +11,6 @@ RealGen::RealGen()
 {
     // Reset pointers and fitness values
     mTourIndex = nullptr;
-    mIndexMinFitness = 0;
-    mMaxFitness = -1;
-    mIndexMaxFitness = 0;
     mFitnessFcn = nullptr;
     mGeneration = 0;
     mSelectionAlgorithm = nullptr;
@@ -210,13 +207,7 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
 
         Stat::setSeed(mOptions.seed);
 
-        mMinFitness = -1;
-        mIndexMinFitness = 0;
-        mMaxFitness = -1;
-        mIndexMaxFitness = 0;
         mGeneration = 0;
-
-        
     }
 
 
@@ -263,25 +254,14 @@ float RealGen::evalFitness(const RealChromosome &x) {
     return mFitnessFcn->eval(x);
 }
 
-float RealGen::getMeanFitness() {
-    float meanF = 0.0;
-    for(int i=0; i<mOptions.populationSize; i++) {
-        meanF += mFitnessValues[i];
-    }
-    return meanF / (float)mOptions.populationSize;
-}
-
 RealChromosome RealGen::getBestChromosome() {
     RealChromosome best;
-    best = mPopulation[mIndexMinFitness];
+    best = mPopulation[0];
     return best;
 }
 
-float RealGen::getMinFitness() {
-    return mMinFitness;
-}
-
-float RealGen::getDiversity() {  // TO Test
+/*
+float RealGen::getDiversity() {  //  TODO
     float I = 0.0;
     // Compute the centroid
     for(int j=0; j<mOptions.chromosomeSize; j++) {
@@ -297,31 +277,10 @@ float RealGen::getDiversity() {  // TO Test
     }
     return I;
 }
+*/
 
 vector<RealChromosome> RealGen::getPopulation() {
     return mPopulation;
-}
-
-void RealGen::evalMinFitness(){
-    mMinFitness = mFitnessValues[0];
-    mIndexMinFitness = 0;
-    for(int i=1; i<mOptions.populationSize; i++) {
-        if(mFitnessValues[i] < mMinFitness) {
-            mMinFitness = mFitnessValues[i];
-            mIndexMinFitness = i;
-        }
-    }
-}
-
-void RealGen::evalMaxFitness(){
-    mMaxFitness = mFitnessValues[0];
-    mIndexMaxFitness = 0;
-    for(int i=1; i<mOptions.populationSize; i++) {
-        if(mFitnessValues[i] > mMaxFitness) {
-            mMaxFitness = mFitnessValues[i];
-            mIndexMaxFitness = i;
-        }
-    }
 }
 
 string RealGen::populationToString() {
@@ -445,10 +404,6 @@ void RealGen::evolve() {
     }
 
     mPopulation = mNewPopulation;
-
-    evalMinFitness();
-    evalMaxFitness();
-
     mGeneration++;
 }
 
@@ -460,10 +415,6 @@ void RealGen::popInitRandUniform() {
     }
 
     sort(mPopulation.begin(), mPopulation.end());
-
-    // evaluate statistics
-    evalMinFitness();
-    evalMaxFitness();
 }
 
 
@@ -484,10 +435,6 @@ void RealGen::popInitGaussianMutate(vector<float> &gene, float sigma) {
     }
 
     sort(mPopulation.begin(), mPopulation.end());
-
-    // evaluate statistics
-    evalMinFitness();
-    evalMaxFitness();
 }
 
 
@@ -501,37 +448,6 @@ void RealGen::evalPopulationFitness() {
 }
 
 // ================= Selection =================================
-void RealGen::rouletteWheelSelection(int &index1, int &index2) {
-    rouletteWheel(index1, mSumFitnessR*Stat::randUniform());
-    rouletteWheel(index2, mSumFitnessR*Stat::randUniform());
-    if(index1 == index2) {
-        if(index1 != mOptions.populationSize-1)
-            index2 = index1 + 1;
-        else
-            index2 = index1 - 1;
-    }
-}
-
-void RealGen::sumFitnessRoulette() {
-    float s=0.0;
-    for(int i=0; i<mOptions.populationSize; i++) {
-        s += mPopulation[i].fitness;
-    }
-    mSumFitnessR = mOptions.populationSize*mMaxFitness-s;
-}
-
-void RealGen::rouletteWheel(int &index, float stop) {
-    float sumP = 0.0;
-    index = 0;
-    for(int i=0; i<mOptions.populationSize; i++) {
-        sumP += (mMaxFitness-mPopulation[i].fitness);
-        if(sumP > stop) {
-            index = i;
-            break;
-        }
-    }
-}
-
 void RealGen::tournamentSelection(int p, int &index1, int &index2) {
     tournamentSelect(p, index1);
     tournamentSelect(p, index2);

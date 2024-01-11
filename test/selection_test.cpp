@@ -31,13 +31,13 @@ void SelectionTests::test_RWsearchIndexBinarySearch() {
 
 
 void SelectionTests::test_RWselect() {
-    int popSize = 50;
-    int n_test = 5000;
+    int popSize = 100;
+    int n_test = 50000;
     vector<float> fitnessValues(popSize);
     vector<float> indexA(n_test), indexB(n_test);
 
     for(int i=0; i<fitnessValues.size(); i++) {
-        fitnessValues[i] = pow((float)i, 2);
+        fitnessValues[i] = sin((float)i / 6.0);
     }
     RouletteWheelSelection selector = RouletteWheelSelection(fitnessValues.size());
 
@@ -60,5 +60,5 @@ void SelectionTests::test_RWselect() {
     meanB /= n_test;
     cout << "Mean A: " << meanA << "   Mean B:" << meanB << endl;
 
-    printDistribution(fitnessValues);
+    printDistribution(indexA);
 }

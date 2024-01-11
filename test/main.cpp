@@ -20,7 +20,7 @@ int main() {
     cout << "==================== Selection Test ============================" << endl;
     selectionUT.test_RWsearchIndexBinarySearch();
     selectionUT.test_RWselect();
-    exit(-1);
+    
     cout << "==================== GA Test ============================" << endl;
 
     sphere_problem(opt, results[0]);
