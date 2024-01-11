@@ -19,7 +19,7 @@ $x^*$ is the optimal solution that minimize the fitness function $F(x)$.
 
 A genetic algorithm may struggle to converge to the true global minimum due to the inherent probabilistic nature of the method.
 
-# Compile - Linux
+# Build - Linux
 On terminal
 
 ```
@@ -31,7 +31,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
 
-# Compile - Windows (Visual Studio 14)
+# Build - Windows (Visual Studio 14)
 
 
 On Powershell
