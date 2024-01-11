@@ -111,13 +111,21 @@ void RealChromosome::randUniformPerc(int i, float perc)
         gene[i] = UB[i];
 }
 
-void RealChromosome::randGaussianPerc(int i, float sigma) {
+void RealChromosome::randGaussianPerc(int i, float perc) {
     if(i >= gene.size()){
-        cerr << "ERROR: RealChromosome::randGaussianPerc(int i, float sigma) " << endl;
+        cerr << "ERROR: RealChromosome::randGaussianPerc(int i, float perc) " << endl;
         exit(-1);
     }
+    float delta = UB[i] - LB[i];
 
-    float r = Stat::randGaussian(0.0, sigma*(UB[i]-LB[i])/2.0f);
+    // 2 * sigma = delta / 2
+    float sigma = perc * (delta / 2.0);
+
+    if (sigma < 1e-6) {
+        sigma = 1e-6;
+    }
+
+    float r = Stat::randGaussian(0.0, sigma);
     if (isnan(r) || isinf(r)) {
         cerr << "randGaussianPerc error!  r=" << r << endl;
         r = 0.0;

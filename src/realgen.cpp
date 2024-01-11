@@ -14,6 +14,7 @@ RealGen::RealGen()
     mFitnessFcn = nullptr;
     mGeneration = 0;
     mSelectionAlgorithm = nullptr;
+    mGaussianPerc = 1.0f;
 }
 
 RealGen::~RealGen()
@@ -23,10 +24,6 @@ RealGen::~RealGen()
         delete []mTourIndex;
     }
 
-    if (mOptions.mutationType == GAUSSIAN_MUTATION) {
-        delete [] mSigma;
-    }
-    
     delete mSelectionAlgorithm;
 }
 
@@ -97,8 +94,8 @@ void RealGen::checkOptions()
 
         break;
     case GAUSSIAN_MUTATION:
-        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianScale = " << mOptions.mutationGaussianScale << endl;
-        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianShrink = " << mOptions.mutationGaussianShrink << endl;
+        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianPercDelta = " << mOptions.mutationGaussianPercDelta << endl;
+        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianPercMin = " << mOptions.mutationGaussianPercMin << endl;
         break;
     }
 
@@ -135,13 +132,10 @@ void RealGen::resetPopulation()
     }
 }
 
-void RealGen::resetGaussianMutationSigma()
+void RealGen::resetGaussianMutationPerc()
+// Initialize standars deviations for gaussian mutation
 {
-    // Initialize standars deviations for gaussian mutation
-    mSigma = new float[mOptions.chromosomeSize];
-    for (int i = 0; i<mOptions.chromosomeSize; i++) {
-        mSigma[i] = mOptions.mutationGaussianScale;
-    }
+    mGaussianPerc = 1.0f;
 }
 
 void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
@@ -168,10 +162,6 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
             exit(-1);
         }
 
-        if (mOptions.mutationGaussianScale != opt.mutationGaussianScale) {
-            resetGaussianMutationSigma();
-        }
-
     } else {
         // reset population size
         resetPopulation();
@@ -184,7 +174,7 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
         
         // Initialize gaussian standard deviation
         if(mOptions.mutationType == GAUSSIAN_MUTATION) {
-            resetGaussianMutationSigma();
+            resetGaussianMutationPerc();
         }
         
         // Allocate the selection algorithm
@@ -391,15 +381,10 @@ void RealGen::evolve() {
     partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+elitismIndex, mNewPopulation.end());
 
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
-        for(int i=0; i<mOptions.chromosomeSize; i++) {
-            if (mGeneration >= mOptions.maxGenerations) {
-                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink);
-            } else {
-                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink*((float)mGeneration/(float)mOptions.maxGenerations));
-            }
-            if (mSigma[i] <= 0) {
-                mSigma[i] = 0;
-            }
+        if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
+            mGaussianPerc = 1.0f - mOptions.mutationGaussianPercDelta*(float)mGeneration;
+        } else {
+            mGaussianPerc = mOptions.mutationGaussianPercMin;
         }
     }
 
@@ -512,7 +497,7 @@ void RealGen::uniformMutate(RealChromosome &g, float perc) {
 void RealGen::gaussianMutate(RealChromosome &g) {
     for (int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform() < mOptions.mutationRate) {
-            g.randGaussianPerc(j, mSigma[j]);
+            g.randGaussianPerc(j, mGaussianPerc);
         }
     }
 }

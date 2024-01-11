@@ -41,7 +41,7 @@ public:
     void setMutationType(string value);
     void setUniformMutationPercentage(float value);
     void setMutationRate(float rate);
-    void setMutationGaussianScaleShrink(float scale, float shrink);
+    void setMutationGaussianPerc(float percDelta, float percMin);
 
     void setCrossoverType(string value);
     void setSinglePointCrossoverIndex(int value);
@@ -68,10 +68,12 @@ public:
 
     // MutationOpt
     MutationType mutationType;
-    float mutationUniformPerc;
     float mutationRate;
-    float mutationGaussianScale;
-    float mutationGaussianShrink;
+    // Uniform mutation
+    float mutationUniformPerc;
+    // Gaussian mutation
+    float mutationGaussianPercDelta;
+    float mutationGaussianPercMin;
 
 
 };

@@ -22,12 +22,13 @@ RealGenOptions::RealGenOptions() {
     crossoverIndex2 = 0;
 
     mutationType = UNIFORM_MUTATION;
-    mutationUniformPerc = 0.25;
+    mutationUniformPerc = 0.25;         // percentage of UB-LB
 
     mutationRate = 0.1;
+    
 
-    mutationGaussianScale = 1.0;
-    mutationGaussianShrink = 1.0;
+    mutationGaussianPercDelta = 0.01;    // 100 iterations decay to 0.01
+    mutationGaussianPercMin= 0.001;     // 1000 iterations
 
     verbose = false;
     seed = 42;
@@ -117,9 +118,9 @@ void RealGenOptions::setMutationRate(float rate) {
     }
 }
 
-void RealGenOptions::setMutationGaussianScaleShrink(float scale, float shrink) {
-    mutationGaussianScale = scale;
-    mutationGaussianShrink = shrink;
+void RealGenOptions::setMutationGaussianPerc(float percDelta, float percMin) {
+    mutationGaussianPercDelta = percDelta;
+    mutationGaussianPercMin = percMin;
 }
 
 void RealGenOptions::setCrossoverType(string value) {

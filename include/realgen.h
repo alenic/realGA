@@ -34,7 +34,7 @@ public:
 
     void fillFitnessValues();
     void resetPopulation();
-    void resetGaussianMutationSigma();
+    void resetGaussianMutationPerc();
 
     // Getter
     RealChromosome getBestChromosome();
@@ -84,7 +84,7 @@ protected:
     // Tournament selection
     int *mTourIndex;
     // Gaussian Mutation
-    float *mSigma;
+    float mGaussianPerc;
 };
 
 #endif // REALGEN_H

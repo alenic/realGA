@@ -158,7 +158,7 @@ void optimize(unsigned int seed, unsigned int nThreads) {
     options.setMaxGenerations(1500);
     options.setMutationType("gaussian");
     options.setMutationRate(0.05);
-    options.setMutationGaussianScaleShrink(1, 1);
+    options.setMutationGaussianPerc(0.01, 0.001);
     options.setSeed(seed);
 
     MyFitnessFunction *myFitnessFunction = new MyFitnessFunction();

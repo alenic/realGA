@@ -134,20 +134,14 @@ void RealGenMultithread::evolve() {
 
     partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+elitismIndex, mNewPopulation.end());
 
-
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
-        for(int i=0; i<mOptions.chromosomeSize; i++) {
-            if (mGeneration >= mOptions.maxGenerations) {
-                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink);
-            } else {
-                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink*((float)mGeneration/(float)mOptions.maxGenerations));
-            }
-            if (mSigma[i] <= 0) {
-                mSigma[i] = 0;
-            }
+        if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
+            mGaussianPerc = 1.0f - mOptions.mutationGaussianPercDelta*(float)mGeneration;
+        } else {
+            mGaussianPerc = mOptions.mutationGaussianPercMin;
         }
     }
-
+    
     mPopulation = mNewPopulation;
     mGeneration++;
 }

@@ -37,7 +37,7 @@ int main() {
     }
 
     opt.setMutationType("gaussian");
-    opt.setMutationGaussianScaleShrink(1.0, 2.0);
+    opt.setMutationGaussianPerc(0.025, 0.001);
     sphere_problem(opt, results[0]);
     rosenbrock_problem(opt, results[1]);
     flatSurface_problem(opt, results[2]);

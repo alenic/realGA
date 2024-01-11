@@ -29,7 +29,7 @@ int main(int argc,  char** argv) {
     options.setMaxGenerations(200);
     options.setMutationType("gaussian");
     options.setMutationRate(0.05);
-    options.setMutationGaussianScaleShrink(1, 1);
+    options.setMutationGaussianPerc(0.01, 0.001);
     options.setVerbose(true);
     // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
     RealGen ga;
