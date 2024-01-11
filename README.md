@@ -3,7 +3,7 @@
 
 ![image](./images/logo.png)
 
-Fast implementation of Genetic Algorithm for nonlinear constrained optimization problems.
+**realGen** is a fast and simple C++ implementation of Genetic Algorithm, that can be used for nonlinear *constrained optimization* problems.
 
 * $F(x)$ represents the **fitness function**, a non-linear function defined by the user. The objective is to identify the *minimum value* of this function.
 * $x = (x_1, x_2, ..., x_n)$ is the input of the fitness function and is called **chromosome**
