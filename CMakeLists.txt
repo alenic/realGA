@@ -20,18 +20,18 @@ add_library(realgen_static STATIC ${SOURCES})
 
 set_target_properties(realgen_static realgen_shared
     PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Libs"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Libs"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Libs"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
 )
 
 # ====================================== Build TESTS ====================================
 file(GLOB TESTSOURCES "test/*.cpp")
-add_executable(test_main ${TESTSOURCES})
-target_link_libraries(test_main realgen_static)
+add_executable(main.bin ${TESTSOURCES})
+target_link_libraries(main.bin realgen_static)
 
-set_target_properties(test_main
-                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Tests")
+set_target_properties(main.bin
+                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
 
 # ====================================== Build examples ====================================
 # --------------- readme.cpp -------------------------
@@ -55,4 +55,4 @@ endif(UNIX)
 
 # --------------- Output directories -------------------------
 set_target_properties(ex_readme ex_quadratic ex_multithread
-                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Examples")
+                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/examples")

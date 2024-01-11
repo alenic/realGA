@@ -1,10 +1,8 @@
 /*
+realGen: Genetic Algorithm with Real values
 
-stat.h : genetic algorithm statistics
-
-author: A. Nicolosi
-realGen project: https://github.com/alenic/realGen
-
+author: Alessandro Nicolosi
+website: https://github.com/alenic
 */
 #ifndef STAT_H_
 #define STAT_H_
@@ -17,10 +15,10 @@ using namespace std;
 
 class Stat {
 public:
-    static float uniformRand();
-    static float uniformRand(float lb, float ub);
-    static float gaussianRand(float m, float s);
-    static int uniformIndex(int N);
+    static float randUniform();
+    static float randUniform(float lb, float ub);
+    static float randGaussian(float m, float s);
+    static int randIndex(int N);
     static void setSeed(unsigned int seed);
 };
 

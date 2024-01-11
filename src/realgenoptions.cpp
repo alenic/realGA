@@ -1,3 +1,9 @@
+/*
+realGen: Genetic Algorithm with Real values
+
+author: Alessandro Nicolosi
+website: https://github.com/alenic
+*/
 #include "realgenoptions.h"
 
 
@@ -8,7 +14,7 @@ RealGenOptions::RealGenOptions() {
 
     selectionType = ROULETTE_WHEEL_SELECTION;
     selectionTournamentP = 4;
-    selectionSorting = true;
+
     selectionElitismFactor = 0.1;
 
     crossoverType = UNIFORM_CROSSOVER;
@@ -22,6 +28,9 @@ RealGenOptions::RealGenOptions() {
 
     mutationGaussianScale = 1.0;
     mutationGaussianShrink = 1.0;
+
+    verbose = false;
+    seed = 42;
 
 }
 
@@ -54,6 +63,15 @@ void RealGenOptions::setMaxGenerations(int value) {
     maxGenerations = value;
 }
 
+void RealGenOptions::setVerbose(bool value) {
+    verbose = value;
+}
+
+
+void RealGenOptions::setSeed(bool seedValue) {
+    seed = seedValue;
+}
+
 void RealGenOptions::setSelectionType(string value) {
     if (value == "roulette_wheel")
         selectionType = ROULETTE_WHEEL_SELECTION;
@@ -67,12 +85,14 @@ void RealGenOptions::setSelectionTournamentP(int value) {
     selectionTournamentP = value;
 }
 
-void RealGenOptions::setSorting(bool value) {
-    selectionSorting = value;
-}
 
-void RealGenOptions::setElitismFactor(float value) {
-    selectionElitismFactor = value;
+void RealGenOptions::setElitismFactor(float factor) {
+    if(factor >= 0.0 && factor <= 1.0) {
+        selectionElitismFactor = factor;
+    } else {
+        cerr << "ERROR: options.selection.elitismFactor must be a number between 0.0 and 1.0" << endl;
+        exit(-1);
+    }
 }
 
 void RealGenOptions::setMutationType(string value) {
@@ -88,8 +108,13 @@ void RealGenOptions::setUniformMutationPercentage(float value) {
     mutationUniformPerc = value;
 }
 
-void RealGenOptions::setMutationRate(float value) {
-    mutationRate = value;
+void RealGenOptions::setMutationRate(float rate) {
+    if(rate >= 0.0 && rate <= 1.0) {
+        mutationRate = rate;
+    } else {
+        cerr << "ERROR: options.mutation.mutationRate must be a number between 0.0 and 1.0" << endl;
+        exit(-1);
+    }
 }
 
 void RealGenOptions::setMutationGaussianScaleShrink(float scale, float shrink) {

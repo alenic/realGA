@@ -1,10 +1,8 @@
 /*
+realGen: Genetic Algorithm with Real values
 
-realgen.h : genetic algorithm core
-
-author: A. Nicolosi
-realGen project: https://github.com/alenic/realGen
-
+author: Alessandro Nicolosi
+website: https://github.com/alenic
 */
 #ifndef REALGEN_H
 #define REALGEN_H
@@ -16,7 +14,7 @@ realGen project: https://github.com/alenic/realGen
 #include <sstream>
 #include <math.h>
 #include <stdio.h>
-#include "realgenotype.h"
+#include "realchromosome.h"
 #include "stat.h"
 #include "realgenoptions.h"
 #include "fitnessfunction.h"
@@ -26,34 +24,29 @@ using namespace std;
 class RealGen {
 public:
     RealGen();
-    RealGen(RealGenOptions &opt);
     ~RealGen();
     // Setter
+    void init(RealGenOptions &opt, FitnessFunction *func, bool keepState);
     void setFitnessFunction(FitnessFunction *f);
-    void setSorting(bool);
-    void setMutationRate(float);
-    void setElitismFactor(float);
-    void setPopulationSize(int);
-    void setOptions(RealGenOptions &opt);
-    void setMaxGenerations(int);
-    void setSeed(unsigned int);
-    void setVerbose(bool value);
+    void setChromosomeInPopulation(unsigned int index, RealChromosome &chromosome);
+    void setPopulation(vector<RealChromosome>  &population);
 
-    void setPopulation(int index, RealGenotype &chromosome);
-    void setPopulation(vector<RealGenotype>  &new_population);
-    // getter
-    RealGenotype getBestChromosome();
+    void resetPopulation();
+    void resetGaussianMutationSigma();
+
+    // Getter
+    RealChromosome getBestChromosome();
     int getGeneration();
-    double evalFitness(const RealGenotype &);
-    double getMeanFitness();
-    double getMinFitness();
+    float evalFitness(const RealChromosome &);
+    float getMeanFitness();
+    float getMinFitness();
     string populationToString();
-    double getDiversity();
+    float getDiversity();
     void checkOptions();
-    vector<RealGenotype> getPopulation();
+    vector<RealChromosome> getPopulation();
 
-    // For debug
-    bool checkChromosome(RealGenotype &chromosome);
+    // Checking
+    bool checkChromosome(RealChromosome &chromosome);
     void checkPopulation();
 
     //  ================= Initialization =================================
@@ -67,34 +60,35 @@ public:
     void tournamentSelection(int p, int &index1, int &index2);
     void tournamentSelect(int p, int &index);
     //==================================== Crossover ==================
-    void crossoverUniform(int index1, int index2, RealGenotype &c);
-    void crossoverFixed(int index1, int index2, RealGenotype &c, int n);
+    void crossoverUniform(int index1, int index2, RealChromosome &c);
+    void crossoverFixed(int index1, int index2, RealChromosome &c, int n);
     //===================================== Mutation ======================
-    void uniformMutate(RealGenotype &g, float perc);
-    void gaussianMutate(RealGenotype &);
+    void uniformMutate(RealChromosome &g, float perc);
+    void gaussianMutate(RealChromosome &);
     // ====================================================================
     virtual void evolve();
 
 protected:
-    vector <RealGenotype> mPopulation;
-    vector <RealGenotype> mNewPopulation;
+    vector <RealChromosome> mPopulation;
+    vector <RealChromosome> mNewPopulation;
     RealGenOptions mOptions;
-    int mNp;
-    int mNx;
 
     FitnessFunction *mFitnessFcn;
+
+    // State
     int mGeneration;
 
-    int mMaxGenerations;  // Maximum number of generations (default: 100*number of variables)
-    double mSumFitnessR; // Only for roulette wheel selection
-    int *mTourIndex; // Only for tournament selection
+    // Roulette wheel selection
+    float mSumFitnessR;
+    // Tournament selection
+    int *mTourIndex;
+    // Gaussian Mutation
     float *mSigma;
 
-    double mMinFitness;
+    float mMinFitness;
     int mIndexMinFitness;
-    double mMaxFitness;
+    float mMaxFitness;
     int mIndexMaxFitness;
-    int mVerbose;
 
     void evalMinFitness();
     void evalMaxFitness();

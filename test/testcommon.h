@@ -3,10 +3,8 @@
 #include "realgen.h"
 #include <iostream>
 #include <string>
-#include <vector>
 #include <time.h>
 #include <math.h>
-#include <cstring>
 
 using namespace std;
 
@@ -30,13 +28,13 @@ public:
 };
 
 
-// Realgenotype Unit Tests
-class RealGenotypeTest {
+// Realchromosome Unit Tests
+class RealChromosomeTest {
 public:
-    RealGenotypeTest();
-    void test_uniformRandom();
-    void test_uniformLocalRandom();
-    void test_gaussianLocalRandom();
+    RealChromosomeTest();
+    void test_randUniform();
+    void test_randUniformPerc();
+    void test_randGaussianPerc();
     void test_bound();
     void test_distanceTo();
 };
@@ -44,24 +42,27 @@ public:
 
 
 struct GAResults {
-    char name[40];
+    string name;
     int Np;
     int maxIter;
     int iter;
     bool converged;
     float eps;
-    double bestFitness;
+    float bestFitness;
     float maxTime;
-    float exTime;
-    RealGenotype best;
+    float convergedTime;
+    RealChromosome best;
 };
 
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
-// Benchmarks problems
-void bench1_sphere(RealGenOptions opt, GAResults &results);
-void bench2_rosenbrock(RealGenOptions opt, GAResults &results);
-void bench3_flatSurface(RealGenOptions opt, GAResults &results);
 
-void bench5_foxholes(RealGenOptions opt, GAResults &results);
+// Benchmark
+void benchmark(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize);
+
+// Test Problems
+void sphere_problem(RealGenOptions opt, GAResults &results);
+void rosenbrock_problem(RealGenOptions opt, GAResults &results);
+void flatSurface_problem(RealGenOptions opt, GAResults &results);
+void foxholes_problem(RealGenOptions opt, GAResults &results);
 
 #endif

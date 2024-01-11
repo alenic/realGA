@@ -1,14 +1,14 @@
 #include "testcommon.h"
 
-RealGenotypeTest::RealGenotypeTest() {
+RealChromosomeTest::RealChromosomeTest() {
 
 }
 
-void RealGenotypeTest::test_uniformRandom() {
-    cout << "RealGenotypeTest::test_uniformRandom" << endl;
+void RealChromosomeTest::test_randUniform() {
+    cout << "RealChromosomeTest::test_randUniform" << endl;
     // bound test
     cout << "|---> bound test: ";
-    RealGenotype g;
+    RealChromosome g;
     vector<float> LB(40);
     vector<float> UB(40);
     for (int i = 0; i < 40; ++i) {
@@ -19,7 +19,7 @@ void RealGenotypeTest::test_uniformRandom() {
     bool fail = false;
     for(int n=1; n<=40 && !fail; n++) {
         g.gene.resize(n);
-        g.uniformRandom();
+        g.randUniform();
         for(int i=0; i<n; i++) {
             if(g.gene[i] < LB [i] || g.gene[i] > UB[i]) {
                 fail = true;
@@ -37,11 +37,11 @@ void RealGenotypeTest::test_uniformRandom() {
 }
 
 
-void RealGenotypeTest::test_uniformLocalRandom() {
-    cout << "RealGenotypeTest::test_uniformLocalRandom" << endl;
+void RealChromosomeTest::test_randUniformPerc() {
+    cout << "RealChromosomeTest::test_randUniformPerc" << endl;
     // Test the interval bound
     cout << "|---> 0.5 +- 0.2*rand() - : ";
-    RealGenotype g(1);
+    RealChromosome g(1);
     vector<float> LB = { 0.0 };
     vector<float> UB = { 1.0 };
 
@@ -51,7 +51,7 @@ void RealGenotypeTest::test_uniformLocalRandom() {
     float maxValue = 0.0;
     for(int i=0; i<10000; i++) {
         g.gene[0] = 0.5;
-        g.uniformLocalRandom(0, 0.4);
+        g.randUniformPerc(0, 0.4);
         if(g.gene[0] < minValue) {
             minValue = g.gene[0];
         }
@@ -71,14 +71,14 @@ void RealGenotypeTest::test_uniformLocalRandom() {
     cout << endl;
 }
 
-void RealGenotypeTest::test_gaussianLocalRandom() {
+void RealChromosomeTest::test_randGaussianPerc() {
 
 }
 
-void RealGenotypeTest::test_bound() {
+void RealChromosomeTest::test_bound() {
 
 }
 
-void RealGenotypeTest::test_distanceTo() {
+void RealChromosomeTest::test_distanceTo() {
 
 }

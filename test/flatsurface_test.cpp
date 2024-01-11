@@ -5,8 +5,8 @@ class FlatSurfaceFitness : public FitnessFunction {
 public:
     FlatSurfaceFitness() {}
 
-    double eval(const RealGenotype &g) {
-        double fitness = 0.0;
+    float eval(const RealChromosome &g) {
+        float fitness = 0.0;
         for(int i=0; i<g.gene.size(); i++) {
             fitness += fabs(floor(g.gene[i]));
         }
@@ -15,12 +15,12 @@ public:
 };
 
 
-void bench3_flatSurface(RealGenOptions opt, GAResults &results) {
+void flatSurface_problem(RealGenOptions opt, GAResults &results) {
     vector<float> LB = { -5.12, -5.12, -5.12, -5.12, -5.12 };
     vector<float> UB = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
     FlatSurfaceFitness *myFitnessFunction = new FlatSurfaceFitness();
-    strcpy(results.name, "Flat surface");
+    results.name = "Flat surface";
     results.maxIter = 5000;
     results.Np = 200;
 
@@ -28,8 +28,8 @@ void bench3_flatSurface(RealGenOptions opt, GAResults &results) {
     opt.setChromosomeSize(5);
     opt.setBounds(LB, UB);
 
-    RealGen ga(opt);
-    ga.setFitnessFunction(myFitnessFunction);
+    RealGen ga;
+    ga.init(opt, myFitnessFunction, false);
 
     testRealGen(ga, results.maxIter, 1, results);
 

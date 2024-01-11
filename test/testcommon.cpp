@@ -20,7 +20,6 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
     results.converged = false;
     //ga.checkOptions();
     ga.initRandom();
-    ga.setMaxGenerations(maxIter);
     clock_t startTime = clock(), endTime;
     for (int i=0; i<maxIter; i++) {
         ga.evolve();
@@ -29,7 +28,7 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
 
         if(results.best.fitness < eps && !results.converged) {
             results.iter = generation;
-            results.exTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
+            results.convergedTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
             results.bestFitness = results.best.fitness;
             results.best = ga.getBestChromosome();
             results.converged = true;
@@ -41,7 +40,7 @@ void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
 
     if(!results.converged) {
         results.iter = maxIter;
-        results.exTime = results.maxTime;
+        results.convergedTime = results.maxTime;
         results.bestFitness = results.best.fitness;
         results.best = ga.getBestChromosome();
     }

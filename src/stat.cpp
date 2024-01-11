@@ -1,24 +1,30 @@
+/*
+realGen: Genetic Algorithm with Real values
+
+author: Alessandro Nicolosi
+website: https://github.com/alenic
+*/
 #include "stat.h"
 
-float Stat::uniformRand() {
+float Stat::randUniform() {
     float r = (float)rand() / (RAND_MAX + 1.0);
     return r;
 }
 
-int Stat::uniformIndex(int N) {
-    return rand() % N;
+int Stat::randIndex(int N) {
+    return (int)(randUniform()*N);
 }
 
 void Stat::setSeed(unsigned int seed) {
     srand(seed);
 }
 
-float Stat::uniformRand(float lb, float ub) {
-    return (ub-lb)*uniformRand() + lb;
+float Stat::randUniform(float lb, float ub) {
+    return (ub-lb)*randUniform() + lb;
 }
 
 /* mean m, standard deviation s */
-float Stat::gaussianRand(float m, float s) {
+float Stat::randGaussian(float m, float s) {
 
     float x1, x2, w, y1;
     static float y2;
@@ -32,8 +38,8 @@ float Stat::gaussianRand(float m, float s) {
     else
     {
         do {
-            x1 = 2.0 * uniformRand() - 1.0;
-            x2 = 2.0 * uniformRand() - 1.0;
+            x1 = 2.0 * randUniform() - 1.0;
+            x2 = 2.0 * randUniform() - 1.0;
             w = x1 * x1 + x2 * x2;
         } while ( w >= 1.0 );
 

@@ -15,34 +15,27 @@ $x^*$ is the optimal solution that minimize the fitness function $F(x)$.
 
 A genetic algorithm may struggle to converge to the true global minimum due to the inherent probabilistic nature of the method.
 
-# Install
-
-Download the repository with the command
+# Compile - Linux
+On terminal
 
 ```
 git clone https://github.com/alenic/realGen.git
-```
-
-Create the forlder build for cmake:
-
-```
 cd realGen
 mkdir build
 cd build
-```
-
-Use CMake to build the library 
-
-## Linux
-
-```
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
 
-## Windows (Visual Studio 14)
+# Compile - Windows (Visual Studio 14)
 
+
+On Powershell
 ```
+git clone https://github.com/alenic/realGen.git
+cd realGen
+mkdir build
+cd build
 cmake ..
 MSBuild.exe .\realGen.sln /p:Configuration=Release
 ```
@@ -53,25 +46,14 @@ If you want to use Win64 compiler use the command:
 cmake -G "Visual Studio 14 2015 Win64" ..
 ```
 
-It will generates the static library librealgen.a and the share library librealgen_shared.so into the folder build/Libs
+It will generates the static library **librealgen.a** and the shared library **librealgen_shared.so** into the folder **build/libs**
 
-# Test
-To test you can execute the test_main program:
+# Tests
+To test you can execute the **main.bin** executable into **build/tests** folder
 
-```
-realGen/build > ./Tests/test_main
-```
 
-# Compile
-Use the following command to compile a .cpp file that use librealgen.a:
-```
-g++ -std=c++11 -I$(REALGEN_INCLUDE_FOLDER) -o readme.bin readme.cpp $(REALGEN_LIB_FOLDER)/librealgen.a
-```
 
-* REALGEN_INCLUDE_FOLDERS is the folder of include files, (the **include** folder)
-* REALGEN_LIB_FOLDER is the folder where the librealgen.a file was generated 
-
-# Quick start
+# Code Example
 
 You can find the following code example inside examples/readme.cpp
 
@@ -87,11 +69,10 @@ class QuadraticFitness : public FitnessFunction {
 public:
     QuadraticFitness() {}
 
-    double eval(const RealGenotype &g) {
+    float eval(const RealChromosome &g) {
         return g.gene[0]*g.gene[0] + g.gene[1]*g.gene[1];
     }
 };
-
 
 int main(int argc,  char** argv) {
     vector<float> LB = {-5.0, -5.0};  // Lower bound of genes
@@ -101,11 +82,11 @@ int main(int argc,  char** argv) {
     options.setChromosomeSize(2);
     options.setPopulationSize(50);
     options.setBounds(LB, UB);
+    options.setVerbose(true);
 
     // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-    RealGen ga(options);
-    ga.setFitnessFunction(myFitnessFunction);
-    ga.setVerbose(true);
+    RealGen ga;
+    ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random
     ga.initRandom();
@@ -114,7 +95,7 @@ int main(int argc,  char** argv) {
         ga.evolve();
     }
     // get the best score function (the minimum)
-    RealGenotype best = ga.getBestChromosome();
+    RealChromosome best = ga.getBestChromosome();
     // Print results
     cout << ga.populationToString(); // print all the population
     cout << "Best solution: "<< best.toString() << endl;
@@ -123,7 +104,5 @@ int main(int argc,  char** argv) {
     delete myFitnessFunction;
     return 0;
 }
-
-  ```
+```
   
-

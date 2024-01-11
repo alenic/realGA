@@ -1,19 +1,18 @@
 /*
+realGen: Genetic Algorithm with Real values
 
-fitnessfunction.h: base class for fitness function
-
-author: A. Nicolosi
-realGen project: https://github.com/alenic/realGen
+author: Alessandro Nicolosi
+website: https://github.com/alenic
 
 */
 #ifndef FITNESSFUNCTION_H
 #define FITNESSFUNCTION_H
 
-#include "realgenotype.h"
+#include "realchromosome.h"
 
 class FitnessFunction {
 public:
-    virtual double eval(const RealGenotype &x) = 0;
+    virtual float eval(const RealChromosome &x) = 0;
     virtual ~FitnessFunction() {};
 };
 

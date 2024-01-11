@@ -9,7 +9,7 @@ class QuadraticFitness : public FitnessFunction {
 public:
     QuadraticFitness() {}
 
-    double eval(const RealGenotype &g) {
+    float eval(const RealChromosome &g) {
         return g.gene[0]*g.gene[0] + g.gene[1]*g.gene[1];
     }
 };
@@ -23,11 +23,11 @@ int main(int argc,  char** argv) {
     options.setChromosomeSize(2);
     options.setPopulationSize(50);
     options.setBounds(LB, UB);
+    options.setVerbose(true);
 
     // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-    RealGen ga(options);
-    ga.setFitnessFunction(myFitnessFunction);
-    ga.setVerbose(true);
+    RealGen ga;
+    ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random
     ga.initRandom();
@@ -36,7 +36,7 @@ int main(int argc,  char** argv) {
         ga.evolve();
     }
     // get the best score function (the minimum)
-    RealGenotype best = ga.getBestChromosome();
+    RealChromosome best = ga.getBestChromosome();
     // Print results
     cout << ga.populationToString(); // print all the population
     cout << "Best solution: "<< best.toString() << endl;

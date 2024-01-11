@@ -1,8 +1,13 @@
+/*
+realGen: Genetic Algorithm with Real values
+
+author: Alessandro Nicolosi
+website: https://github.com/alenic
+*/
 #include "realgenmultithread.h"
 
 // Constructors
-RealGenMultithread::RealGenMultithread(RealGenOptions &opt, unsigned int nt) : RealGen(opt) {
-    nThread = nt;
+RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGen() {
 #ifdef _WIN32
     localThread = new HANDLE[nThread];
 #else
@@ -42,29 +47,23 @@ void *RealGenMultithread::evaluatePopulationThread(void *params) {
 
 
 void RealGenMultithread::evolve() {
-    RealGenotype offspring(mNx);
+    RealChromosome offspring(mOptions.chromosomeSize);
     offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
     int index1=0, index2=1;
-    int elitismIndex = (int)(mOptions.selectionElitismFactor*mNp);
+    int elitismIndex = (int)(mOptions.selectionElitismFactor*mOptions.populationSize);
     int k=0;
 
     if(mOptions.selectionType == ROULETTE_WHEEL_SELECTION) {
         sumFitnessRoulette();
     }
 
-    if (mOptions.selectionSorting) {
-        while (k < elitismIndex) {
-            mNewPopulation[k] = mPopulation[k];
-            ++k;
-        }
-    } else {
-        // Keep only the best one
-        mNewPopulation[k] = mPopulation[mIndexMinFitness];
+    while (k < elitismIndex) {
+        mNewPopulation[k] = mPopulation[k];
         ++k;
     }
 
-    while(k < mNp) {
+    while(k < mOptions.populationSize) {
         // Selection
         switch(mOptions.selectionType) {
         case ROULETTE_WHEEL_SELECTION:
@@ -91,13 +90,13 @@ void RealGenMultithread::evolve() {
         ++k;
     }
 
-    int interval = ceil((float)(mNp-elitismIndex)/(float)nThread);
+    int interval = ceil((float)(mOptions.populationSize-elitismIndex)/(float)nThread);
 
     thread_params localThreadParam[nThread];
 
     for (int i = 0; i < nThread; ++i) {
         localThreadParam[i].startIndex = elitismIndex + interval*i;
-        localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)mNp);
+        localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
         localThreadParam[i].ga = this;
 
 
@@ -122,13 +121,19 @@ void RealGenMultithread::evolve() {
 #endif
     }
 
-    if(mOptions.selectionSorting) {
-        partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+elitismIndex, mNewPopulation.end());
-    }
+    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+elitismIndex, mNewPopulation.end());
+
 
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
-        for(int i=0; i<mNx; i++) {
-            mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink*((float)mGeneration/(float)mMaxGenerations));
+        for(int i=0; i<mOptions.chromosomeSize; i++) {
+            if (mGeneration >= mOptions.maxGenerations) {
+                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink);
+            } else {
+                mSigma[i] = mOptions.mutationGaussianScale*(1.0 - mOptions.mutationGaussianShrink*((float)mGeneration/(float)mOptions.maxGenerations));
+            }
+            if (mSigma[i] <= 0) {
+                mSigma[i] = 0;
+            }
         }
     }
 

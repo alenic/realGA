@@ -28,7 +28,7 @@ private:
     pthread_t *localThread;
 #endif
 public:
-    RealGenMultithread(RealGenOptions &opt, unsigned int nThread);
+    RealGenMultithread(unsigned int nThread);
     ~RealGenMultithread();
 
 #ifdef _WIN32
