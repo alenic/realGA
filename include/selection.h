@@ -39,4 +39,19 @@ private:
     float mCumSum;
 };
 
+
+// Tournament selection strategy
+class TournamentSelection: public Selection {
+public:
+    TournamentSelection(int populationSize);
+    ~TournamentSelection();
+
+    void init(vector<float> &fitnessValues);
+    void select(vector<float> &fitnessValues, int &index1, int &index2);
+
+private:
+    int *mTourIndex;
+};
+
+
 #endif // SELECTION_H

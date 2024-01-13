@@ -11,6 +11,8 @@ website: https://github.com/alenic
 #include <iostream>
 #include <limits>
 
+#define MIN_SIGMA 1.0e-9f
+
 using namespace std;
 
 class Stat {

@@ -91,10 +91,10 @@ void RealGenMultithread::evolve() {
         // Mutation
         switch(mOptions.mutationType) {
             case UNIFORM_MUTATION:
-                uniformMutate(offspring, mOptions.mutationUniformPerc);
+                uniformMutate(offspring, mOptions.mutationRate, mGaussianPerc);
                 break;
             case GAUSSIAN_MUTATION:
-                gaussianMutate(offspring);
+                gaussianMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
                 break;
         }
         mNewPopulation[k] = offspring;

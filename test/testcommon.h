@@ -34,8 +34,8 @@ class RealChromosomeTest {
 public:
     RealChromosomeTest();
     void test_randUniform();
-    void test_randUniformPerc();
-    void test_randGaussianPerc();
+    void test_uniformMutate();
+    void test_gaussianMutate();
     void test_bound();
     void test_distanceTo();
 };

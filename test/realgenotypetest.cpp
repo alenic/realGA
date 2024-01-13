@@ -37,8 +37,8 @@ void RealChromosomeTest::test_randUniform() {
 }
 
 
-void RealChromosomeTest::test_randUniformPerc() {
-    cout << "RealChromosomeTest::test_randUniformPerc" << endl;
+void RealChromosomeTest::test_uniformMutate() {
+    cout << "RealChromosomeTest::test_uniformMutate" << endl;
     // Test the interval bound
     cout << "|---> 0.5 +- 0.2*rand() - : ";
     RealChromosome g(1);
@@ -51,7 +51,7 @@ void RealChromosomeTest::test_randUniformPerc() {
     float maxValue = 0.0;
     for(int i=0; i<10000; i++) {
         g.gene[0] = 0.5;
-        g.randUniformPerc(0, 0.4);
+        g.uniformMutate(0, 0.4);
         if(g.gene[0] < minValue) {
             minValue = g.gene[0];
         }
@@ -71,7 +71,7 @@ void RealChromosomeTest::test_randUniformPerc() {
     cout << endl;
 }
 
-void RealChromosomeTest::test_randGaussianPerc() {
+void RealChromosomeTest::test_gaussianMutate() {
 
 }
 

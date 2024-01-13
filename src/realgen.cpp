@@ -362,14 +362,13 @@ void RealGen::evolve() {
                 break;
         }
         
-
         // Mutation
         switch(mOptions.mutationType) {
             case UNIFORM_MUTATION:
-                uniformMutate(offspring, mOptions.mutationUniformPerc);
+                uniformMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
                 break;
             case GAUSSIAN_MUTATION:
-                gaussianMutate(offspring);
+                gaussianMutate(offspring, mOptions.mutationRate, mGaussianPerc);
                 break;
         }
 
@@ -393,7 +392,9 @@ void RealGen::evolve() {
 }
 
 // ===================================== Init function =============================
-void RealGen::popInitRandUniform() {
+void RealGen::popInitRandUniform()
+// Init random uniform population
+{
     for(int i=0; i<mOptions.populationSize; i++) {
         mPopulation[i].randUniform();
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
@@ -402,8 +403,21 @@ void RealGen::popInitRandUniform() {
     sort(mPopulation.begin(), mPopulation.end());
 }
 
+void RealGen::popInitRandGaussian(float mean, float sigma)
+// Init random gaussian population
+{
+    for(int i=0; i<mOptions.populationSize; i++) {
+        mPopulation[i].randGaussian(mean, sigma);
+        mPopulation[i].fitness = evalFitness(mPopulation[i]);
+    }
 
-void RealGen::popInitGaussianMutate(vector<float> &gene, float sigma) {
+    sort(mPopulation.begin(), mPopulation.end());
+}
+
+
+void RealGen::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc)
+// Init population from a given chromosome and mutate it
+{
     RealChromosome g(mOptions.chromosomeSize);
     g.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
     for(int i=0; i<mOptions.chromosomeSize; i++) {
@@ -413,9 +427,7 @@ void RealGen::popInitGaussianMutate(vector<float> &gene, float sigma) {
     mPopulation[0].fitness = evalFitness(mPopulation[0]);
     for(int i=1; i<mOptions.populationSize; i++) {
         mPopulation[i] = g;
-        for(int j=0; j<mOptions.chromosomeSize; ++j) {
-            mPopulation[i].randGaussianPerc(j, sigma);
-        }
+        gaussianMutate(mPopulation[i], mutatioRate, perc);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
@@ -485,19 +497,20 @@ void RealGen::crossoverFixed(int index1, int index2, RealChromosome &c, int n) {
         c.gene[i] = mPopulation[index2].gene[i];
     }
 }
+
 //===================================== Mutation ======================
-void RealGen::uniformMutate(RealChromosome &g, float perc) {
+void RealGen::uniformMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int i=0; i<mOptions.chromosomeSize; i++) {
-        if(Stat::randUniform() < mOptions.mutationRate) {
-            g.randUniformPerc(i, perc);
+        if(Stat::randUniform() < mutationRate) {
+            chromosome.uniformMutate(i, perc);
         }
     }
 }
 
-void RealGen::gaussianMutate(RealChromosome &g) {
+void RealGen::gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int j=0; j<mOptions.chromosomeSize; j++) {
-        if(Stat::randUniform() < mOptions.mutationRate) {
-            g.randGaussianPerc(j, mGaussianPerc);
+        if(Stat::randUniform() < mutationRate) {
+            chromosome.gaussianMutate(j, perc);
         }
     }
 }

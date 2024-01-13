@@ -32,7 +32,7 @@ RealChromosome::~RealChromosome()
 
 }
 
-RealChromosome & RealChromosome::operator= ( const RealChromosome &c ) {
+RealChromosome & RealChromosome::operator= (const RealChromosome &c) {
     gene = c.gene;
     fitness = c.fitness;
     LB = c.LB;
@@ -78,7 +78,6 @@ float RealChromosome::distanceTo(RealChromosome &g) {
     return sqrt(sse);
 }
 
-
 void RealChromosome::randUniform()
 {
     for(int i=0; i<gene.size(); i++) {
@@ -95,10 +94,10 @@ void RealChromosome::randUniform(int i)
     gene[i] = Stat::randUniform(LB[i], UB[i]);
 }
 
-void RealChromosome::randUniformPerc(int i, float perc)
+void RealChromosome::uniformMutate(int i, float perc)
 {
     if(i >= gene.size()) {
-        cerr << "ERROR: RealChromosome::randUniformPerc(int i, float perc) " << endl;
+        cerr << "ERROR: RealChromosome::uniformMutate(int i, float perc) " << endl;
         exit(-1);
     }
     float fraction = perc*(Stat::randUniform()-0.5)*(UB[i]-LB[i]);
@@ -111,23 +110,37 @@ void RealChromosome::randUniformPerc(int i, float perc)
         gene[i] = UB[i];
 }
 
-void RealChromosome::randGaussianPerc(int i, float perc) {
-    if(i >= gene.size()){
-        cerr << "ERROR: RealChromosome::randGaussianPerc(int i, float perc) " << endl;
+void RealChromosome::randGaussian(float mean, float sigma)
+{
+    for(int i=0; i<gene.size(); i++) {
+        gene[i] = Stat::randGaussian(mean, sigma);
+        if (gene[i] < LB[i]) gene[i] = LB[i];
+        if (gene[i] > UB[i]) gene[i] = UB[i];
+    }
+}
+
+void RealChromosome::randGaussian(int i, float mean, float sigma)
+{
+    if(i >= gene.size()) {
+        cerr << "ERROR: RealChromosome::randUniform(int i) " << endl;
+        exit(-1);
+    }
+    gene[i] = Stat::randUniform(LB[i], UB[i]);
+}
+
+void RealChromosome::gaussianMutate(int i, float perc) {
+    if(i >= gene.size()) {
+        cerr << "ERROR: RealChromosome::gaussianMutate(int i, float perc) " << endl;
         exit(-1);
     }
     float delta = UB[i] - LB[i];
 
     // 2 * sigma = delta / 2
-    float sigma = perc * (delta / 2.0);
-
-    if (sigma < 1e-6) {
-        sigma = 1e-6;
-    }
+    float sigma = perc * (delta / 4.0f);
 
     float r = Stat::randGaussian(0.0, sigma);
     if (isnan(r) || isinf(r)) {
-        cerr << "randGaussianPerc error!  r=" << r << endl;
+        cerr << "gaussianMutate error!  r=" << r << endl;
         r = 0.0;
     }
 

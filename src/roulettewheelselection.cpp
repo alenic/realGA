@@ -1,5 +1,4 @@
 #include "selection.h"
-#include <algorithm>
 
 
 RouletteWheelSelection::RouletteWheelSelection(int populationSize) {
@@ -7,9 +6,7 @@ RouletteWheelSelection::RouletteWheelSelection(int populationSize) {
     mCumSum = 0;
 }
 
-RouletteWheelSelection::~RouletteWheelSelection() {
-    
-}
+RouletteWheelSelection::~RouletteWheelSelection() {}
 
 void RouletteWheelSelection::computeCumulativeValues(vector<float> &fitnessValues)
 // call this function before the internal loop of evolve

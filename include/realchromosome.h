@@ -32,10 +32,14 @@ public:
     string toString();
 
     void setBounds(const vector<float> &lb, const vector<float> &ub);
+
     void randUniform();
     void randUniform(int i);
-    void randUniformPerc(int i, float perc);
-    void randGaussianPerc(int i, float perc);
+    void uniformMutate(int i, float perc);
+    void randGaussian(float mean, float sigma);
+    void randGaussian(int i, float mean, float sigma);
+    void gaussianMutate(int i, float perc);
+
     float distanceTo(RealChromosome &);
 
     RealChromosome & operator= ( const RealChromosome &c );

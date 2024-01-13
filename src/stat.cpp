@@ -26,6 +26,10 @@ float Stat::randUniform(float lb, float ub) {
 /* mean m, standard deviation s */
 float Stat::randGaussian(float m, float s) {
 
+    if (s < MIN_SIGMA) {
+        s = MIN_SIGMA;
+    }
+
     float x1, x2, w, y1;
     static float y2;
     static int use_last = 0;
