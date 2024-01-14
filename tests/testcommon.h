@@ -49,33 +49,6 @@ public:
 };
 
 
-
-struct GAResults {
-    string name;
-    int Np;
-    int maxIter;
-    int iter;
-    bool converged;
-    float eps;
-    float bestFitness;
-    float maxTime;
-    float convergedTime;
-    RealChromosome best;
-};
-
 void printDistribution(vector<float> &x);
-
-void testProblems(RealGenOptions &opt);
-
-void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
-
-// Benchmark
-void benchmark(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize);
-
-// Problems
-void sphere_problem(RealGenOptions opt, GAResults &results);
-void rosenbrock_problem(RealGenOptions opt, GAResults &results);
-void flatSurface_problem(RealGenOptions opt, GAResults &results);
-void foxholes_problem(RealGenOptions opt, GAResults &results);
 
 #endif

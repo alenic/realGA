@@ -39,7 +39,6 @@ int main(int argc,  char** argv) {
     // get the best score function (the minimum)
     RealChromosome best = ga.getBestChromosome();
     // Print results
-    cout << ga.populationToString(); // print all the population
     cout << "Best solution: "<< best.toString() << endl;
     cout << "Best Fitness value = " << best.fitness << endl;
 

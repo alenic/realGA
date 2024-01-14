@@ -1,17 +1,15 @@
-#include "testcommon.h"
-#include "fitnessfunction.h"
+#include "benchmarks.h"
 
 class Benchmark : public FitnessFunction {
 public:
     Benchmark() {}
 
     float eval(const RealChromosome &g) {
-        return 0.0;
+        return 1000.0;
     }
 };
 
-
-void benchmark(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize) {
+void benchmark_fake(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize) {
     vector<float> LB(chromosomeSize);
     vector<float> UB(chromosomeSize);
 
@@ -30,7 +28,7 @@ void benchmark(RealGenOptions opt, GAResults &results, int chromosomeSize, int p
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    testRealGen(ga, results.maxIter, 1, results);
+    benchmarkRealGen(ga, results.maxIter, 0.0f, results);
 
     delete myFitnessFunction;
 }

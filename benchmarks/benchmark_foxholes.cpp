@@ -1,6 +1,4 @@
-#include "testcommon.h"
-#include "fitnessfunction.h"
-
+#include "benchmarks.h"
 
 class FoxholesFitness : public FitnessFunction {
 public:
@@ -21,9 +19,7 @@ private:
     float *mA;
 };
 
-
-
-void foxholes_problem(RealGenOptions opt, GAResults &results) {
+void benchmark_foxholes(RealGenOptions opt, GAResults &results) {
     vector<float> LB = { -65536, -65536 };
     vector<float> UB = { 65536,  65536};
     float A[] = {-32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32,
@@ -41,7 +37,7 @@ void foxholes_problem(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    testRealGen(ga, results.maxIter, 1e-2, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-2, results);
 
     delete myFitnessFunction;
 }

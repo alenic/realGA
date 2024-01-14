@@ -1,5 +1,4 @@
-#include "testcommon.h"
-#include "fitnessfunction.h"
+#include "benchmarks.h"
 
 class FlatSurfaceFitness : public FitnessFunction {
 public:
@@ -15,7 +14,7 @@ public:
 };
 
 
-void flatSurface_problem(RealGenOptions opt, GAResults &results) {
+void benchmark_flatSurface(RealGenOptions opt, GAResults &results) {
     vector<float> LB = { -5.12, -5.12, -5.12, -5.12, -5.12 };
     vector<float> UB = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
@@ -31,7 +30,7 @@ void flatSurface_problem(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    testRealGen(ga, results.maxIter, 1, results);
+    benchmarkRealGen(ga, results.maxIter, 1, results);
 
     delete myFitnessFunction;
 }

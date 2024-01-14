@@ -53,8 +53,10 @@ cmake -G "Visual Studio 14 2015 Win64" ..
 It will generates the static library **librealgen.a** and the shared library **librealgen_shared.so** into the folder **build/libs**
 
 # Tests
-To test you can execute the **main.bin** executable into **build/tests** folder
+To test realGen you can execute the **tests.bin** executable into **build/tests** folder
 
+# Benchmarks
+To perform realGen's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
 
 
 # Code Example
@@ -102,7 +104,6 @@ int main(int argc,  char** argv) {
     // get the best score function (the minimum)
     RealChromosome best = ga.getBestChromosome();
     // Print results
-    cout << ga.populationToString(); // print all the population
     cout << "Best solution: "<< best.toString() << endl;
     cout << "Best Fitness value = " << best.fitness << endl;
 

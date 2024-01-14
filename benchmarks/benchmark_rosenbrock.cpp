@@ -1,5 +1,4 @@
-#include "testcommon.h"
-#include "fitnessfunction.h"
+#include "benchmarks.h"
 
 class RosenbrockFitness : public FitnessFunction {
 public:
@@ -12,7 +11,7 @@ public:
     }
 };
 
-void rosenbrock_problem(RealGenOptions opt, GAResults &results) {
+void benchmark_rosenbrock(RealGenOptions opt, GAResults &results) {
     vector<float> LB = { -2.048, -2.048 };
     vector<float> UB = { 2.048,  2.048};
 
@@ -28,7 +27,7 @@ void rosenbrock_problem(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    testRealGen(ga, results.maxIter, 1e-4, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-4, results);
 
     delete myFitnessFunction;
 }

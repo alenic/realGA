@@ -1,6 +1,4 @@
-#include "testcommon.h"
-#include "fitnessfunction.h"
-
+#include "benchmarks.h"
 
 class SphereFitness : public FitnessFunction {
 public:
@@ -16,9 +14,7 @@ public:
     }
 };
 
-
-
-void sphere_problem(RealGenOptions opt, GAResults &results) {
+void benchmark_sphere(RealGenOptions opt, GAResults &results) {
     vector<float> LB = { -5.12, -5.12, -5.12, -5.12 };
     vector<float> UB = { 5.12,  5.12,  5.12,  5.12};
 
@@ -35,7 +31,7 @@ void sphere_problem(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
     
-    testRealGen(ga, results.maxIter, 1e-4, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-4, results);
 
     delete myFitnessFunction;
 }

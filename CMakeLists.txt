@@ -25,13 +25,20 @@ set_target_properties(realgen_static realgen_shared
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
 )
 
-# ====================================== Build TESTS ====================================
-file(GLOB TESTSOURCES "test/*.cpp")
-add_executable(main.bin ${TESTSOURCES})
-target_link_libraries(main.bin realgen_static)
+# ====================================== Build Tests ====================================
+file(GLOB TESTSOURCES "tests/*.cpp")
+add_executable(tests.bin ${TESTSOURCES})
+target_link_libraries(tests.bin realgen_static)
 
-set_target_properties(main.bin
+set_target_properties(tests.bin
                       PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
+
+# ====================================== Build Benchmarks ====================================
+file(GLOB BENCHSOURCES "benchmarks/*.cpp")
+add_executable(benchmarks.bin ${BENCHSOURCES} "tests/testcommon.cpp")
+target_link_libraries(benchmarks.bin realgen_static)
+set_target_properties(benchmarks.bin
+                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/benchmarks")
 
 # ====================================== Build examples ====================================
 # --------------- readme.cpp -------------------------
