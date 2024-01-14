@@ -35,7 +35,7 @@ public:
     void setSeed(bool seedValue);
 
     void setSelectionType(string value);
-    void setSelectionTournamentP(int value);
+    void setselectionTournamentSize(int value);
     void setElitismFactor(float value);
 
     void setMutationType(string value);
@@ -58,13 +58,13 @@ public:
 
     //SelectionOpt
     SelectionType selectionType;
-    int selectionTournamentP;
+    int selectionTournamentSize;
     float selectionElitismFactor;
 
     //CrossoverOpt
     CrossoverType crossoverType;
-    unsigned int crossoverIndex1;
-    unsigned int crossoverIndex2;
+    unsigned int crossoverindexA;
+    unsigned int crossoverindexB;
 
     // MutationOpt
     MutationType mutationType;

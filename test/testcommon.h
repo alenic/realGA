@@ -65,6 +65,8 @@ struct GAResults {
 
 void printDistribution(vector<float> &x);
 
+void testProblems(RealGenOptions &opt);
+
 void testRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
 
 // Benchmark

@@ -57,11 +57,11 @@ public:
     void evalPopulationFitness();
     void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc);
     // Selection
-    void tournamentSelection(int p, int &index1, int &index2);
+    void tournamentSelection(int p, int &indexA, int &indexB);
     void tournamentSelect(int p, int &index);
     // Crossover
-    void crossoverUniform(int index1, int index2, RealChromosome &c);
-    void crossoverFixed(int index1, int index2, RealChromosome &c, int n);
+    void crossoverUniform(int indexA, int indexB, RealChromosome &c);
+    void crossoverFixed(int indexA, int indexB, RealChromosome &c, int n);
     // Mutation
     void uniformMutate(RealChromosome &chromosome, float mutationRate, float perc);
     void gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc);
@@ -79,11 +79,6 @@ protected:
 
     // State
     int mGeneration;
-
-    // Roulette wheel selection
-    float mSumFitnessR;
-    // Tournament selection
-    int *mTourIndex;
     // Gaussian mutation perc (change during generations)
     float mGaussianPerc;
 };

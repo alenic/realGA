@@ -67,15 +67,7 @@ void RealGenMultithread::evolve() {
 
      while(k < mOptions.populationSize) {
         // Selection
-        switch(mOptions.selectionType) {
-            case ROULETTE_WHEEL_SELECTION:
-                // Choose index A and B from population according to roulette wheel selection strategy
-                mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-                break;
-            case TOURNAMENT_SELECTION:
-                tournamentSelection(mOptions.selectionTournamentP, selectedIndexA, selectedIndexB);
-                break;
-        }
+        mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
         // Crossover
         switch(mOptions.crossoverType) {
@@ -83,7 +75,7 @@ void RealGenMultithread::evolve() {
                 crossoverUniform(selectedIndexA, selectedIndexB, offspring);
                 break;
             case SINGLE_POINT_CROSSOVER:
-                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverIndex1);
+                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
                 break;
         }
         

@@ -13,13 +13,13 @@ RealGenOptions::RealGenOptions() {
     maxGenerations = 100 * populationSize;
 
     selectionType = ROULETTE_WHEEL_SELECTION;
-    selectionTournamentP = 4;
+    selectionTournamentSize = 4;
 
     selectionElitismFactor = 0.1;
 
     crossoverType = UNIFORM_CROSSOVER;
-    crossoverIndex1 = 0;
-    crossoverIndex2 = 0;
+    crossoverindexA = 0;
+    crossoverindexB = 0;
 
     mutationType = UNIFORM_MUTATION;
     mutationUniformPerc = 0.25;         // percentage of UB-LB
@@ -74,7 +74,7 @@ void RealGenOptions::setSeed(bool seedValue) {
 }
 
 void RealGenOptions::setSelectionType(string value) {
-    if (value == "roulette_wheel")
+    if (value == "roulette")
         selectionType = ROULETTE_WHEEL_SELECTION;
     else if (value == "tournament")
         selectionType = TOURNAMENT_SELECTION;
@@ -82,8 +82,8 @@ void RealGenOptions::setSelectionType(string value) {
         cerr << "setSelectionType(" << value << ") is an invalid option value" << endl;
 }
 
-void RealGenOptions::setSelectionTournamentP(int value) {
-    selectionTournamentP = value;
+void RealGenOptions::setselectionTournamentSize(int value) {
+    selectionTournamentSize = value;
 }
 
 
@@ -135,11 +135,11 @@ void RealGenOptions::setCrossoverType(string value) {
 }
 
 void RealGenOptions::setSinglePointCrossoverIndex(int value) {
-    crossoverIndex1 = value;
+    crossoverindexA = value;
 }
 
 void RealGenOptions::setTwoPointCrossoverIndexes(int i1, int i2) {
-    crossoverIndex1 = i1;
-    crossoverIndex2 = i2;
+    crossoverindexA = i1;
+    crossoverindexB = i2;
 }
 

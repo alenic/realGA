@@ -19,7 +19,7 @@ using namespace std;
 class Selection {
 public:
     virtual void init(vector<float> &fitnessValues) = 0;
-    virtual void select(vector<float> &fitnessValues, int &index1, int &index2) = 0;
+    virtual void select(vector<float> &fitnessValues, int &indexA, int &indexB) = 0;
 };
 
 // Roulette-Wheel selection strategy
@@ -31,7 +31,7 @@ public:
     void init(vector<float> &fitnessValues);
     void computeCumulativeValues(vector<float> &fitnessValues);
 
-    void select(vector<float> &fitnessValues, int &index1, int &index2);
+    void select(vector<float> &fitnessValues, int &indexA, int &indexB);
     int searchIndexBinarySearch(vector<float> arr, float x);
 private:
     vector<float> mCumulativeFitness;
@@ -43,14 +43,16 @@ private:
 // Tournament selection strategy
 class TournamentSelection: public Selection {
 public:
-    TournamentSelection(int populationSize);
+    TournamentSelection();
+    TournamentSelection(int mTorunamentSize);
     ~TournamentSelection();
 
     void init(vector<float> &fitnessValues);
-    void select(vector<float> &fitnessValues, int &index1, int &index2);
+    void select(vector<float> &fitnessValues, int &indexA, int &indexB);
 
 private:
-    int *mTourIndex;
+    int mTorunamentSize;
+    int mPopulationSize;
 };
 
 

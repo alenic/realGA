@@ -23,35 +23,25 @@ int main() {
     
     cout << "==================== GA Test ============================" << endl;
 
-    sphere_problem(opt, results[0]);
-    rosenbrock_problem(opt, results[1]);
-    flatSurface_problem(opt, results[2]);
-    foxholes_problem(opt, results[3]);
-
+    opt.setMutationType("uniform");
     printf("Mutation type = Uniform\n");
-    printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
-
-    for(int i=0; i<4; i++) {
-        printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f ", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
-        cout << results[i].best.toString() << endl;
-    }
+    testProblems(opt);
 
     opt.setMutationType("gaussian");
     opt.setMutationGaussianPerc(0.025, 0.001);
-    sphere_problem(opt, results[0]);
-    rosenbrock_problem(opt, results[1]);
-    flatSurface_problem(opt, results[2]);
-    foxholes_problem(opt, results[3]);
-
     printf("Mutation type = Gaussian\n");
-    printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
+    testProblems(opt);
+    
+    opt.setMutationType("uniform");
+    opt.setSelectionType("tournament");
+    printf("Mutation type = Uniform\n");
+    testProblems(opt);
 
-    for(int i=0; i<4; i++) {
-        printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f ", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
-        cout << results[i].best.toString() << endl;
-    }
-
-
+    opt.setMutationType("gaussian");
+    opt.setSelectionType("tournament");
+    opt.setMutationGaussianPerc(0.025, 0.001);
+    printf("Mutation type = Gaussian\n");
+    testProblems(opt);
     cout << "==================== GA Benchmark ============================" << endl;
     
     printf("Mutation type = Uniform\n");

@@ -10,7 +10,6 @@ RealGen::RealGen()
 // Default Constructor
 {
     // Reset pointers and fitness values
-    mTourIndex = nullptr;
     mFitnessFcn = nullptr;
     mGeneration = 0;
     mSelectionAlgorithm = nullptr;
@@ -20,10 +19,6 @@ RealGen::RealGen()
 RealGen::~RealGen()
 // Destructor
 {
-    if(mTourIndex != nullptr) {
-        delete []mTourIndex;
-    }
-
     delete mSelectionAlgorithm;
 }
 
@@ -36,8 +31,8 @@ void RealGen::checkOptions()
         cout << "-> Selection: ROULETTE_WHEEL_SELECTION" << endl;
         break;
     case TOURNAMENT_SELECTION:
-        if(mOptions.selectionTournamentP >= 2 && mOptions.selectionTournamentP <= mOptions.populationSize) {
-            cout << "-> Selection: TOURNAMENT_SELECTION : tournamentP = " << mOptions.selectionTournamentP << endl;
+        if(mOptions.selectionTournamentSize >= 2 && mOptions.selectionTournamentSize <= mOptions.populationSize) {
+            cout << "-> Selection: TOURNAMENT_SELECTION : tournamentP = " << mOptions.selectionTournamentSize << endl;
         } else {
             cerr << "ERROR: options.selection.tournamentP must be an unsigned number between 2 and Np" << endl;
             exit(-1);
@@ -59,23 +54,23 @@ void RealGen::checkOptions()
         cout << "-> Crossover: UNIFORM_CROSSOVER" << endl;
         break;
     case SINGLE_POINT_CROSSOVER:
-        if(mOptions.crossoverIndex1 >= 0 && mOptions.crossoverIndex1 < mOptions.chromosomeSize) {
-            cout << "-> Crossover: SINGLE_POINT_CROSSOVER : index1 = " << mOptions.crossoverIndex1 << endl;
+        if(mOptions.crossoverindexA >= 0 && mOptions.crossoverindexA < mOptions.chromosomeSize) {
+            cout << "-> Crossover: SINGLE_POINT_CROSSOVER : indexA = " << mOptions.crossoverindexA << endl;
         } else {
-            cerr << "ERROR: options.crossover.index1 must be a number between 0 and Nx" << endl;
+            cerr << "ERROR: options.crossover.indexA must be a number between 0 and Nx" << endl;
             exit(-1);
         }
         break;
     case TWO_POINT_CROSSOVER:
-        if(mOptions.crossoverIndex1 >= 0 && mOptions.crossoverIndex1 < mOptions.chromosomeSize &&
-                mOptions.crossoverIndex2 >= 0 && mOptions.crossoverIndex2 < mOptions.chromosomeSize) {
-            cout << "-> Crossover: TWO_POINT_CROSSOVER : index1 = " << mOptions.crossoverIndex1 << "index2 = " << mOptions.crossoverIndex2 << endl;
+        if(mOptions.crossoverindexA >= 0 && mOptions.crossoverindexA < mOptions.chromosomeSize &&
+                mOptions.crossoverindexB >= 0 && mOptions.crossoverindexB < mOptions.chromosomeSize) {
+            cout << "-> Crossover: TWO_POINT_CROSSOVER : indexA = " << mOptions.crossoverindexA << "indexB = " << mOptions.crossoverindexB << endl;
         } else {
-            cerr << "ERROR: crossover_index1 and crossover_index2 must be a number between 0 and Nx" << endl;
+            cerr << "ERROR: crossover_indexA and crossover_indexB must be a number between 0 and Nx" << endl;
             exit(-1);
         }
-        if(mOptions.crossoverIndex1 > mOptions.crossoverIndex2) {
-            cerr << "ERROR: crossover_index1 <= crossover_index2 must be satisfied" << endl;
+        if(mOptions.crossoverindexA > mOptions.crossoverindexB) {
+            cerr << "ERROR: crossover_indexA <= crossover_indexB must be satisfied" << endl;
             exit(-1);
         }
         break;
@@ -183,11 +178,8 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
                 mSelectionAlgorithm = new RouletteWheelSelection(mOptions.populationSize);
                 break;
             case TOURNAMENT_SELECTION:
-            if (mTourIndex != nullptr) {
-                delete []mTourIndex;
-                mTourIndex = new int[mOptions.selectionTournamentP];
-            }
-            break;
+                mSelectionAlgorithm = new TournamentSelection(mOptions.selectionTournamentSize);
+                break;
         }
 
 
@@ -342,15 +334,7 @@ void RealGen::evolve() {
 
     while(k < mOptions.populationSize) {
         // Selection
-        switch(mOptions.selectionType) {
-            case ROULETTE_WHEEL_SELECTION:
-                // Choose index A and B from population according to roulette wheel selection strategy
-                mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-                break;
-            case TOURNAMENT_SELECTION:
-                tournamentSelection(mOptions.selectionTournamentP, selectedIndexA, selectedIndexB);
-                break;
-        }
+        mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
         // Crossover
         switch(mOptions.crossoverType) {
@@ -358,7 +342,7 @@ void RealGen::evolve() {
                 crossoverUniform(selectedIndexA, selectedIndexB, offspring);
                 break;
             case SINGLE_POINT_CROSSOVER:
-                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverIndex1);
+                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
                 break;
         }
         
@@ -444,57 +428,31 @@ void RealGen::evalPopulationFitness() {
 
 }
 
-// ================= Selection =================================
-void RealGen::tournamentSelection(int p, int &index1, int &index2) {
-    tournamentSelect(p, index1);
-    tournamentSelect(p, index2);
-    if(index1 == index2) {
-        if(index1 != mOptions.populationSize-1)
-            index2 = index1 + 1;
-        else
-            index2 = index1 - 1;
-    }
-}
-
-void RealGen::tournamentSelect(int p, int &iMin) {
-    iMin = 0;
-    float fMin = mPopulation[0].fitness;
-    for(int i=0; i<p; i++) {
-        mTourIndex[i] = Stat::randIndex(mOptions.populationSize);
-    }
-    for(int i=0; i<p; i++) {
-        float f=mPopulation[mTourIndex[i]].fitness;
-        if(f < fMin) {
-            fMin = f;
-            iMin = mTourIndex[i];
-        }
-    }
-}
 //==================================== Crossover ==================
-void RealGen::crossoverUniform(int index1, int index2, RealChromosome &c) {
-    if (index1 < 0 || index1 >= mOptions.populationSize) {
-        cerr << "crossoverUniform error: index1 = " << index1 << endl;
+void RealGen::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
+    if (indexA < 0 || indexA >= mOptions.populationSize) {
+        cerr << "crossoverUniform error: indexA = " << indexA << endl;
         exit(-1);
     }
-    if (index2 < 0 || index2 >= mOptions.populationSize) {
-        cerr << "crossoverUniform error: index2 = " << index2 << endl;
+    if (indexB < 0 || indexB >= mOptions.populationSize) {
+        cerr << "crossoverUniform error: indexB = " << indexB << endl;
         exit(-1);
     }
     for(int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform()<0.5) {
-            c.gene[j] = mPopulation[index1].gene[j];
+            c.gene[j] = mPopulation[indexA].gene[j];
         } else {
-            c.gene[j] = mPopulation[index2].gene[j];
+            c.gene[j] = mPopulation[indexB].gene[j];
         }
     }
 }
 
-void RealGen::crossoverFixed(int index1, int index2, RealChromosome &c, int n) {
+void RealGen::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
     for(int i=0; i<n; i++) {
-        c.gene[i] = mPopulation[index1].gene[i];
+        c.gene[i] = mPopulation[indexA].gene[i];
     }
     for(int i=n; i<mOptions.chromosomeSize; i++) {
-        c.gene[i] = mPopulation[index2].gene[i];
+        c.gene[i] = mPopulation[indexB].gene[i];
     }
 }
 

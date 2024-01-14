@@ -34,21 +34,21 @@ void RouletteWheelSelection::init(vector<float> &fitnessValues) {
     computeCumulativeValues(fitnessValues);
 }
 
-void RouletteWheelSelection::select(vector<float> &fitnessValues, int &index1, int &index2) {
+void RouletteWheelSelection::select(vector<float> &fitnessValues, int &indexA, int &indexB) {
     unsigned int n = mCumulativeFitness.size();
     float cumulative1, cumulative2;
     
     cumulative1 = mCumSum * Stat::randUniform();
     cumulative2 = mCumSum * Stat::randUniform();
 
-    index1 = searchIndexBinarySearch(mCumulativeFitness, cumulative1);
-    index2 = searchIndexBinarySearch(mCumulativeFitness, cumulative2);
+    indexA = searchIndexBinarySearch(mCumulativeFitness, cumulative1);
+    indexB = searchIndexBinarySearch(mCumulativeFitness, cumulative2);
 
-    if(index1 == index2) {
-        if(index1 != n-1) {
-            index2 = index1 + 1;
+    if(indexA == indexB) {
+        if(indexA != n-1) {
+            indexB = indexA + 1;
         } else {
-            index2 = index1 - 1;
+            indexB = indexA - 1;
         }
     }
 }
