@@ -5,8 +5,8 @@ author: Alessandro Nicolosi
 website: https://github.com/alenic
 
 */
-#ifndef REALCHROMOSOME_H
-#define REALCHROMOSOME_H
+#ifndef REALGEN_CHROMOSOME_H
+#define REALGEN_CHROMOSOME_H
 #include "stat.h"
 #include <stdlib.h>
 #include <iostream>
@@ -47,4 +47,4 @@ public:
     bool operator==(const RealChromosome &other) const;
 };
 
-#endif // REALCHROMOSOME_H
+#endif // REALGEN_CHROMOSOME_H

@@ -1,5 +1,5 @@
-#ifndef REALGENMULTITHREAD_H
-#define REALGENMULTITHREAD_H
+#ifndef REALGEN_MULTITHREAD_H
+#define REALGEN_MULTITHREAD_H
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -49,4 +49,4 @@ struct thread_params {
 
 
 
-#endif // REALGEN_H
+#endif // REALGEN_MULTITHREAD_H

@@ -4,11 +4,11 @@ realGen: Genetic Algorithm with Real values
 author: Alessandro Nicolosi
 website: https://github.com/alenic
 */
-#ifndef REALGENOPTIONS_H
-#define REALGENOPTIONS_H
+#ifndef REALGEN_OPTIONS_H
+#define REALGEN_OPTIONS_H
 #include <string>
 #include <iostream>
-#include "realchromosome.h"
+#include "chromosome.h"
 #include "fitnessfunction.h"
 
 using namespace std;
@@ -79,4 +79,4 @@ public:
 };
 
 
-#endif //REALGENOPTIONS_H
+#endif //REALGEN_OPTIONS_H

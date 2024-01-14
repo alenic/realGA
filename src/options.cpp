@@ -4,7 +4,7 @@ realGen: Genetic Algorithm with Real values
 author: Alessandro Nicolosi
 website: https://github.com/alenic
 */
-#include "realgenoptions.h"
+#include "options.h"
 
 
 RealGenOptions::RealGenOptions() {

@@ -14,9 +14,9 @@ website: https://github.com/alenic
 #include <sstream>
 #include <math.h>
 #include <stdio.h>
-#include "realchromosome.h"
+#include "chromosome.h"
 #include "stat.h"
-#include "realgenoptions.h"
+#include "options.h"
 #include "fitnessfunction.h"
 #include "selection.h"
 
@@ -29,36 +29,32 @@ public:
     // Setter
     void init(RealGenOptions &opt, FitnessFunction *func, bool keepState);
     void setFitnessFunction(FitnessFunction *f);
-    void setChromosomeInPopulation(unsigned int index, RealChromosome &chromosome);
-    void setPopulation(vector<RealChromosome>  &population);
 
-    void fillFitnessValues();
+
     void resetPopulation();
     void resetGaussianMutationPerc();
+
+    float evalFitness(const RealChromosome &);
 
     // Getter
     RealChromosome getBestChromosome();
     int getGeneration();
-    float evalFitness(const RealChromosome &);
-
-    string populationToString();
-    
     //float getDiversity();  // -> TODO
-    void checkOptions();
     vector<RealChromosome> getPopulation();
 
     // Checking
+    void checkOptions();
     bool checkChromosome(RealChromosome &chromosome);
     void checkPopulation();
+    string populationToString();
 
     // Initialization
     void popInitRandUniform();
     void popInitRandGaussian(float mean, float sigma);
-    void evalPopulationFitness();
     void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc);
-    // Selection
-    void tournamentSelection(int p, int &indexA, int &indexB);
-    void tournamentSelect(int p, int &index);
+    void popInitSetChromosome(unsigned int index, RealChromosome &chromosome);
+    void popInitSetPopulation(vector<RealChromosome>  &population);
+
     // Crossover
     void crossoverUniform(int indexA, int indexB, RealChromosome &c);
     void crossoverFixed(int indexA, int indexB, RealChromosome &c, int n);
@@ -73,14 +69,20 @@ protected:
     vector <RealChromosome> mNewPopulation;
     RealGenOptions mOptions;
     FitnessFunction *mFitnessFcn;
-
-    Selection *mSelectionAlgorithm;
     vector<float> mFitnessValues;
 
+    int mElitismIndex;
+
+    // Selection Algorithm
+    Selection *mSelectionAlgorithm;
+    
     // State
     int mGeneration;
     // Gaussian mutation perc (change during generations)
     float mGaussianPerc;
+
+    // Fill mFitnessValues vector
+    void fillFitnessValues();
 };
 
 #endif // REALGEN_H

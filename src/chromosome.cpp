@@ -4,7 +4,7 @@ realGen: Genetic Algorithm with Real values
 author: Alessandro Nicolosi
 website: https://github.com/alenic
 */
-#include "realchromosome.h"
+#include "chromosome.h"
 #include <sstream>
 #include <math.h>
 

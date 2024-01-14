@@ -4,8 +4,8 @@ realGen: Genetic Algorithm with Real values
 author: Alessandro Nicolosi
 website: https://github.com/alenic
 */
-#ifndef STAT_H_
-#define STAT_H_
+#ifndef REALGEN_STAT_H
+#define REALGEN_STAT_H
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>
@@ -24,4 +24,4 @@ public:
     static void setSeed(unsigned int seed);
 };
 
-#endif // STAT_H_
+#endif // REALGEN_STAT_H

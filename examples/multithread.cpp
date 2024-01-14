@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #endif
 #include <stdio.h>
-#include "realgenmultithread.h"
+#include "realgen_mt.h"
 #include "fitnessfunction.h"
 
 #define N_SAMPLE 500

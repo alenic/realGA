@@ -4,7 +4,7 @@ realGen: Genetic Algorithm with Real values
 author: Alessandro Nicolosi
 website: https://github.com/alenic
 */
-#include "realgenmultithread.h"
+#include "realgen_mt.h"
 
 // Constructors
 RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGen() {

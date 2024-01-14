@@ -25,12 +25,13 @@ int main(int argc,  char** argv) {
     options.setBounds(LB, UB);
     options.setVerbose(true);
 
-    // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
+    // Init Genetic Algorithm with options, fitness function and keepState=false
     RealGen ga;
     ga.init(options, myFitnessFunction, false);
 
-    // Init population with uniform random
+    // Init population with uniform random between LB and UB
     ga.popInitRandUniform();
+
     // Evolve the population for 100 times
     for (int i=0; i<100; i++) {
         ga.evolve();

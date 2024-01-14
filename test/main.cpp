@@ -24,23 +24,25 @@ int main() {
     cout << "==================== GA Test ============================" << endl;
 
     opt.setMutationType("uniform");
-    printf("Mutation type = Uniform\n");
+    opt.setSelectionType("roulette");
+    printf("Mutation type=uniform - Selection Type=roulette\n");
     testProblems(opt);
 
-    opt.setMutationType("gaussian");
-    opt.setMutationGaussianPerc(0.025, 0.001);
-    printf("Mutation type = Gaussian\n");
-    testProblems(opt);
-    
     opt.setMutationType("uniform");
     opt.setSelectionType("tournament");
-    printf("Mutation type = Uniform\n");
+    printf("Mutation type=uniform - Selection Type=tournament\n");
+    testProblems(opt);
+
+    opt.setMutationType("gaussian");
+    opt.setSelectionType("roulette");
+    opt.setMutationGaussianPerc(0.025, 0.001);
+    printf("Mutation type=gaussian - Selection Type=roulette\n");
     testProblems(opt);
 
     opt.setMutationType("gaussian");
     opt.setSelectionType("tournament");
     opt.setMutationGaussianPerc(0.025, 0.001);
-    printf("Mutation type = Gaussian\n");
+    printf("Mutation type=gaussian - Selection Type=tournament\n");
     testProblems(opt);
     cout << "==================== GA Benchmark ============================" << endl;
     

@@ -5,10 +5,10 @@ author: Alessandro Nicolosi
 website: https://github.com/alenic
 
 */
-#ifndef FITNESSFUNCTION_H
-#define FITNESSFUNCTION_H
+#ifndef REALGEN_FITNESS_FUNCTION_H
+#define REALGEN_FITNESS_FUNCTION_H
 
-#include "realchromosome.h"
+#include "chromosome.h"
 
 class FitnessFunction {
 public:
@@ -17,4 +17,4 @@ public:
 };
 
 
-#endif // FITNESSFUNCTION_H
+#endif // REALGEN_FITNESS_FUNCTION_H

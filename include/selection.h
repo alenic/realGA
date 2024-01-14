@@ -5,8 +5,8 @@ author: Alessandro Nicolosi
 website: https://github.com/alenic
 
 */
-#ifndef SELECTION_H
-#define SELECTION_H
+#ifndef REALGEN_SELECTION_H
+#define REALGEN_SELECTION_H
 #include "stat.h"
 #include <stdlib.h>
 #include <iostream>
@@ -56,4 +56,4 @@ private:
 };
 
 
-#endif // SELECTION_H
+#endif // REALGEN_SELECTION_H
