@@ -17,9 +17,9 @@ int main() {
     realChromosomeUT.test_uniformMutate();
 
     cout << "==================== Selection Test ============================" << endl;
-    selectionUT.test_RWsearchIndexBinarySearch();
-    selectionUT.test_RWselect();
-    
+    selectionUT.test_roulette_searchIndexBinarySearch();
+    selectionUT.test_roulette_select();
+    selectionUT.test_tournament_select();
 
     return 0;
 }

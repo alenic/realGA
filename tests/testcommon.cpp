@@ -16,11 +16,14 @@ void coutColor(const char * s, TextColor color) {
 }
 
 
-void printDistribution(vector<float> &x) {
-    int nstars = 400;
-    int bins = 20;
-    int *freq = (int *)calloc(bins, sizeof(int));
+void printDistribution(vector<float> &x, size_t bins, int nstars) {
+    int *freq = new int[bins];
+    for (int i=0; i<bins; ++i) freq[i] = 0;
 
+    if(freq == NULL) {
+        cerr << "Error! memory not allocated." << endl;
+        exit(-1);
+    }
     float minV = *std::min_element(x.begin(), x.end());
     float maxV = *std::max_element(x.begin(), x.end());
     float delta = maxV - minV;
@@ -30,11 +33,10 @@ void printDistribution(vector<float> &x) {
         ++freq[int(value)];
     }
 
-    cout << "Histogram" << endl;
     for (int i=0; i<bins; ++i) {
         cout << ": ";
         cout << string(freq[i] * nstars/x.size(), '*') << endl;
     }
     cout << endl;
-    free(freq);
+    delete freq;
 }

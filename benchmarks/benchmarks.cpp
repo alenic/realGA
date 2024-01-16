@@ -78,8 +78,9 @@ int main() {
     benchmark_all(opt);
 
     cout << "==================== GA Fake Benchmark ============================" << endl;
-    printf("Mutation type = Uniform\n");
+    printf("Selection type = \"roulette\"\n");
     opt.setMutationType("uniform");
+    opt.setSelectionType("roulette");
     int chromosomeSize = 2;
     printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
     for(int i=0; i<5; i++) {
@@ -88,8 +89,8 @@ int main() {
         printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f\n", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
     }
 
-    printf("Mutation type = Gaussian\n");
-    opt.setMutationType("gaussian");
+    printf("Selection type = \"tournament\"\n");
+    opt.setSelectionType("tournament");
     chromosomeSize = 2;
     printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
     for(int i=0; i<5; i++) {

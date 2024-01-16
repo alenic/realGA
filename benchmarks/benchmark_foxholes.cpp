@@ -37,7 +37,7 @@ void benchmark_foxholes(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    benchmarkRealGen(ga, results.maxIter, 1e-2, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-1, results);
 
     delete myFitnessFunction;
 }

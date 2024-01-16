@@ -44,11 +44,12 @@ public:
 class SelectionTests {
 public:
     SelectionTests();
-    void test_RWsearchIndexBinarySearch();
-    void test_RWselect();
+    void test_roulette_searchIndexBinarySearch();
+    void test_roulette_select();
+    void test_tournament_select();
 };
 
 
-void printDistribution(vector<float> &x);
+void printDistribution(vector<float> &x, size_t bins, int nstars);
 
 #endif

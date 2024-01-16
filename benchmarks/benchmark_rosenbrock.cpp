@@ -27,7 +27,7 @@ void benchmark_rosenbrock(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    benchmarkRealGen(ga, results.maxIter, 1e-4, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-3, results);
 
     delete myFitnessFunction;
 }

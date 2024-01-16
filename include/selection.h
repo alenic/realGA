@@ -11,7 +11,7 @@ website: https://github.com/alenic
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -40,19 +40,33 @@ private:
 };
 
 
+class IndicesFitness {
+public:
+    int index;
+    float fitnessValue;
+    bool operator<(const IndicesFitness &c) const {
+        return fitnessValue < c.fitnessValue;
+    }
+};
+
 // Tournament selection strategy
 class TournamentSelection: public Selection {
 public:
-    TournamentSelection();
-    TournamentSelection(int mTorunamentSize);
+    TournamentSelection(int populationSize);
     ~TournamentSelection();
+
+    void setTournamentSize(int tournamentSize);
+    void setSelectionProbability(float selectionProbability);
 
     void init(vector<float> &fitnessValues);
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
-
+    int tournament(vector<float> &fitnessValues);
 private:
     int mTorunamentSize;
     int mPopulationSize;
+    // Probability of select the winner in a tournament
+    float mSelectionProbability;
+    vector<IndicesFitness> mTournament;
 };
 
 
