@@ -65,13 +65,13 @@ public:
     virtual void evolve();
 
 protected:
-    vector <RealChromosome> mPopulation;
-    vector <RealChromosome> mNewPopulation;
+    vector<RealChromosome> mPopulation;
+    vector<RealChromosome> mNewPopulation;
     RealGenOptions mOptions;
     FitnessFunction *mFitnessFcn;
     vector<float> mFitnessValues;
 
-    int mElitismIndex;
+    int mElitismFactor;
 
     // Selection Algorithm
     Selection *mSelectionAlgorithm;

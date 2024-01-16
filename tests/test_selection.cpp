@@ -73,14 +73,13 @@ void SelectionTests::test_tournament_select() {
     int numSelect = 10000;
     vector<float> fitnessValues(popSize);
     vector<float> indexA(numSelect), indexB(numSelect);
-    int tournamentSize = 32;
 
     for(int i=0; i<popSize; i++) {
         float time = (float)i / ((float)popSize-1);
         fitnessValues[i] = sin(time * M_PI);
     }
 
-    TournamentSelection selector = TournamentSelection(tournamentSize);
+    TournamentSelection selector = TournamentSelection(popSize);
 
     // allocate for performances
     selector.init(fitnessValues);

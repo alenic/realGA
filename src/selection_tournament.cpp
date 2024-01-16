@@ -9,12 +9,13 @@ TournamentSelection::TournamentSelection(int populationSize) {
 }
 
 TournamentSelection::~TournamentSelection() {
-
+    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
+    if(mTournamentIndex != nullptr) delete []mTournamentIndex;
 }
 
 void TournamentSelection::setTournamentSize(int tournamentSize) {
     if (tournamentSize <= 0) {
-        cerr << "setTournamentSize: tournamentSize must be >= 1" << endl;
+        cerr << "setTournamentSize: tournamentSize must be >= 1" <<  endl;
         exit(-1);
     }
     mTournamentSize = tournamentSize;
@@ -29,7 +30,8 @@ void TournamentSelection::setSelectionProbability(float selectionProbability) {
 }
 
 void TournamentSelection::init(vector<float> &fitnessValues) {
-    mTournament.resize(mTournamentSize);
+    mTournamentFitness = new float[mTournamentSize];
+    mTournamentIndex = new int[mTournamentSize];
 }
 
 void TournamentSelection::select(vector<float> &fitnessValues, int &indexA, int &indexB) {
@@ -52,44 +54,58 @@ int TournamentSelection::tournament(vector<float> &fitnessValues) {
     // sample random mTournamentSize indices from mPopulationSize indices, without replacement
     while(i < mTournamentSize) {
         int index = Stat::randIndex(mPopulationSize-1);
-        
         // check if the index was choosen
         match = false;
         for(int j=0; j<i; j++) {
-            if(mTournament[j].index == index) {
+            if(mTournamentIndex[j] == index) {
                 match = true;
                 break;
             }
         }
         if(!match) {
-            mTournament[i].index = index;
-            mTournament[i].fitnessValue = fitnessValues[index];
+            mTournamentIndex[i] = index;
+            mTournamentFitness[i] = fitnessValues[index];
             i++;
         }
     }
 
-    size_t kWinner = 0;
+    int kth = 0;
+    int kthMinIndex = 0;
+    float minValue;
+    
     if(mSelectionProbability < 1.0) {
+        float chooseP = mSelectionProbability;
         // choose the winner with a probability p, 2nd with p*(1-p), 3rd with p*(1-p)*2,...
         for(int j=0; j<mTournamentSize; j++) {
-            float chooseP = mSelectionProbability * pow(1.0 - mSelectionProbability, j);
             if(Stat::randUniform() < chooseP) {
-                kWinner = j;
+                kth = j;
+                break;
             }
+            chooseP *= (1.0 - mSelectionProbability);
         }
-
-        std::nth_element(mTournament.begin(), mTournament.begin()+kWinner, mTournament.end());
-    } else {
-        float minFitnessValue = mTournament[0].fitnessValue;
-        for(int j=0; j<mTournamentSize; j++) {
-            float value = mTournament[j].fitnessValue;
-            if(value < minFitnessValue) {
-                minFitnessValue = value;
-                kWinner = j;
+        int minIndex;
+        for(int k=0; k<kth; k++) {
+            minValue = mTournamentFitness[0];
+            minIndex = 0;
+            for(int i=1; i<mTournamentSize; i++) {
+                if(minValue < mTournamentFitness[i]) {
+                    minValue = mTournamentFitness[i];
+                    minIndex = i;
+                }
             }
+            mTournamentFitness[minIndex] = MAXFLOAT;
         }
-
     }
 
-    return mTournament[kWinner].index;
+    // get the min
+    minValue = mTournamentFitness[0];
+    kthMinIndex = 0;
+    for(int i=1; i<mTournamentSize; i++) {
+        if(minValue < mTournamentFitness[i]) {
+            minValue = mTournamentFitness[i];
+            kthMinIndex = i;
+        }
+    }
+
+    return kthMinIndex;
 }

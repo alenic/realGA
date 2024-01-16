@@ -30,6 +30,8 @@ int main(int argc,  char** argv) {
     options.setMutationType("gaussian");
     options.setMutationRate(0.05);
     options.setMutationGaussianPerc(0.01, 0.001);
+    options.setSelectionType("tournament");
+    options.setSelectionTournamentProbability(0.8);
     options.setVerbose(true);
     // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
     RealGen ga;

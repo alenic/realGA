@@ -193,7 +193,7 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
 
         mGeneration = 0;
     }
-    mElitismIndex = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
+    mElitismFactor = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
 }
 
 void RealGen::setFitnessFunction(FitnessFunction *f) 
@@ -307,7 +307,7 @@ void RealGen::evolve() {
     mSelectionAlgorithm->init(mFitnessValues);
 
     // Keep the 0:elitismIndex elements in the new population
-    while (k < mElitismIndex) {
+    while (k < mElitismFactor) {
         mNewPopulation[k] = mPopulation[k];
         ++k;
     }
@@ -341,7 +341,7 @@ void RealGen::evolve() {
         ++k;
     }
 
-    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismIndex, mNewPopulation.end());
+    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismFactor, mNewPopulation.end());
 
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
         if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
@@ -364,7 +364,7 @@ void RealGen::popInitRandUniform()
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismIndex, mPopulation.end());
+    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
 }
 
 void RealGen::popInitRandGaussian(float mean, float sigma)
@@ -375,7 +375,7 @@ void RealGen::popInitRandGaussian(float mean, float sigma)
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismIndex, mPopulation.end());
+    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
 }
 
 
@@ -395,7 +395,7 @@ void RealGen::popInitGaussianMutate(vector<float> &gene, float mutatioRate, floa
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismIndex, mPopulation.end());
+    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
 }
 
 
@@ -406,7 +406,7 @@ void RealGen::popInitSetChromosome(unsigned int index, RealChromosome &chromosom
     } else {
         mPopulation[index] = chromosome;
     }
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismIndex, mPopulation.end());
+    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
 }
 
 void RealGen::popInitSetPopulation(vector<RealChromosome> &population)
@@ -416,7 +416,7 @@ void RealGen::popInitSetPopulation(vector<RealChromosome> &population)
     } else {
         mPopulation = population;
     
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismIndex, mPopulation.end());}
+    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());}
 }
 
 //==================================== Crossover ==================

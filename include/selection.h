@@ -40,20 +40,6 @@ private:
 };
 
 
-class IndicesFitness {
-public:
-    int index;
-    float fitnessValue;
-    bool operator<(const IndicesFitness &c) const {
-        return fitnessValue < c.fitnessValue;
-    }
-    IndicesFitness & operator=(const IndicesFitness &c){
-        index = c.index;
-        fitnessValue = c.fitnessValue;
-        return *this;
-    }
-};
-
 // Tournament selection strategy
 class TournamentSelection: public Selection {
 public:
@@ -71,7 +57,11 @@ private:
     int mPopulationSize;
     // Probability of select the winner in a tournament
     float mSelectionProbability;
-    vector<IndicesFitness> mTournament;
+
+    // Local vectors for the tournaments
+    float *mTournamentFitness;
+    int *mTournamentIndex;
+
 };
 
 

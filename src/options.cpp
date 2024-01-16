@@ -88,7 +88,7 @@ void RealGenOptions::setSelectionTournamentSize(int value) {
 }
 
 void RealGenOptions::setSelectionTournamentProbability(float value) {
-    selectionTournamentSize = value;
+    selectionTournamentProbability = value;
 }
 
 
