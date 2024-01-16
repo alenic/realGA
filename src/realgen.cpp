@@ -178,7 +178,9 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
                 mSelectionAlgorithm = new RouletteWheelSelection(mOptions.populationSize);
                 break;
             case TOURNAMENT_SELECTION:
-                mSelectionAlgorithm = new TournamentSelection(mOptions.selectionTournamentSize);
+                mSelectionAlgorithm = new TournamentSelection(mOptions.populationSize);
+                ((TournamentSelection *)mSelectionAlgorithm)->setTournamentSize(mOptions.selectionTournamentSize);
+                ((TournamentSelection *)mSelectionAlgorithm)->setSelectionProbability(mOptions.selectionTournamentProbability);
                 break;
         }
 

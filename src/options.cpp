@@ -13,7 +13,8 @@ RealGenOptions::RealGenOptions() {
     maxGenerations = 100 * populationSize;
 
     selectionType = ROULETTE_WHEEL_SELECTION;
-    selectionTournamentSize = 4;
+    selectionTournamentSize = 16;
+    selectionTournamentProbability = 1.0;
 
     selectionElitismFactor = 0.1;
 
@@ -82,7 +83,11 @@ void RealGenOptions::setSelectionType(string value) {
         cerr << "setSelectionType(" << value << ") is an invalid option value" << endl;
 }
 
-void RealGenOptions::setselectionTournamentSize(int value) {
+void RealGenOptions::setSelectionTournamentSize(int value) {
+    selectionTournamentSize = value;
+}
+
+void RealGenOptions::setSelectionTournamentProbability(float value) {
     selectionTournamentSize = value;
 }
 

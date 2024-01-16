@@ -47,6 +47,11 @@ public:
     bool operator<(const IndicesFitness &c) const {
         return fitnessValue < c.fitnessValue;
     }
+    IndicesFitness & operator=(const IndicesFitness &c){
+        index = c.index;
+        fitnessValue = c.fitnessValue;
+        return *this;
+    }
 };
 
 // Tournament selection strategy
@@ -62,7 +67,7 @@ public:
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
     int tournament(vector<float> &fitnessValues);
 private:
-    int mTorunamentSize;
+    int mTournamentSize;
     int mPopulationSize;
     // Probability of select the winner in a tournament
     float mSelectionProbability;
