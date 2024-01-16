@@ -4,13 +4,18 @@
 int main() {
     RealGenOptions opt;
 
-    StatTest statUT;
+    StatTest statTest;
+    RALGTest ralgTest;
     RealChromosomeTest realChromosomeUT;
     SelectionTests selectionUT;
 
     cout << "==================== Statistical Test ============================" << endl;
-    statUT.test_uniformDist();
-    statUT.test_gaussianDist(5.0, 2.0);
+    statTest.test_uniformDist();
+    statTest.test_gaussianDist(5.0, 2.0);
+
+
+    cout << "==================== Algorithms Test ============================" << endl;
+    ralgTest.test_argKthSmallest();
 
     cout << "==================== RealChromosome Test ============================" << endl;
     realChromosomeUT.test_randUniform();

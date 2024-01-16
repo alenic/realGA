@@ -10,13 +10,12 @@ website: https://github.com/alenic
 #include <math.h>
 #include <iostream>
 #include <limits>
+#include <random>
 
 #define MIN_SIGMA 1.0e-9f
 
-using namespace std;
-
 class Stat {
-public:
+    public:
     static float randUniform();
     static float randUniform(float lb, float ub);
     static float randGaussian(float m, float s);

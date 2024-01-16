@@ -20,7 +20,6 @@ void coutColor(const char * s, TextColor color);
 // Statistics Tests
 class StatTest {
 private:
-    Stat stat;
     float uniformChiSquared(int *a, int n, int N);
 public:
     StatTest();
@@ -28,6 +27,12 @@ public:
     void test_gaussianDist(int mean, int stDev);
 };
 
+// Algorithms Tests
+class RALGTest {
+public:
+    RALGTest();
+    void test_argKthSmallest();
+};
 
 // Realchromosome Tests
 class RealChromosomeTest {

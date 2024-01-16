@@ -6,21 +6,18 @@ website: https://github.com/alenic
 */
 #include "stat.h"
 
+
 float Stat::randUniform() {
     float r = (float)rand() / (RAND_MAX + 1.0);
     return r;
 }
 
-int Stat::randIndex(int N) {
-    return (int)(randUniform()*N);
-}
-
-void Stat::setSeed(unsigned int seed) {
-    srand(seed);
-}
-
 float Stat::randUniform(float lb, float ub) {
     return (ub-lb)*randUniform() + lb;
+}
+
+int Stat::randIndex(int N) {
+    return (int)(randUniform()*N);
 }
 
 /* mean m, standard deviation s */
@@ -42,8 +39,8 @@ float Stat::randGaussian(float m, float s) {
     else
     {
         do {
-            x1 = 2.0 * randUniform() - 1.0;
-            x2 = 2.0 * randUniform() - 1.0;
+            x1 = 2.0 * (float)rand() / (RAND_MAX + 1.0) - 1.0;
+            x2 = 2.0 * (float)rand() / (RAND_MAX + 1.0) - 1.0;
             w = x1 * x1 + x2 * x2;
         } while ( w >= 1.0 );
 
@@ -55,3 +52,10 @@ float Stat::randGaussian(float m, float s) {
 
     return( m + y1 * s );
 }
+
+
+void Stat::setSeed(unsigned int seed) {
+    srand(seed);
+}
+
+

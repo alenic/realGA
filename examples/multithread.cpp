@@ -106,7 +106,6 @@ public:
     }
 
     void generateData() {
-        Stat stat;
         float par[] = {1.0, -1.0, 0.5, -0.5, -2.5, 1.0, 2.5, -1.5, -2.0, 4.0};
 
         for(int i=0; i<N_SAMPLE; ++i) {

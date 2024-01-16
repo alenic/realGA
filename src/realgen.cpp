@@ -201,9 +201,9 @@ void RealGen::setFitnessFunction(FitnessFunction *f)
     mFitnessFcn = f;
 }
 
-void RealGen::fillFitnessValues() {
-    for(int i=0; i<mPopulation.size(); i++) {
-        mFitnessValues[i] = mPopulation[i].fitness;
+void RealGen::fillFitnessValues(vector<RealChromosome> &population) {
+    for(int i=0; i<population.size(); i++) {
+        mFitnessValues[i] = population[i].fitness;
     }
 }
 // ========================================= Getter ======================================
@@ -303,7 +303,7 @@ void RealGen::evolve() {
     int k=0;
 
     // Fill fitness values vector
-    fillFitnessValues();
+    fillFitnessValues(mPopulation);
     mSelectionAlgorithm->init(mFitnessValues);
 
     // Keep the 0:elitismIndex elements in the new population
@@ -341,7 +341,12 @@ void RealGen::evolve() {
         ++k;
     }
 
-    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismFactor, mNewPopulation.end());
+    fillFitnessValues(mNewPopulation);
+    // it doesn't overwrite mFitnessValues
+    // TODO
+    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismFactor);
+
+    //partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismFactor, mNewPopulation.end());
 
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
         if (mGaussianPerc > mOptions.mutationGaussianPercMin) {

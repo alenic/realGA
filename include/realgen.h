@@ -16,6 +16,7 @@ website: https://github.com/alenic
 #include <stdio.h>
 #include "chromosome.h"
 #include "stat.h"
+#include "algorithms.h"
 #include "options.h"
 #include "fitnessfunction.h"
 #include "selection.h"
@@ -29,7 +30,6 @@ public:
     // Setter
     void init(RealGenOptions &opt, FitnessFunction *func, bool keepState);
     void setFitnessFunction(FitnessFunction *f);
-
 
     void resetPopulation();
     void resetGaussianMutationPerc();
@@ -82,7 +82,7 @@ protected:
     float mGaussianPerc;
 
     // Fill mFitnessValues vector
-    void fillFitnessValues();
+    void fillFitnessValues(vector<RealChromosome> &population);
 };
 
 #endif // REALGEN_H
