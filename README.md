@@ -14,7 +14,6 @@ You can find the following code example inside examples/readme.cpp
 ```c++
 #include <iostream>
 #include "realgen.h"
-#include "fitnessfunction.h"
 
 using namespace std;
 
