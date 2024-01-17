@@ -21,7 +21,7 @@ void benchmark_sphere(RealGenOptions opt, GAResults &results) {
     SphereFitness *myFitnessFunction = new SphereFitness();
 
     results.name = "Sphere";
-    results.maxIter = 5000;
+    results.maxIter = 1000;
     results.Np = 50;
 
     opt.setPopulationSize(results.Np);
@@ -31,7 +31,7 @@ void benchmark_sphere(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
     
-    benchmarkRealGen(ga, results.maxIter, 1e-4, results);
+    benchmarkRealGen(ga, results.maxIter, 1e-4, results, BENCH_NUM_EXPERIMENTS);
 
     delete myFitnessFunction;
 }

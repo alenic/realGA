@@ -20,7 +20,7 @@ void benchmark_flatSurface(RealGenOptions opt, GAResults &results) {
 
     FlatSurfaceFitness *myFitnessFunction = new FlatSurfaceFitness();
     results.name = "Flat surface";
-    results.maxIter = 5000;
+    results.maxIter = 1000;
     results.Np = 200;
 
     opt.setPopulationSize(results.Np);
@@ -30,7 +30,7 @@ void benchmark_flatSurface(RealGenOptions opt, GAResults &results) {
     RealGen ga;
     ga.init(opt, myFitnessFunction, false);
 
-    benchmarkRealGen(ga, results.maxIter, 1, results);
+    benchmarkRealGen(ga, results.maxIter, 1, results, BENCH_NUM_EXPERIMENTS);
 
     delete myFitnessFunction;
 }

@@ -18,6 +18,7 @@ using namespace std;
 // Abstract class
 class Selection {
 public:
+    ~Selection() {}
     virtual void init(vector<float> &fitnessValues) = 0;
     virtual void select(vector<float> &fitnessValues, int &indexA, int &indexB) = 0;
 };

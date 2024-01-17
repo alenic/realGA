@@ -28,6 +28,7 @@ public:
     RealGen();
     ~RealGen();
     // Setter
+    void restart();
     void init(RealGenOptions &opt, FitnessFunction *func, bool keepState);
     void setFitnessFunction(FitnessFunction *f);
 
@@ -70,8 +71,9 @@ protected:
     RealGenOptions mOptions;
     FitnessFunction *mFitnessFcn;
     vector<float> mFitnessValues;
+    float mKthSmallestFitness;
 
-    int mElitismFactor;
+    int mElitismNumber;
 
     // Selection Algorithm
     Selection *mSelectionAlgorithm;

@@ -49,14 +49,14 @@ void *RealGenMultithread::evaluatePopulationThread(void *params) {
 void RealGenMultithread::evolve() {
     // Allocate offspring (a new gene)
     RealChromosome offspring(mOptions.chromosomeSize);
-    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
-
     int selectedIndexA, selectedIndexB;
     int elitismIndex = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
     int k=0;
 
+    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
+
     // Fill fitness values vector
-    fillFitnessValues();
+    fillFitnessValues(mPopulation);
     mSelectionAlgorithm->init(mFitnessValues);
 
     // Keep the 0:elitismIndex elements in the new population
@@ -76,6 +76,9 @@ void RealGenMultithread::evolve() {
                 break;
             case SINGLE_POINT_CROSSOVER:
                 crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
+                break;
+            case TWO_POINT_CROSSOVER:
+                // TODO
                 break;
         }
         

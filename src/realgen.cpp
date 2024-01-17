@@ -133,6 +133,16 @@ void RealGen::resetGaussianMutationPerc()
     mGaussianPerc = 1.0f;
 }
 
+void RealGen::restart() {
+    if(mOptions.mutationType == GAUSSIAN_MUTATION) {
+        resetGaussianMutationPerc();
+    }
+    mGeneration = 0;
+    if (mOptions.verbose>0) {
+        checkOptions();
+    }
+}
+
 void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
 // Set custom options
 {
@@ -184,16 +194,13 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
                 break;
         }
 
-
-        if (mOptions.verbose) {
+        if (mOptions.verbose>0) {
             checkOptions();
         }
-
         Stat::setSeed(mOptions.seed);
-
         mGeneration = 0;
     }
-    mElitismFactor = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
+    mElitismNumber = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
 }
 
 void RealGen::setFitnessFunction(FitnessFunction *f) 
@@ -219,7 +226,16 @@ float RealGen::evalFitness(const RealChromosome &x) {
 
 RealChromosome RealGen::getBestChromosome() {
     RealChromosome best;
-    best = mPopulation[0];
+    int minIndex=0;
+    float minValue=mPopulation[0].fitness;
+    for(int i=0; i<mPopulation.size(); i++) {
+        float value = mPopulation[i].fitness;
+        if(value < minValue) {
+            minValue = value;
+            minIndex = i;
+        }
+    }
+    best = mPopulation[minIndex];
     return best;
 }
 
@@ -292,27 +308,62 @@ void RealGen::checkPopulation() {
     }
 }
 
-
+#define SORT 1
 // ==================================================== Evolve ====================================================
 void RealGen::evolve() {
-    // Allocate offspring (a new gene)
+    // Allocate offspring (gene after crossover and mutation)
     RealChromosome offspring(mOptions.chromosomeSize);
-    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
-
     int selectedIndexA, selectedIndexB;
     int k=0;
+    int countElite=0;
 
-    // Fill fitness values vector
+    // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
+    if(!SORT)
+    {   
+        if (mGeneration == 0) {
+            mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
+            //cout << "original"<<endl;
+            //for(int i=0;i<mFitnessValues.size();i++)cout << mFitnessValues[i] << ",";
+            //cout << endl;
+            cout << "MBEST " << mKthSmallestFitness << endl << endl;
+        }
+    }
+
     mSelectionAlgorithm->init(mFitnessValues);
+    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
+    if(SORT)
+    {
 
     // Keep the 0:elitismIndex elements in the new population
-    while (k < mElitismFactor) {
+    while (k < mElitismNumber) {
         mNewPopulation[k] = mPopulation[k];
         ++k;
     }
 
+    } // SORT
+    else
+    {
+        k = 0;
+        countElite = 0;
+    }
+
+    // Generate New Population
     while(k < mOptions.populationSize) {
+
+        if(!SORT)
+        {
+        if((mFitnessValues[k] <= mKthSmallestFitness) && (countElite <= mElitismNumber)) {
+            //cout << mFitnessValues[k] << " < " << mKthSmallestFitness << endl;
+            mNewPopulation[k] = mPopulation[k];
+            ++k;
+            countElite++;
+            continue;
+        }
+
+        }
+
+
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
@@ -341,12 +392,27 @@ void RealGen::evolve() {
         ++k;
     }
 
-    fillFitnessValues(mNewPopulation);
-    // it doesn't overwrite mFitnessValues
-    // TODO
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismFactor);
+    
+    
+    if(SORT)
+    {
+    
+    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismNumber, mNewPopulation.end());
 
-    //partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+mElitismFactor, mNewPopulation.end());
+    }
+    else
+    {
+
+    if(mElitismNumber > 0) {
+        //for(int i=0;i<mFitnessValues.size();i++) cout << mNewPopulation[i].fitness << endl;
+        fillFitnessValues(mNewPopulation);
+        
+        //exit(-1);
+        // it doesn't overwrite mFitnessValues
+        mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
+    }
+
+    }
 
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
         if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
@@ -356,7 +422,10 @@ void RealGen::evolve() {
         }
     }
 
-    mPopulation = mNewPopulation;
+    for(int i=0; i<mPopulation.size(); i++) {
+        mPopulation[i] = mNewPopulation[i];
+    }
+    
     mGeneration++;
 }
 
@@ -368,8 +437,8 @@ void RealGen::popInitRandUniform()
         mPopulation[i].randUniform();
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
-
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
+    
+    if(SORT)partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismNumber, mPopulation.end());
 }
 
 void RealGen::popInitRandGaussian(float mean, float sigma)
@@ -380,7 +449,7 @@ void RealGen::popInitRandGaussian(float mean, float sigma)
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
+    if(SORT)partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismNumber, mPopulation.end());
 }
 
 
@@ -400,28 +469,31 @@ void RealGen::popInitGaussianMutate(vector<float> &gene, float mutatioRate, floa
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
+    if(SORT)partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismNumber, mPopulation.end());
 }
 
-
+// TODO
 void RealGen::popInitSetChromosome(unsigned int index, RealChromosome &chromosome)
 {
     if (index >= mOptions.populationSize) {
         cerr << "ERROR: popInitSetChromosome: index " << index << " is out of range [0," << mOptions.populationSize << ")" << endl;
     } else {
         mPopulation[index] = chromosome;
+        // TODO : Check the LB and UB
     }
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());
+    if(SORT)partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismNumber, mPopulation.end());
 }
 
+// TODO
 void RealGen::popInitSetPopulation(vector<RealChromosome> &population)
 {
     if (mPopulation.size() != mOptions.populationSize) {
         cerr << "ERROR: popInitSetPopulation: size of population " << mPopulation.size() << " is not the same as Np = " << mOptions.populationSize << endl;
     } else {
         mPopulation = population;
-    
-    partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismFactor, mPopulation.end());}
+        // TODO : Check the LB and UB
+        if(SORT)partial_sort(mPopulation.begin(), mPopulation.begin()+mElitismNumber, mPopulation.end());
+    }
 }
 
 //==================================== Crossover ==================

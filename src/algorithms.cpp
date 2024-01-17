@@ -50,7 +50,8 @@ float kthSmallest_(float arr[], int l, int r, int k)
 }
 
 
-int kthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
+float kthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
+    // Copy fitnessValues
     int n = fitnessValues.size();
     float *arr = new float[n];
 
@@ -66,7 +67,7 @@ int kthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
 }
 
 int argKthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
-    // an additive O(N) to find the index
+    // additive O(N) to find the index
     int n = fitnessValues.size();
     float kth = kthSmallest(fitnessValues, l, r, k);
 

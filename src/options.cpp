@@ -31,7 +31,7 @@ RealGenOptions::RealGenOptions() {
     mutationGaussianPercDelta = 0.01;    // 100 iterations decay to 0.01
     mutationGaussianPercMin= 0.001;     // 1000 iterations
 
-    verbose = false;
+    verbose = NO_VERBOSE;
     seed = 42;
 
 }
@@ -65,8 +65,15 @@ void RealGenOptions::setMaxGenerations(int value) {
     maxGenerations = value;
 }
 
-void RealGenOptions::setVerbose(bool value) {
-    verbose = value;
+void RealGenOptions::setVerbose(string value) {
+    if (value == "none")
+        verbose = NO_VERBOSE;
+    else if (value == "soft")
+        verbose = SOFT_VERBOSE;
+    else if (value == "hard")
+        verbose = HARD_VERBOSE;
+    else
+        cerr << "setVerbose(" << value << ") is an invalid. Options: none, soft, hard" << endl;
 }
 
 

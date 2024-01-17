@@ -1,58 +1,73 @@
 #include "benchmarks.h"
 
 
-void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results) {
-    int generation = 0;
+void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, int numExperiments) {
+    vector<GAResults> resultsVector(numExperiments);
+    int generation;
 
-    results.converged = false;
-    //ga.checkOptions();
-    ga.popInitRandUniform();
-    clock_t startTime = clock(), endTime;
-    for (int i=0; i<maxIter; i++) {
-        ga.evolve();
-        generation++;
-        results.best = ga.getBestChromosome();
+    for(int k=0; k<numExperiments; k++) {
+        generation = 0;
 
-        if(results.best.fitness < eps && !results.converged) {
-            results.iter = generation;
-            results.convergedTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
-            results.bestFitness = results.best.fitness;
-            results.best = ga.getBestChromosome();
-            results.converged = true;
+        ga.popInitRandUniform();
+        ga.restart();
+
+        clock_t startTime = clock(), endTime;
+        for(int i=0; i<maxIter; i++) {
+            ga.evolve();
+            generation++;
+            if(ga.getBestChromosome().fitness < eps || i==(maxIter-1)) {
+                resultsVector[k].converged = 1;
+                resultsVector[k].iter = (float)generation;
+                resultsVector[k].convergedTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
+                resultsVector[k].best = ga.getBestChromosome();
+                resultsVector[k].bestFitness = resultsVector[k].best.fitness;
+                break;
+            }
         }
     }
-    endTime = clock();
 
-    results.maxTime = float( endTime - startTime ) / (float)CLOCKS_PER_SEC;
+    // Compute statistics
+    results.converged = 0;
+    results.iter = 0;
+    results.convergedTime = 0;
 
-    if(!results.converged) {
-        results.iter = maxIter;
-        results.convergedTime = results.maxTime;
-        results.bestFitness = results.best.fitness;
-        results.best = ga.getBestChromosome();
+    float minFitness=MAXFLOAT;
+    for(int i=0; i<numExperiments; i++) {
+        if(resultsVector[i].bestFitness < minFitness) {
+            results.bestFitness = resultsVector[i].bestFitness;
+            results.best = resultsVector[i].best;
+            minFitness = results.bestFitness;
+        }
+        results.converged += resultsVector[i].converged;
+        results.iter += resultsVector[i].iter;
+        results.convergedTime += resultsVector[i].convergedTime;
+        
     }
+    results.iter /= numExperiments;
+    results.convergedTime /= numExperiments;
+    results.converged /= numExperiments;
+    results.printResults();
 }
 
 void benchmark_all(RealGenOptions &opt) {
-    GAResults results[4];
+    GAResults results;
 
-    benchmark_sphere(opt, results[0]);
-    benchmark_rosenbrock(opt, results[1]);
-    benchmark_flatSurface(opt, results[2]);
-    benchmark_foxholes(opt, results[3]);
-    
-    printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
-
-    for(int i=0; i<4; i++) {
-        printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f ", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
-        cout << results[i].best.toString() << endl;
-    }
+    cout << "Test       " <<setw(18)
+         << "Converged  " <<setw(18)
+         << "Iterations " <<setw(18)
+         << "Time       " <<setw(18)
+         << "Min.Fitness" << endl;
+    benchmark_sphere(opt, results);
+    benchmark_rosenbrock(opt, results);
+    benchmark_flatSurface(opt, results);
+    benchmark_foxholes(opt, results);
 }
 
 int main() {
     GAResults results[5];
     RealGenOptions opt;
-
+    int chromosomeSize = 2;
+    
     cout << "==================== GA Test ============================" << endl;
 
     opt.setMutationType("uniform");
@@ -76,28 +91,23 @@ int main() {
     opt.setMutationGaussianPerc(0.025, 0.001);
     printf("Mutation type=gaussian - Selection Type=tournament\n");
     benchmark_all(opt);
-
+    
     cout << "==================== GA Fake Benchmark ============================" << endl;
     printf("Selection type = \"roulette\"\n");
     opt.setMutationType("uniform");
     opt.setSelectionType("roulette");
-    int chromosomeSize = 2;
-    printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
     for(int i=0; i<5; i++) {
         benchmark_fake(opt, results[i], chromosomeSize, 1000);
         chromosomeSize *= 2;
-        printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f\n", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
     }
 
     printf("Selection type = \"tournament\"\n");
+    opt.setMutationType("uniform");
     opt.setSelectionType("tournament");
     chromosomeSize = 2;
-    printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s\n", "Test", "Converged", "iter", "maxIter", "convTime", "maxTime", "Fitness");
     for(int i=0; i<5; i++) {
         benchmark_fake(opt, results[i], chromosomeSize, 1000);
-        chromosomeSize *= 2;
-        printf("%-15s%-12d%-12d%-12d%-12.6f%-12.6f%-12f\n", results[i].name.c_str(), results[i].converged, results[i].iter, results[i].maxIter, results[i].convergedTime, results[i].maxTime, results[i].bestFitness);
-    }
+        chromosomeSize *= 2;    }
 
     return 0;
 }

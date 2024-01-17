@@ -1,19 +1,30 @@
 #include "realgen.h"
+#include <iomanip>
+
+#define BENCH_NUM_EXPERIMENTS 10
 
 struct GAResults {
     string name;
     int Np;
-    int maxIter;
-    int iter;
-    bool converged;
+    float maxIter;
+    float iter;
+    float converged;
     float eps;
     float bestFitness;
     float maxTime;
     float convergedTime;
     RealChromosome best;
+
+    void printResults() {
+        cout << name << setw(18) <<
+        converged << setw(18) <<
+        iter << setw(18) <<
+        convergedTime << setw(18) <<
+        bestFitness << endl;
+    }
 };
 
-void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results);
+void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, int numExperiments);
 
 // Benchmark Problems
 void benchmark_all(RealGenOptions &opt);

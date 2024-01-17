@@ -10,7 +10,6 @@ using namespace std;
 class QuadraticFitness : public FitnessFunction {
 public:
     float eval(const RealChromosome &g) {
-        float f = 0.0;
         float dx1 = g.gene[0]-2.5,
                 dx2 = g.gene[1]-2.5;
         return dx1*dx1+dx2*dx2;
@@ -32,7 +31,7 @@ int main(int argc,  char** argv) {
     options.setMutationGaussianPerc(0.01, 0.001);
     options.setSelectionType("tournament");
     options.setSelectionTournamentProbability(0.8);
-    options.setVerbose(true);
+    options.setVerbose("soft");
     // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
     RealGen ga;
     ga.init(options, myFitnessFunction, false);

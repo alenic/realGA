@@ -16,7 +16,7 @@ using namespace std;
 typedef enum { ROULETTE_WHEEL_SELECTION=1, TOURNAMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=1, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
 typedef enum { UNIFORM_MUTATION=1, GAUSSIAN_MUTATION} MutationType;
-
+typedef enum { NO_VERBOSE=0, SOFT_VERBOSE=1, HARD_VERBOSE=2} VerboseType;
 /*
   Class used for option settings
 */
@@ -31,7 +31,7 @@ public:
     void setUpperBounds(const vector<float> &ub);
     void setBounds(const vector<float> &lb, const vector<float> &ub);
     void setMaxGenerations(int value);
-    void setVerbose(bool value);
+    void setVerbose(string value);
     void setSeed(bool seedValue);
 
     void setSelectionType(string value);
@@ -55,7 +55,7 @@ public:
     vector<float> upperBounds;
     int maxGenerations;
     int seed;
-    bool verbose;
+    VerboseType verbose;
 
     float selectionElitismFactor;
 
