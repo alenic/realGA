@@ -41,6 +41,9 @@ void SelectionTests::test_roulette_select() {
         float time = (float)i / ((float)popSize-1);
         fitnessValues[i] = sin(time * M_PI);
     }
+
+    std::random_shuffle(fitnessValues.begin(), fitnessValues.end());
+
     RouletteWheelSelection selector = RouletteWheelSelection(popSize);
 
     // allocate for performances
