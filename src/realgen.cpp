@@ -326,7 +326,7 @@ void RealGen::evolve() {
             //cout << "original"<<endl;
             //for(int i=0;i<mFitnessValues.size();i++)cout << mFitnessValues[i] << ",";
             //cout << endl;
-            cout << "MBEST " << mKthSmallestFitness << endl << endl;
+            //cout << "MBEST " << mKthSmallestFitness << endl << endl;
         }
     }
 

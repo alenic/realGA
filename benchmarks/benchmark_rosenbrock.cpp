@@ -18,7 +18,7 @@ void benchmark_rosenbrock(RealGenOptions opt, GAResults &results) {
     RosenbrockFitness *myFitnessFunction = new RosenbrockFitness();
 
     results.name = "Rosenbrock";
-    results.maxIter = 5000;
+    results.maxIter = 1000;
     results.Np = 200;
 
     opt.setPopulationSize(results.Np);
