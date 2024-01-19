@@ -9,11 +9,14 @@ def roulette(cumf, value):
             index = i
         else:
             break
-    
     return index
 
 x = np.array([math.sin(math.pi*i/(100-1)) for i in range(100)])
-np.random.shuffle(x)
+shuffle_ind = np.arange(100)
+#np.random.shuffle(shuffle_ind)
+
+x = x[shuffle_ind]
+
 minv = x.min()
 maxv = x.max()
 
@@ -25,15 +28,16 @@ for i in range(100):
     cumsum += 1 - (x[i] - minv) / delta
     cumf += [cumsum]
 
-index = []
-for i in range(1000):
-
+index = np.arange(10000)
+for i in range(10000):
     cumulative1 = cumsum * np.random.rand()
+    index[i] = roulette(cumf, cumulative1)
 
-    index += [roulette(cumf, cumulative1)]
+
+
 plt.figure()
 plt.step(range(100), cumf)
 plt.plot(x)
 plt.figure()
-plt.hist(index, bins=10)
+plt.hist(index, bins=100)
 plt.show()
