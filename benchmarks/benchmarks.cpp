@@ -11,12 +11,14 @@ void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, i
         ga.popInitRandUniform();
         ga.restart();
 
+        resultsVector[k].converged = 0;
         clock_t startTime = clock(), endTime;
         for(int i=0; i<maxIter; i++) {
             ga.evolve();
             generation++;
             if(ga.getBestChromosome().fitness < eps || i==(maxIter-1)) {
-                resultsVector[k].converged = 1;
+                if(i!=(maxIter-1)) resultsVector[k].converged = 1;
+                
                 resultsVector[k].iter = (float)generation;
                 resultsVector[k].convergedTime = float( clock() - startTime ) / (float)CLOCKS_PER_SEC;
                 resultsVector[k].best = ga.getBestChromosome();
@@ -51,12 +53,8 @@ void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, i
 
 void benchmark_all(RealGenOptions &opt) {
     GAResults results;
+    printf("%-15s %-12s %-12s %-12s %-12s\n", "Test", "Converged", "Iterations", "Time", "Min Fitness");
 
-    cout << "Test       " <<setw(18)
-         << "Converged  " <<setw(18)
-         << "Iterations " <<setw(18)
-         << "Time       " <<setw(18)
-         << "Min.Fitness" << endl;
     benchmark_sphere(opt, results);
     benchmark_rosenbrock(opt, results);
     benchmark_flatSurface(opt, results);

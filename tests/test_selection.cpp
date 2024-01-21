@@ -42,7 +42,7 @@ void SelectionTests::test_roulette_select() {
         fitnessValues[i] = sin(time * M_PI);
     }
 
-    std::random_shuffle(fitnessValues.begin(), fitnessValues.end());
+    //std::random_shuffle(fitnessValues.begin(), fitnessValues.end());
 
     RouletteWheelSelection selector = RouletteWheelSelection(popSize);
 

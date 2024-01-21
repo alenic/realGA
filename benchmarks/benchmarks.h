@@ -16,11 +16,7 @@ struct GAResults {
     RealChromosome best;
 
     void printResults() {
-        cout << name << setw(18) <<
-        converged << setw(18) <<
-        iter << setw(18) <<
-        convergedTime << setw(18) <<
-        bestFitness << endl;
+        printf("%-15s %-12f %-12f %-12f %-12f\n", name.c_str(), converged, iter, convergedTime, bestFitness);
     }
 };
 
