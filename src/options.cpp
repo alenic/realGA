@@ -1,65 +1,60 @@
-/*
-realGen: Genetic Algorithm with Real values
-
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-*/
 #include "options.h"
 
-
-RealGenOptions::RealGenOptions() {
+RealGAOptions::RealGAOptions() {
     populationSize = 100;
-
-    selectionType = ROULETTE_WHEEL_SELECTION;
-    selectionTournamentSize = 16;
-    selectionTournamentProbability = 1.0;
-
-    selectionElitismFactor = 0.1;
-
-    crossoverType = UNIFORM_CROSSOVER;
-    crossoverindexA = 0;
-    crossoverindexB = 0;
-
-    mutationType = UNIFORM_MUTATION;
-    mutationUniformPerc = 0.25;         // percentage of UB-LB
-
-    mutationRate = 0.1;
-    
-
-    mutationGaussianPercDelta = 0.01;    // 100 iterations decay to 0.01
-    mutationGaussianPercMin= 0.001;     // 1000 iterations
-
+    chromosomeSize = -1;
     verbose = NO_VERBOSE;
     seed = 42;
+    elitismFactor = 0.1;
+
+    //SelectionOpt
+    selectionType = ROULETTE_WHEEL_SELECTION;
+    selectionTournamentSize = 16;
+    selectionTournamentProbability = 0.85;
+
+    //CrossoverOpt
+    crossoverType = UNIFORM_CROSSOVER;
+    crossoverindexA = -1;
+
+    // MutationOpt
+    mutationType = UNIFORM_MUTATION;
+    mutationRate = 0.1;
+    // Uniform mutation
+    mutationUniformPerc = 0.25;
+
+    // Gaussian mutation
+    mutationGaussianPercDelta = 0.01;    // 100 iterations decay to 0.01
+    mutationGaussianPercMin= 0.001;     // 1000 iterations
+}
+
+RealGAOptions::~RealGAOptions() {
 
 }
 
-RealGenOptions::~RealGenOptions() {
-
-}
-
-void RealGenOptions::setPopulationSize(int value) {
+void RealGAOptions::setPopulationSize(int value) {
+    REALGA_ERROR(value <= 0, "Population size must be > 0");
     populationSize = value;
 }
 
-void RealGenOptions::setChromosomeSize(int value) {
+void RealGAOptions::setChromosomeSize(int value) {
+    REALGA_ERROR(value <= 0, "Chromosome size must be > 0");
     chromosomeSize = value;
 }
 
-void RealGenOptions::setLowerBounds(const vector<float> &lb) {
+void RealGAOptions::setLowerBounds(const vector<float> &lb) {
     lowerBounds = lb;
 }
 
-void RealGenOptions::setUpperBounds(const vector<float> &ub) {
+void RealGAOptions::setUpperBounds(const vector<float> &ub) {
     upperBounds = ub;
 }
 
-void RealGenOptions::setBounds(const vector<float> &lb, const vector<float> &ub) {
-    lowerBounds = lb;
-    upperBounds = ub;
+void RealGAOptions::setBounds(const vector<float> &lb, const vector<float> &ub) {
+    setLowerBounds(lb);
+    setUpperBounds(ub);
 }
 
-void RealGenOptions::setVerbose(string value) {
+void RealGAOptions::setVerbose(string value) {
     if (value == "none")
         verbose = NO_VERBOSE;
     else if (value == "soft")
@@ -67,83 +62,94 @@ void RealGenOptions::setVerbose(string value) {
     else if (value == "hard")
         verbose = HARD_VERBOSE;
     else
-        cerr << "setVerbose(" << value << ") is an invalid. Options: none, soft, hard" << endl;
+        REALGA_ERROR(1, value << " is an invalid verbose type");
 }
 
 
-void RealGenOptions::setSeed(bool seedValue) {
-    seed = seedValue;
+void RealGAOptions::setSeed(unsigned int value) {
+    seed = value;
 }
 
-void RealGenOptions::setSelectionType(string value) {
+void RealGAOptions::setSelectionType(string value) {
     if (value == "roulette")
         selectionType = ROULETTE_WHEEL_SELECTION;
     else if (value == "tournament")
         selectionType = TOURNAMENT_SELECTION;
     else
-        cerr << "setSelectionType(" << value << ") is an invalid option value" << endl;
+        REALGA_ERROR(1, value << " is an invalid selection type");
 }
 
-void RealGenOptions::setSelectionTournamentSize(int value) {
+void RealGAOptions::setSelectionTournamentSize(int value) {
+    REALGA_ERROR(value <= 0, "Tournament size must be > 0");
     selectionTournamentSize = value;
 }
 
-void RealGenOptions::setSelectionTournamentProbability(float value) {
+void RealGAOptions::setSelectionTournamentProbability(float value) {
+    REALGA_ERROR((value<0.0)||(value>1.0), "tournament probability must be in [0,1]");
     selectionTournamentProbability = value;
 }
 
-
-void RealGenOptions::setElitismFactor(float factor) {
-    if(factor >= 0.0 && factor <= 1.0) {
-        selectionElitismFactor = factor;
-    } else {
-        cerr << "ERROR: options.selection.elitismFactor must be a number between 0.0 and 1.0" << endl;
-        exit(-1);
-    }
+void RealGAOptions::setElitismFactor(float value) {
+    REALGA_ERROR((value<0.0)||(value>1.0), "elitism factor must be in [0,1]");
+    elitismFactor = value;
 }
 
-void RealGenOptions::setMutationType(string value) {
+void RealGAOptions::setMutationType(string value) {
     if (value == "uniform")
         mutationType = UNIFORM_MUTATION;
     else if (value == "gaussian")
         mutationType = GAUSSIAN_MUTATION;
     else
-        cerr << "setMutationType(" << value << ") is an invalid option value" << endl;
+        REALGA_ERROR(1, value << " is an invalid mutation type");
 }
 
-void RealGenOptions::setUniformMutationPercentage(float value) {
+void RealGAOptions::setUniformMutationRate(float value) {
+    REALGA_ERROR((value<0.0)||(value>1.0), "mutation rate must be in [0,1]");
     mutationUniformPerc = value;
 }
 
-void RealGenOptions::setMutationRate(float rate) {
-    if(rate >= 0.0 && rate <= 1.0) {
-        mutationRate = rate;
-    } else {
-        cerr << "ERROR: options.mutation.mutationRate must be a number between 0.0 and 1.0" << endl;
-        exit(-1);
-    }
+void RealGAOptions::setMutationRate(float value) {
+    REALGA_ERROR((value<0.0)||(value>1.0), "mutation rate must be in [0,1]");
+    mutationRate = value;
 }
 
-void RealGenOptions::setMutationGaussianPerc(float percDelta, float percMin) {
+void RealGAOptions::setMutationGaussianPerc(float percDelta, float percMin) {
+    REALGA_ERROR((percDelta<0.0)||(percDelta>1.0), "gaussian mutation delta percentage must be in [0,1]");
+    REALGA_ERROR((percMin<0.0)||(percMin>1.0), "gaussian mutation min percentage must be in [0,1]");
     mutationGaussianPercDelta = percDelta;
     mutationGaussianPercMin = percMin;
 }
 
-void RealGenOptions::setCrossoverType(string value) {
+void RealGAOptions::setCrossoverType(string value) {
     if (value == "uniform")
         crossoverType = UNIFORM_CROSSOVER;
     else if (value == "single_point")
         crossoverType = SINGLE_POINT_CROSSOVER;
     else
-        cerr << "setCrossoverType(" << value << ") is an invalid option value" << endl;
+        REALGA_ERROR(1, value << " is an invalid crossover type");
 }
 
-void RealGenOptions::setSinglePointCrossoverIndex(int value) {
+void RealGAOptions::setSinglePointCrossoverIndex(int value) {
     crossoverindexA = value;
 }
 
-void RealGenOptions::setTwoPointCrossoverIndexes(int i1, int i2) {
-    crossoverindexA = i1;
-    crossoverindexB = i2;
-}
+void RealGAOptions::checkOptions()
+{
+    // Check if chromosome size is compatible with options
+    REALGA_ERROR((lowerBounds.size() != chromosomeSize),
+    "lower bounds size "<<lowerBounds.size()<<
+    " must equals chromosome size "<<chromosomeSize);
+    REALGA_ERROR((upperBounds.size() != chromosomeSize),
+    "upper bounds size "<<upperBounds.size()<<
+    " must equals chromosome size "<<chromosomeSize);
+    if(crossoverType == SINGLE_POINT_CROSSOVER) {
+        REALGA_ERROR(((crossoverindexA<0)||(crossoverindexA>=chromosomeSize)), "index must be between 0 and " << chromosomeSize);
+    }
 
+    // check population size
+    if(selectionType == TOURNAMENT_SELECTION) {
+        REALGA_ERROR(populationSize <= selectionTournamentSize, "tournament size "<<
+        selectionTournamentSize << " must be less than population size " << populationSize);
+    }
+    
+}

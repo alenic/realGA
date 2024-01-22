@@ -1,12 +1,16 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-
+    file description:
+        This class is the implementation of selection
+        strategies.
+---------------------------------------------
 */
-#ifndef REALGEN_SELECTION_H
-#define REALGEN_SELECTION_H
+#ifndef REALGA_SELECTION_H
+#define REALGA_SELECTION_H
 #include "stat.h"
 #include "options.h"
 #include "algorithms.h"
@@ -66,4 +70,4 @@ private:
 };
 
 
-#endif // REALGEN_SELECTION_H
+#endif // REALGA_SELECTION_H

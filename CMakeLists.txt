@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(realGen)
+project(realGA)
 
 
 set(CMAKE_SUPPRESS_REGENERATION true)
@@ -13,22 +13,23 @@ include_directories(include)
 file(GLOB SOURCES "src/*.cpp")
 
 # Shared library
-add_library(realgen_shared SHARED ${SOURCES})
+add_library(realga_shared SHARED ${SOURCES})
 
 #Generate the static library from the sources
-add_library(realgen_static STATIC ${SOURCES})
+add_library(realga_static STATIC ${SOURCES})
 
-set_target_properties(realgen_static realgen_shared
+set_target_properties(realga_static realga_shared
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
 )
 
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 # ====================================== Build Tests ====================================
 file(GLOB TESTSOURCES "tests/*.cpp")
 add_executable(tests.bin ${TESTSOURCES})
-target_link_libraries(tests.bin realgen_static)
+target_link_libraries(tests.bin realga_static)
 
 set_target_properties(tests.bin
                       PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
@@ -36,30 +37,24 @@ set_target_properties(tests.bin
 # ====================================== Build Benchmarks ====================================
 file(GLOB BENCHSOURCES "benchmarks/*.cpp")
 add_executable(benchmarks.bin ${BENCHSOURCES} "tests/testcommon.cpp")
-target_link_libraries(benchmarks.bin realgen_static)
+target_link_libraries(benchmarks.bin realga_static)
 set_target_properties(benchmarks.bin
                       PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/benchmarks")
 
 # ====================================== Build examples ====================================
-# --------------- readme.cpp -------------------------
-add_executable(ex_readme examples/readme.cpp)
-target_link_libraries(ex_readme realgen_static)
-
-# --------------- quadratic.cpp -------------------------
-add_executable(ex_quadratic examples/quadratic.cpp)
-target_link_libraries(ex_quadratic realgen_static)
-
-# --------------- multithread.cpp -------------------------
-add_executable(ex_multithread examples/multithread.cpp)
+file(GLOB example_files "examples/*.cpp")
+foreach(ex_file ${example_files})
+  get_filename_component(EX_FILENAME ${ex_file} NAME_WE)
+  message(${EX_FILENAME})
+  add_executable("${EX_FILENAME}.bin" examples/${EX_FILENAME}.cpp)
+  target_link_libraries(${EX_FILENAME}.bin realga_static)
+  set_target_properties("${EX_FILENAME}.bin" PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/examples")
+endforeach()
 
 if(WIN32)
-  target_link_libraries(ex_multithread realgen_static)
+  target_link_libraries(multithread.bin realga_static)
 endif(WIN32)
 
 if(UNIX)
-  target_link_libraries(ex_multithread realgen_static pthread)
+  target_link_libraries(multithread.bin realga_static pthread)
 endif(UNIX)
-
-# --------------- Output directories -------------------------
-set_target_properties(ex_readme ex_quadratic ex_multithread
-                      PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/examples")

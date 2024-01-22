@@ -1,12 +1,16 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-
+    file description:
+        RealChromosome is the solution x of the
+        optimization problem of type real (float)
+---------------------------------------------
 */
-#ifndef REALGEN_CHROMOSOME_H
-#define REALGEN_CHROMOSOME_H
+#ifndef REALGA_CHROMOSOME_H
+#define REALGA_CHROMOSOME_H
 #include "stat.h"
 #include <stdlib.h>
 #include <iostream>
@@ -47,4 +51,4 @@ public:
     bool operator==(const RealChromosome &other) const;
 };
 
-#endif // REALGEN_CHROMOSOME_H
+#endif // REALGA_CHROMOSOME_H

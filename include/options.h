@@ -1,13 +1,20 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
+    file description:
+        RealGAOptions defines all the option of your Genetic
+        algorithm. You can set the selection, mutation and 
+        crossover strategy with relative parameters.
+---------------------------------------------
 */
-#ifndef REALGEN_OPTIONS_H
-#define REALGEN_OPTIONS_H
+#ifndef REALGA_OPTIONS_H
+#define REALGA_OPTIONS_H
 #include <string>
 #include <iostream>
+#include "messages.h"
 #include "chromosome.h"
 #include "fitnessfunction.h"
 
@@ -17,13 +24,12 @@ typedef enum { ROULETTE_WHEEL_SELECTION=1, TOURNAMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=1, SINGLE_POINT_CROSSOVER } CrossoverType;
 typedef enum { UNIFORM_MUTATION=1, GAUSSIAN_MUTATION} MutationType;
 typedef enum { NO_VERBOSE=0, SOFT_VERBOSE=1, HARD_VERBOSE=2} VerboseType;
-/*
-  Class used for option settings
-*/
-class RealGenOptions {
+
+
+class RealGAOptions {
 public:
-    RealGenOptions();
-    ~RealGenOptions();
+    RealGAOptions();
+    ~RealGAOptions();
 
     void setPopulationSize(int np);
     void setChromosomeSize(int nx);
@@ -31,21 +37,23 @@ public:
     void setUpperBounds(const vector<float> &ub);
     void setBounds(const vector<float> &lb, const vector<float> &ub);
     void setVerbose(string value);
-    void setSeed(bool seedValue);
-
+    void setSeed(unsigned int seedValue);
+    void setElitismFactor(float value);
+    
     void setSelectionType(string value);
     void setSelectionTournamentSize(int value);
     void setSelectionTournamentProbability(float value);
-    void setElitismFactor(float value);
+    
 
     void setMutationType(string value);
-    void setUniformMutationPercentage(float value);
-    void setMutationRate(float rate);
+    void setUniformMutationRate(float value);
+    void setMutationRate(float value);
     void setMutationGaussianPerc(float percDelta, float percMin);
 
     void setCrossoverType(string value);
     void setSinglePointCrossoverIndex(int value);
-    void setTwoPointCrossoverIndexes(int i1, int i2);
+
+    void checkOptions();
 
     // Basic options
     int populationSize;
@@ -55,7 +63,7 @@ public:
     int seed;
     VerboseType verbose;
 
-    float selectionElitismFactor;
+    float elitismFactor;
 
     //SelectionOpt
     SelectionType selectionType;
@@ -64,8 +72,7 @@ public:
     
     //CrossoverOpt
     CrossoverType crossoverType;
-    unsigned int crossoverindexA;
-    unsigned int crossoverindexB;
+    int crossoverindexA;
 
     // MutationOpt
     MutationType mutationType;
@@ -75,9 +82,7 @@ public:
     // Gaussian mutation
     float mutationGaussianPercDelta;
     float mutationGaussianPercMin;
-
-
 };
 
 
-#endif //REALGEN_OPTIONS_H
+#endif //REALGA_OPTIONS_H

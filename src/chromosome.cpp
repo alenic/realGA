@@ -1,13 +1,6 @@
-/*
-realGen: Genetic Algorithm with Real values
-
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-*/
 #include "chromosome.h"
 #include <sstream>
 #include <math.h>
-
 
 RealChromosome::RealChromosome()
 {
@@ -87,19 +80,11 @@ void RealChromosome::randUniform()
 
 void RealChromosome::randUniform(int i)
 {
-    if(i >= gene.size()) {
-        cerr << "ERROR: RealChromosome::randUniform(int i) " << endl;
-        exit(-1);
-    }
     gene[i] = Stat::randUniform(LB[i], UB[i]);
 }
 
 void RealChromosome::uniformMutate(int i, float perc)
 {
-    if(i >= gene.size()) {
-        cerr << "ERROR: RealChromosome::uniformMutate(int i, float perc) " << endl;
-        exit(-1);
-    }
     float fraction = perc*(Stat::randUniform()-0.5)*(UB[i]-LB[i]);
     // Mutate
     gene[i] += fraction;
@@ -121,18 +106,10 @@ void RealChromosome::randGaussian(float mean, float sigma)
 
 void RealChromosome::randGaussian(int i, float mean, float sigma)
 {
-    if(i >= gene.size()) {
-        cerr << "ERROR: RealChromosome::randUniform(int i) " << endl;
-        exit(-1);
-    }
     gene[i] = Stat::randUniform(LB[i], UB[i]);
 }
 
 void RealChromosome::gaussianMutate(int i, float perc) {
-    if(i >= gene.size()) {
-        cerr << "ERROR: RealChromosome::gaussianMutate(int i, float perc) " << endl;
-        exit(-1);
-    }
     float delta = UB[i] - LB[i];
 
     // 2 * sigma = delta / 2
@@ -140,7 +117,6 @@ void RealChromosome::gaussianMutate(int i, float perc) {
 
     float r = Stat::randGaussian(0.0, sigma);
     if (isnan(r) || isinf(r)) {
-        cerr << "gaussianMutate error!  r=" << r << endl;
         r = 0.0;
     }
 

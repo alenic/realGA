@@ -14,7 +14,7 @@ public:
 };
 
 
-void benchmark_flatSurface(RealGenOptions opt, GAResults &results) {
+void benchmark_flatSurface(RealGAOptions opt, GAResults &results) {
     vector<float> LB = { -5.12, -5.12, -5.12, -5.12, -5.12 };
     vector<float> UB = { 5.12,  5.12,  5.12,  5.12,  5.12};
 
@@ -27,7 +27,7 @@ void benchmark_flatSurface(RealGenOptions opt, GAResults &results) {
     opt.setChromosomeSize(5);
     opt.setBounds(LB, UB);
 
-    RealGen ga;
+    realGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 1, results, BENCH_NUM_EXPERIMENTS);

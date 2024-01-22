@@ -1,13 +1,6 @@
-/*
-realGen: Genetic Algorithm with Real values
+#include "realga_mt.h"
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-*/
-#include "realgen_mt.h"
-
-// Constructors
-RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGen() {
+RealGenMultithread::RealGenMultithread(unsigned int nThread) : realGA() {
 #ifdef _WIN32
     localThread = new HANDLE[nThread];
 #else
@@ -114,10 +107,7 @@ void RealGenMultithread::evolve() {
 #else
         int rc;
         rc = pthread_create(&localThread[i], NULL, RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i]);
-        if (rc) {
-            cerr << "Error:unable to create thread," << rc << endl;
-            exit(-1);
-        }
+        REALGA_ERROR(rc, "Error:unable to create thread");
 #endif
     }
 

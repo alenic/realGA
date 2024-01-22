@@ -1,11 +1,4 @@
-/*
-realGen: Genetic Algorithm with Real values
-
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-*/
 #include "stat.h"
-
 
 float Stat::randUniform() {
     return (float)(rand() / (float(RAND_MAX) + 1.0));
@@ -19,8 +12,11 @@ int Stat::randIndex(int N) {
     return (int)(randUniform()*N);
 }
 
-/* mean m, standard deviation s */
-float Stat::randGaussian(float m, float s) {
+
+float Stat::randGaussian(float m, float s)
+/* Gaussian distribution generator with mean m,
+   and standard deviation s */
+{
 
     if (s < MIN_SIGMA) {
         s = MIN_SIGMA;

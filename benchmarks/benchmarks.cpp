@@ -1,7 +1,7 @@
 #include "benchmarks.h"
 
 
-void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, int numExperiments) {
+void benchmarkRealGen(realGA &ga, int maxIter, float eps, GAResults &results, int numExperiments) {
     vector<GAResults> resultsVector(numExperiments);
     int generation;
 
@@ -51,7 +51,7 @@ void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, i
     results.printResults();
 }
 
-void benchmark_all(RealGenOptions &opt) {
+void benchmark_all(RealGAOptions &opt) {
     GAResults results;
     printf("%-15s %-12s %-12s %-12s %-12s\n", "Test", "Converged", "Iterations", "Time", "Min Fitness");
 
@@ -63,7 +63,7 @@ void benchmark_all(RealGenOptions &opt) {
 
 int main() {
     GAResults results[5];
-    RealGenOptions opt;
+    RealGAOptions opt;
     int chromosomeSize = 2;
     
     cout << "==================== GA Test ============================" << endl;

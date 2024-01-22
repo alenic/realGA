@@ -1,6 +1,6 @@
 #include <iostream>
 #include <time.h>
-#include "realgen.h"
+#include "realga.h"
 #include "fitnessfunction.h"
 
 #define N_SAMPLE 1000
@@ -21,7 +21,7 @@ int main(int argc,  char** argv) {
     vector<float> LB = {-5.0, -5.0};  // Lower bound of genes
     vector<float> UB = { 5.0,  5.0};  // Upper bound of genes
     QuadraticFitness *myFitnessFunction = new QuadraticFitness();
-    RealGenOptions options;
+    RealGAOptions options;
     options.setChromosomeSize(2);
     options.setPopulationSize(200);
     options.setBounds(LB, UB);
@@ -31,8 +31,8 @@ int main(int argc,  char** argv) {
     options.setSelectionType("tournament");
     options.setSelectionTournamentProbability(0.8);
     options.setVerbose("soft");
-    // Define RealGen(Population size, number of genes in a chromosome, LB, UB)
-    RealGen ga;
+    // Define realGA(Population size, number of genes in a chromosome, LB, UB)
+    realGA ga;
     ga.init(options, myFitnessFunction, false);
 
 

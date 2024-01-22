@@ -2,7 +2,7 @@
 #define MAX_RESULTS_BUFFER 16
 
 int main() {
-    RealGenOptions opt;
+    RealGAOptions opt;
 
     StatTest statTest;
     RALGTest ralgTest;

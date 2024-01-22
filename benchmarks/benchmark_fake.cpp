@@ -9,7 +9,7 @@ public:
     }
 };
 
-void benchmark_fake(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize) {
+void benchmark_fake(RealGAOptions opt, GAResults &results, int chromosomeSize, int populationSize) {
     vector<float> LB(chromosomeSize);
     vector<float> UB(chromosomeSize);
 
@@ -25,7 +25,7 @@ void benchmark_fake(RealGenOptions opt, GAResults &results, int chromosomeSize, 
     opt.setChromosomeSize(chromosomeSize);
     opt.setBounds(LB, UB);
 
-    RealGen ga;
+    realGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 0.0f, results, 1);

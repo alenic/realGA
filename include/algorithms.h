@@ -1,5 +1,15 @@
-#ifndef REALGEN_ALGORITHMS_H
-#define REALGEN_ALGORITHMS_H
+/*
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
+
+    file description:
+        realGA algorithms for general purpose
+---------------------------------------------
+*/
+#ifndef REALGA_ALGORITHMS_H
+#define REALGA_ALGORITHMS_H
 #include <vector>
 
 using namespace std;
@@ -7,7 +17,7 @@ using namespace std;
 
 namespace RALG {
 
-void realgenSwap(float &a, float &b);
+void realgaSwap(float &a, float &b);
 int partition(float arr[], int l, int r);
 float kthSmallest_(float arr[], int l, int r, int k);
 float kthSmallest(vector<float> &fitnessValues, int l, int r, int k);
@@ -18,4 +28,4 @@ int argMin(float arr[], int l, int r);
 int argSelection(float arr[], int l, int r, int kth);
 }
 
-#endif // REALGEN_ALGORITHMS_H
+#endif // REALGA_ALGORITHMS_H

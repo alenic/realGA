@@ -1,5 +1,19 @@
-#ifndef REALGEN_MULTITHREAD_H
-#define REALGEN_MULTITHREAD_H
+/*
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
+
+    file description:
+        This is the RealGA multithreading implementation.
+        Here threads are used to compute the fitness function
+        in parallel.
+
+        TODO: parallelize the evolve algorithm
+---------------------------------------------
+*/
+#ifndef REALGA_MULTITHREAD_H
+#define REALGA_MULTITHREAD_H
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -15,11 +29,9 @@
 #include <pthread.h>
 #endif
 
-#include "realgen.h"
+#include "realga.h"
 
-
-
-class RealGenMultithread: public RealGen {
+class RealGenMultithread: public realGA {
 private:
     unsigned int nThread;
 #ifdef _WIN32
@@ -49,4 +61,4 @@ struct thread_params {
 
 
 
-#endif // REALGEN_MULTITHREAD_H
+#endif // REALGA_MULTITHREAD_H

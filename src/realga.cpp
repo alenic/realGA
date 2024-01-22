@@ -1,13 +1,6 @@
-/*
-realGen: Genetic Algorithm with Real values
+#include "realga.h"
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-*/
-#include "realgen.h"
-
-RealGen::RealGen()
-// Default Constructor
+realGA::realGA()
 {
     // Reset pointers and fitness values
     mFitnessFcn = nullptr;
@@ -16,83 +9,14 @@ RealGen::RealGen()
     mGaussianPerc = 1.0f;
 }
 
-RealGen::~RealGen()
-// Destructor
+realGA::~realGA()
 {
     delete mSelectionAlgorithm;
 }
 
-void RealGen::checkOptions()
-// Check and print options
-{
-    cout << "------ checkOptions ------" << endl << endl;
-    switch (mOptions.selectionType) {
-    case ROULETTE_WHEEL_SELECTION:
-        cout << "-> Selection: ROULETTE_WHEEL_SELECTION" << endl;
-        break;
-    case TOURNAMENT_SELECTION:
-        if(mOptions.selectionTournamentSize >= 2 && mOptions.selectionTournamentSize <= mOptions.populationSize) {
-            cout << "-> Selection: TOURNAMENT_SELECTION : tournamentP = " << mOptions.selectionTournamentSize << endl;
-        } else {
-            cerr << "ERROR: options.selection.tournamentP must be an unsigned number between 2 and Np" << endl;
-            exit(-1);
-        }
-        break;
-    }
-
-    if (mOptions.selectionElitismFactor >= 0.0 && mOptions.selectionElitismFactor <= 1.0) {
-        cout << "-> Elitism Factor: " << mOptions.selectionElitismFactor << endl;
-    } else {
-        cerr << "ERROR: options.selection.elitismFactor must be a number between 0.0 and 1.0" << endl;
-        exit(-1);
-    }
-
-    cout << endl;
-
-    switch (mOptions.crossoverType) {
-    case UNIFORM_CROSSOVER:
-        cout << "-> Crossover: UNIFORM_CROSSOVER" << endl;
-        break;
-    case SINGLE_POINT_CROSSOVER:
-        if(mOptions.crossoverindexA >= 0 && mOptions.crossoverindexA < mOptions.chromosomeSize) {
-            cout << "-> Crossover: SINGLE_POINT_CROSSOVER : indexA = " << mOptions.crossoverindexA << endl;
-        } else {
-            cerr << "ERROR: options.crossover.indexA must be a number between 0 and Nx" << endl;
-            exit(-1);
-        }
-        break;
-    }
-
-    cout << endl;
-
-    switch (mOptions.mutationType) {
-    case UNIFORM_MUTATION:
-        if (mOptions.mutationUniformPerc >= 0.0 && mOptions.mutationUniformPerc <= 1.0) {
-            cout << "-> Mutation: UNIFORM_MUTATION : uniformPerc = " << mOptions.mutationUniformPerc << endl;
-        } else {
-            cerr << "ERROR: options.selection.uniformPerc must be a number between 0.0 and 1.0" << endl;
-            exit(-1);
-        }
-
-        break;
-    case GAUSSIAN_MUTATION:
-        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianPercDelta = " << mOptions.mutationGaussianPercDelta << endl;
-        cout << "-> Mutation: GAUSSIAN_MUTATION : gaussianPercMin = " << mOptions.mutationGaussianPercMin << endl;
-        break;
-    }
-
-    if (mOptions.mutationRate >= 0.0 && mOptions.mutationRate <= 1.0) {
-        cout << "-> MutationRate = " << mOptions.mutationRate << endl;
-    } else {
-        cerr << "ERROR: options.mutation.mutationRate must be a number between 0.0 and 1.0" << endl;
-        exit(-1);
-    }
-    cout << endl;
-}
-
 // ========================================= Setter ======================================
 
-void RealGen::resetPopulation()
+void realGA::resetPopulation()
 {
     // Check if populationSize has changed
     if(mOptions.populationSize != mPopulation.size()) {
@@ -114,23 +38,20 @@ void RealGen::resetPopulation()
     }
 }
 
-void RealGen::resetGaussianMutationPerc()
+void realGA::resetGaussianMutationPerc()
 // Initialize standars deviations for gaussian mutation
 {
     mGaussianPerc = 1.0f;
 }
 
-void RealGen::restart() {
+void realGA::restart() {
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
         resetGaussianMutationPerc();
     }
     mGeneration = 0;
-    if (mOptions.verbose>0) {
-        checkOptions();
-    }
 }
 
-void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
+void realGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
 // Set custom options
 {
     // set options
@@ -181,37 +102,34 @@ void RealGen::init(RealGenOptions &opt, FitnessFunction *func, bool keepState)
                 break;
         }
 
-        if (mOptions.verbose>0) {
-            checkOptions();
-        }
         Stat::setSeed(mOptions.seed);
         mGeneration = 0;
     }
-    mElitismNumber = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
+    mElitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
 }
 
-void RealGen::setFitnessFunction(FitnessFunction *f) 
+void realGA::setFitnessFunction(FitnessFunction *f) 
 {
     mFitnessFcn = f;
 }
 
-void RealGen::fillFitnessValues(vector<RealChromosome> &population) {
+void realGA::fillFitnessValues(vector<RealChromosome> &population) {
     for(int i=0; i<population.size(); i++) {
         mFitnessValues[i] = population[i].fitness;
     }
 }
 // ========================================= Getter ======================================
 
-int RealGen::getGeneration() {
+int realGA::getGeneration() {
     return mGeneration;
 }
 
 
-float RealGen::evalFitness(const RealChromosome &x) {
+float realGA::evalFitness(const RealChromosome &x) {
     return mFitnessFcn->eval(x);
 }
 
-RealChromosome RealGen::getBestChromosome() {
+RealChromosome realGA::getBestChromosome() {
     RealChromosome best;
     int minIndex=0;
     float minValue=mPopulation[0].fitness;
@@ -227,7 +145,7 @@ RealChromosome RealGen::getBestChromosome() {
 }
 
 /*
-float RealGen::getDiversity() {  //  TODO
+float realGA::getDiversity() {  //  TODO
     float I = 0.0;
     // Compute the centroid
     for(int j=0; j<mOptions.chromosomeSize; j++) {
@@ -245,11 +163,11 @@ float RealGen::getDiversity() {  //  TODO
 }
 */
 
-vector<RealChromosome> RealGen::getPopulation() {
+vector<RealChromosome> realGA::getPopulation() {
     return mPopulation;
 }
 
-string RealGen::populationToString() {
+string realGA::populationToString() {
     std::ostringstream os;
     RealChromosome x;
     os << "============== Generation: " << mGeneration << " ===================" << endl;
@@ -261,7 +179,7 @@ string RealGen::populationToString() {
 }
 
 
-bool RealGen::checkChromosome(RealChromosome &chromosome) {
+bool realGA::checkChromosome(RealChromosome &chromosome) {
     for (int j = 0; j < mOptions.chromosomeSize; ++j) {
         if (isnan(chromosome.gene[j]) || isinf(chromosome.gene[j]) ){
             cout << "checkGene Failed:" << endl;
@@ -286,7 +204,7 @@ bool RealGen::checkChromosome(RealChromosome &chromosome) {
 }
 
 
-void RealGen::checkPopulation() {
+void realGA::checkPopulation() {
     for (int i = 0; i < mOptions.populationSize; i++) {
         if (!checkChromosome(mPopulation[i])) {
             cout << "checkPopulation Failed: Chromosome " << i << endl;
@@ -296,7 +214,7 @@ void RealGen::checkPopulation() {
 }
 
 // ==================================================== Evolve ====================================================
-void RealGen::evolve() {
+void realGA::evolve() {
     // Allocate offspring (gene after crossover and mutation)
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
@@ -305,6 +223,7 @@ void RealGen::evolve() {
 
     // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
+
     // Find the kth smallest Fitness value
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
 
@@ -313,14 +232,13 @@ void RealGen::evolve() {
 
     // Generate New Population
     while(k < mOptions.populationSize) {
-
         if((mFitnessValues[k] <= mKthSmallestFitness) && (countElite <= mElitismNumber)) {
             mNewPopulation[k] = mPopulation[k];
             ++k;
             ++countElite;
             continue;
         }
-
+        
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
@@ -365,7 +283,7 @@ void RealGen::evolve() {
 }
 
 // ===================================== Init function =============================
-void RealGen::popInitRandUniform()
+void realGA::popInitRandUniform()
 // Init random uniform population
 {
     for(int i=0; i<mOptions.populationSize; i++) {
@@ -375,7 +293,7 @@ void RealGen::popInitRandUniform()
     
 }
 
-void RealGen::popInitRandGaussian(float mean, float sigma)
+void realGA::popInitRandGaussian(float mean, float sigma)
 // Init random gaussian population
 {
     for(int i=0; i<mOptions.populationSize; i++) {
@@ -385,7 +303,7 @@ void RealGen::popInitRandGaussian(float mean, float sigma)
 }
 
 
-void RealGen::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc)
+void realGA::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc)
 // Init population from a given chromosome and mutate it
 {
     RealChromosome g(mOptions.chromosomeSize);
@@ -404,7 +322,7 @@ void RealGen::popInitGaussianMutate(vector<float> &gene, float mutatioRate, floa
 }
 
 // TODO
-void RealGen::popInitSetChromosome(unsigned int index, RealChromosome &chromosome)
+void realGA::popInitSetChromosome(unsigned int index, RealChromosome &chromosome)
 {
     if (index >= mOptions.populationSize) {
         cerr << "ERROR: popInitSetChromosome: index " << index << " is out of range [0," << mOptions.populationSize << ")" << endl;
@@ -415,7 +333,7 @@ void RealGen::popInitSetChromosome(unsigned int index, RealChromosome &chromosom
 }
 
 // TODO
-void RealGen::popInitSetPopulation(vector<RealChromosome> &population)
+void realGA::popInitSetPopulation(vector<RealChromosome> &population)
 {
     if (mPopulation.size() != mOptions.populationSize) {
         cerr << "ERROR: popInitSetPopulation: size of population " << mPopulation.size() << " is not the same as Np = " << mOptions.populationSize << endl;
@@ -426,7 +344,7 @@ void RealGen::popInitSetPopulation(vector<RealChromosome> &population)
 }
 
 //==================================== Crossover ==================
-void RealGen::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
+void realGA::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
     if (indexA < 0 || indexA >= mOptions.populationSize) {
         cerr << "crossoverUniform error: indexA = " << indexA << endl;
         exit(-1);
@@ -445,7 +363,7 @@ void RealGen::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
 }
 
 
-void RealGen::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
+void realGA::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
     for(int i=0; i<n; i++) {
         c.gene[i] = mPopulation[indexA].gene[i];
     }
@@ -456,7 +374,7 @@ void RealGen::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
 
 
 //===================================== Mutation ======================
-void RealGen::uniformMutate(RealChromosome &chromosome, float mutationRate, float perc) {
+void realGA::uniformMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int i=0; i<mOptions.chromosomeSize; i++) {
         if(Stat::randUniform() < mutationRate) {
             chromosome.uniformMutate(i, perc);
@@ -464,7 +382,7 @@ void RealGen::uniformMutate(RealChromosome &chromosome, float mutationRate, floa
     }
 }
 
-void RealGen::gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc) {
+void realGA::gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform() < mutationRate) {
             chromosome.gaussianMutate(j, perc);

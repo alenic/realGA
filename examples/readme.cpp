@@ -1,5 +1,5 @@
 #include <iostream>
-#include "realgen.h"
+#include "realga.h"
 #include "fitnessfunction.h"
 
 using namespace std;
@@ -19,14 +19,14 @@ int main(int argc,  char** argv) {
     vector<float> LB = {-5.0, -5.0};  // Lower bound of genes
     vector<float> UB = { 5.0,  5.0};  // Upper bound of genes
     QuadraticFitness *myFitnessFunction = new QuadraticFitness();
-    RealGenOptions options;
+    RealGAOptions options;
     options.setChromosomeSize(2);
     options.setPopulationSize(50);
     options.setBounds(LB, UB);
     options.setVerbose("soft");
 
     // Init Genetic Algorithm with options, fitness function and keepState=false
-    RealGen ga;
+    realGA ga;
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random between LB and UB

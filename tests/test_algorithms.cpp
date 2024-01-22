@@ -1,10 +1,5 @@
 #include "testcommon.h"
 
-RALGTest::RALGTest() {
-
-}
-
-
 void RALGTest::test_searchIndexBinarySearch() {
     vector<float> array = {0, 1.3, 4.5, 5.2, 6.4, 7.9, 9.0, 11.0};
     bool passed=true;

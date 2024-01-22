@@ -1,11 +1,19 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
+    file description:
+        This is the core class, where you can call
+        the evolve method to create new populations.
+        You have to provide the options of your Genetic
+        Algorithm to change selection, mutation and 
+        crossover strategies.
+---------------------------------------------
 */
-#ifndef REALGEN_H
-#define REALGEN_H
+#ifndef REALGA_H
+#define REALGA_H
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -20,16 +28,17 @@ website: https://github.com/alenic
 #include "options.h"
 #include "fitnessfunction.h"
 #include "selection.h"
+#include "messages.h"
 
 using namespace std;
 
-class RealGen {
+class realGA {
 public:
-    RealGen();
-    ~RealGen();
+    realGA();
+    ~realGA();
     // Setter
     void restart();
-    void init(RealGenOptions &opt, FitnessFunction *func, bool keepState);
+    void init(RealGAOptions &opt, FitnessFunction *func, bool keepState);
     void setFitnessFunction(FitnessFunction *f);
 
     void resetPopulation();
@@ -44,7 +53,6 @@ public:
     vector<RealChromosome> getPopulation();
 
     // Checking
-    void checkOptions();
     bool checkChromosome(RealChromosome &chromosome);
     void checkPopulation();
     string populationToString();
@@ -68,7 +76,7 @@ public:
 protected:
     vector<RealChromosome> mPopulation;
     vector<RealChromosome> mNewPopulation;
-    RealGenOptions mOptions;
+    RealGAOptions mOptions;
     FitnessFunction *mFitnessFcn;
     vector<float> mFitnessValues;
     float mKthSmallestFitness;
@@ -87,4 +95,4 @@ protected:
     void fillFitnessValues(vector<RealChromosome> &population);
 };
 
-#endif // REALGEN_H
+#endif // REALGA_H

@@ -1,11 +1,16 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
+    file description:
+        General purpose static class, to manage all
+        the pseudo-random generation.
+---------------------------------------------
 */
-#ifndef REALGEN_STAT_H
-#define REALGEN_STAT_H
+#ifndef REALGA_STAT_H
+#define REALGA_STAT_H
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>
@@ -22,4 +27,4 @@ class Stat {
     static void setSeed(unsigned int seed);
 };
 
-#endif // REALGEN_STAT_H
+#endif // REALGA_STAT_H

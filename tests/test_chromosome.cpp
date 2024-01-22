@@ -32,8 +32,6 @@ void RealChromosomeTest::test_randUniform() {
     else
         coutColor("PASSED", TEXT_GREEN);
     cout << endl;
-    // Destroy all elements
-    g.gene.clear();
 }
 
 

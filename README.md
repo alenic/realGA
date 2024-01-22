@@ -1,4 +1,4 @@
-# RealGen
+# realGA
 
 <p align="center">
   <img src="images/logo.png" width="140" alt="Nest Logo" />
@@ -13,7 +13,7 @@ You can find the following code example inside examples/readme.cpp
 
 ```c++
 #include <iostream>
-#include "realgen.h"
+#include "realga.h"
 
 using namespace std;
 
@@ -31,14 +31,14 @@ int main(int argc,  char** argv) {
     vector<float> LB = {-5.0, -5.0};  // Lower bound of genes
     vector<float> UB = { 5.0,  5.0};  // Upper bound of genes
     QuadraticFitness *myFitnessFunction = new QuadraticFitness();
-    RealGenOptions options;
+    RealGAOptions options;
     options.setChromosomeSize(2);
     options.setPopulationSize(50);
     options.setBounds(LB, UB);
     options.setVerbose("soft");
 
     // Init Genetic Algorithm with options, fitness function and keepState=false
-    RealGen ga;
+    realGA ga;
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random between LB and UB
@@ -79,8 +79,8 @@ A genetic algorithm may struggle to converge to the true global minimum due to t
 On terminal
 
 ```
-git clone https://github.com/alenic/realGen.git
-cd realGen
+git clone https://github.com/alenic/realGA.git
+cd realGA
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -92,12 +92,12 @@ make
 
 On Powershell
 ```
-git clone https://github.com/alenic/realGen.git
-cd realGen
+git clone https://github.com/alenic/realGA.git
+cd realGA
 mkdir build
 cd build
 cmake ..
-MSBuild.exe .\realGen.sln /p:Configuration=Release
+MSBuild.exe .\realGA.sln /p:Configuration=Release
 ```
 
 If you want to use Win64 compiler use the command:
@@ -106,12 +106,12 @@ If you want to use Win64 compiler use the command:
 cmake -G "Visual Studio 14 2015 Win64" ..
 ```
 
-It will generates the static library **librealgen.a** and the shared library **librealgen_shared.so** into the folder **build/libs**
+It will generates the static library **librealga.a** and the shared library **librealga_shared.so** into the folder **build/libs**
 
 # Tests
-To test realGen you can execute the **tests.bin** executable into **build/tests** folder
+To test realGA you can execute the **tests.bin** executable into **build/tests** folder
 
 # Benchmarks
-To perform realGen's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
+To perform realGA's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
 
   

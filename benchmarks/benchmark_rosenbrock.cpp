@@ -11,7 +11,7 @@ public:
     }
 };
 
-void benchmark_rosenbrock(RealGenOptions opt, GAResults &results) {
+void benchmark_rosenbrock(RealGAOptions opt, GAResults &results) {
     vector<float> LB = { -2.048, -2.048 };
     vector<float> UB = { 2.048,  2.048};
 
@@ -24,7 +24,7 @@ void benchmark_rosenbrock(RealGenOptions opt, GAResults &results) {
     opt.setPopulationSize(results.Np);
     opt.setChromosomeSize(2);
     opt.setBounds(LB, UB);
-    RealGen ga;
+    realGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 1e-3, results, BENCH_NUM_EXPERIMENTS);

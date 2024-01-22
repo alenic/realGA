@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #endif
 #include <stdio.h>
-#include "realgen_mt.h"
+#include "realga_mt.h"
 #include "fitnessfunction.h"
 
 #define N_SAMPLE 500
@@ -147,7 +147,7 @@ vector<float> UB = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};
 
 
 void optimize(unsigned int seed, unsigned int nThreads) {
-    RealGenOptions options;
+    RealGAOptions options;
 
     options.setChromosomeSize(10);
     options.setPopulationSize(200);
@@ -160,10 +160,10 @@ void optimize(unsigned int seed, unsigned int nThreads) {
 
     MyFitnessFunction *myFitnessFunction = new MyFitnessFunction();
 
-    RealGen *ga;
+    realGA *ga;
 
     if (nThreads==1) {
-        ga = new RealGen();
+        ga = new realGA();
     } else {
         ga = new RealGenMultithread(nThreads);
     }

@@ -1,12 +1,19 @@
 /*
-realGen: Genetic Algorithm with Real values
+---------------------------------------------
+    author: Alessandro Nicolosi
+    website: https://github.com/alenic
+    license: MIT
 
-author: Alessandro Nicolosi
-website: https://github.com/alenic
-
+    file description:
+        FitnessFunction class is an abstract class
+        that compute the value of the fitness function
+        given a chromosome (solution x). You have
+        to inherit this class to define your own fitness
+        function. 
+---------------------------------------------
 */
-#ifndef REALGEN_FITNESS_FUNCTION_H
-#define REALGEN_FITNESS_FUNCTION_H
+#ifndef REALGA_FITNESS_FUNCTION_H
+#define REALGA_FITNESS_FUNCTION_H
 
 #include "chromosome.h"
 
@@ -17,4 +24,4 @@ public:
 };
 
 
-#endif // REALGEN_FITNESS_FUNCTION_H
+#endif // REALGA_FITNESS_FUNCTION_H

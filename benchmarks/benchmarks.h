@@ -1,4 +1,4 @@
-#include "realgen.h"
+#include "realga.h"
 #include <iomanip>
 
 #define BENCH_NUM_EXPERIMENTS 100
@@ -20,13 +20,13 @@ struct GAResults {
     }
 };
 
-void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, int numExperiments);
+void benchmarkRealGen(realGA &ga, int maxIter, float eps, GAResults &results, int numExperiments);
 
 // Benchmark Problems
-void benchmark_all(RealGenOptions &opt);
-void benchmark_fake(RealGenOptions opt, GAResults &results, int chromosomeSize, int populationSize);
+void benchmark_all(RealGAOptions &opt);
+void benchmark_fake(RealGAOptions opt, GAResults &results, int chromosomeSize, int populationSize);
 // Problems
-void benchmark_sphere(RealGenOptions opt, GAResults &results);
-void benchmark_rosenbrock(RealGenOptions opt, GAResults &results);
-void benchmark_flatSurface(RealGenOptions opt, GAResults &results);
-void benchmark_foxholes(RealGenOptions opt, GAResults &results);
+void benchmark_sphere(RealGAOptions opt, GAResults &results);
+void benchmark_rosenbrock(RealGAOptions opt, GAResults &results);
+void benchmark_flatSurface(RealGAOptions opt, GAResults &results);
+void benchmark_foxholes(RealGAOptions opt, GAResults &results);

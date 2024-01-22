@@ -19,7 +19,7 @@ private:
     float *mA;
 };
 
-void benchmark_foxholes(RealGenOptions opt, GAResults &results) {
+void benchmark_foxholes(RealGAOptions opt, GAResults &results) {
     vector<float> LB = { -65536, -65536 };
     vector<float> UB = { 65536,  65536};
     float A[] = {-32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32, -32, 16, 0, 16, 32,
@@ -34,7 +34,7 @@ void benchmark_foxholes(RealGenOptions opt, GAResults &results) {
     opt.setChromosomeSize(2);
     opt.setBounds(LB, UB);
 
-    RealGen ga;
+    realGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 1e-1, results, BENCH_NUM_EXPERIMENTS);

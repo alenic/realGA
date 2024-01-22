@@ -1,6 +1,5 @@
 #include "selection.h"
 
-
 TournamentSelection::TournamentSelection(int populationSize) {
     mTournamentSize = (int)(populationSize*0.1);
     mPopulationSize = populationSize;

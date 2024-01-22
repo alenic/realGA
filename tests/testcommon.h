@@ -1,6 +1,6 @@
 #ifndef TEST_COMMON_H_
 #define TEST_COMMON_H_
-#include "realgen.h"
+#include "realga.h"
 #include <iostream>
 #include <string>
 #include <time.h>
@@ -30,7 +30,7 @@ public:
 // Algorithms Tests
 class RALGTest {
 public:
-    RALGTest();
+    RALGTest(){};
     void test_argKthSmallest();
     void test_searchIndexBinarySearch();
 };
