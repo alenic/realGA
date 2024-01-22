@@ -345,14 +345,6 @@ void realGA::popInitSetPopulation(vector<RealChromosome> &population)
 
 //==================================== Crossover ==================
 void realGA::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
-    if (indexA < 0 || indexA >= mOptions.populationSize) {
-        cerr << "crossoverUniform error: indexA = " << indexA << endl;
-        exit(-1);
-    }
-    if (indexB < 0 || indexB >= mOptions.populationSize) {
-        cerr << "crossoverUniform error: indexB = " << indexB << endl;
-        exit(-1);
-    }
     for(int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform()<0.5) {
             c.gene[j] = mPopulation[indexA].gene[j];

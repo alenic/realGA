@@ -12,10 +12,6 @@ TournamentSelection::~TournamentSelection() {
 }
 
 void TournamentSelection::setTournamentSize(int tournamentSize) {
-    if (tournamentSize <= 0) {
-        cerr << "setTournamentSize: tournamentSize must be >= 1" <<  endl;
-        exit(-1);
-    }
     mTournamentSize = tournamentSize;
 }
 
