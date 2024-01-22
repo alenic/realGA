@@ -3,7 +3,7 @@
 
 namespace RALG {
 
-void realgen_swap(float &a, float &b) {
+void realgenSwap(float &a, float &b) {
     float c = a;
     a = b;
     b = c;
@@ -15,11 +15,11 @@ int partition(float arr[], int l, int r)
     int i = l; 
     for (int j = l; j <= r - 1; j++) { 
         if (arr[j] <= x) { 
-            realgen_swap(arr[i], arr[j]); 
+            realgenSwap(arr[i], arr[j]); 
             i++; 
         } 
     } 
-    realgen_swap(arr[i], arr[r]); 
+    realgenSwap(arr[i], arr[r]); 
     return i; 
 }
 
@@ -71,7 +71,7 @@ int argKthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
     int n = fitnessValues.size();
     float kth = kthSmallest(fitnessValues, l, r, k);
 
-    int kthIndex = 0;
+    int kthIndex = -1;
 
     for(int i=0; i<n; i++) {
         if(kth == fitnessValues[i]) {
@@ -122,6 +122,38 @@ void minmax(vector<float> arr, float &minValue, float &maxValue) {
         if(v < minValue) minValue = v;
         if(v > maxValue) maxValue = v;
     }
+}
+
+int argMin(float arr[], int l, int r) {
+    float minValue=arr[0];
+    int minIndex=0;
+    for(int i=l+1; i<=r; i++) {
+        if(arr[i] < minValue) {
+            minValue = arr[i];
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+
+int argSelection(float arr[], int l, int r, int kth) {
+    // k * O(n)
+    float minValue;
+    int minIndex;
+    // find min
+    for(int k=0; k<kth; k++) {
+        minValue = arr[k];
+        minIndex = k;
+        for(int i=l+k+1; i<=r; i++) {
+            if(arr[i] < minValue) {
+                minValue = arr[i];
+                minIndex = i;
+            }
+        }
+        if(k<kth-1)
+            realgenSwap(arr[k], arr[minIndex]);
+    }
+    return minIndex;
 }
 
 

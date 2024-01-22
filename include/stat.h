@@ -10,7 +10,6 @@ website: https://github.com/alenic
 #include <math.h>
 #include <iostream>
 #include <limits>
-#include <random>
 
 #define MIN_SIGMA 1.0e-9f
 

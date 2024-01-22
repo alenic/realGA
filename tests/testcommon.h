@@ -55,6 +55,6 @@ public:
 };
 
 
-void printDistribution(vector<float> &x, size_t bins, int nstars);
+void printDistribution(vector<float> &x, int bins, int nstars);
 
 #endif

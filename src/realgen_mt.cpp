@@ -77,9 +77,6 @@ void RealGenMultithread::evolve() {
             case SINGLE_POINT_CROSSOVER:
                 crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
                 break;
-            case TWO_POINT_CROSSOVER:
-                // TODO
-                break;
         }
         
 

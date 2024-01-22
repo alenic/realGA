@@ -37,10 +37,24 @@ void RALGTest::test_searchIndexBinarySearch() {
 }
 
 void RALGTest::test_argKthSmallest() {
-    vector<float> x = {5.0, 3.0, 1.0, 6.0, 2.0, 4.0};
+    vector<float> x(100);
+    bool passed = true;
+    int index;
 
-    int index = RALG::argKthSmallest(x, 0, x.size()-1, 5);
-    //cout << "Index " << index << endl;
-    index = RALG::argKthSmallest(x, 0, x.size()-1, 1);
-    //cout << "Index " << index << endl;
+    for(int i=0; i<x.size(); i++) {
+        x[i] = (float)(i+1);
+    }
+    
+    for(int i=0; i<x.size(); i++) {
+        index = RALG::argKthSmallest(x, 0, x.size()-1, i+1);
+        if (index != i) {
+            passed = false;
+            break;
+        }
+    }
+    if(passed){
+        coutColor("PASSED", TEXT_GREEN);
+    } else {
+        coutColor("FAILED", TEXT_RED);
+    }
 }

@@ -15,13 +15,12 @@ website: https://github.com/alenic
 #include <vector>
 #include <algorithm>
 
-
 using namespace std;
 
 // Abstract class
 class Selection {
 public:
-    ~Selection() {}
+    virtual ~Selection() {}
     virtual void init(vector<float> &fitnessValues) = 0;
     virtual void select(vector<float> &fitnessValues, int &indexA, int &indexB) = 0;
 };
@@ -30,23 +29,15 @@ public:
 class RouletteWheelSelection: public Selection {
 public:
     RouletteWheelSelection(int populationSize);
-    RouletteWheelSelection(int populationSize, RouletteType type);
     ~RouletteWheelSelection();
 
     void init(vector<float> &fitnessValues);
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
 private:
-    vector<float> mCumulativeFitness;
-
     // For stochastic acceptance
     vector<float> mNormalizedFitness;
     float mMinFitnessValue;
     float mMaxFitnessValue;
-
-    float mCumSum;
-    RouletteType mType;
-
-    void computeCumulativeValues(vector<float> &fitnessValues);
     void selectStochasticAcceptance(int &indexA, int &indexB);
 };
 

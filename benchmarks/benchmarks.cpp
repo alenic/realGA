@@ -12,7 +12,7 @@ void benchmarkRealGen(RealGen &ga, int maxIter, float eps, GAResults &results, i
         ga.restart();
 
         resultsVector[k].converged = 0;
-        clock_t startTime = clock(), endTime;
+        clock_t startTime = clock();
         for(int i=0; i<maxIter; i++) {
             ga.evolve();
             generation++;

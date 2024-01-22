@@ -1,7 +1,7 @@
 #include "realgen.h"
 #include <iomanip>
 
-#define BENCH_NUM_EXPERIMENTS 10
+#define BENCH_NUM_EXPERIMENTS 100
 
 struct GAResults {
     string name;

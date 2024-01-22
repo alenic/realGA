@@ -140,8 +140,6 @@ void RealGenOptions::setCrossoverType(string value) {
         crossoverType = UNIFORM_CROSSOVER;
     else if (value == "single_point")
         crossoverType = SINGLE_POINT_CROSSOVER;
-    else if (value == "two_point")
-        crossoverType = TWO_POINT_CROSSOVER;
     else
         cerr << "setCrossoverType(" << value << ") is an invalid option value" << endl;
 }

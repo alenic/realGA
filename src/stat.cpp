@@ -8,8 +8,7 @@ website: https://github.com/alenic
 
 
 float Stat::randUniform() {
-    float r = (float)rand() / (RAND_MAX + 1.0);
-    return r;
+    return (float)(rand() / (float(RAND_MAX) + 1.0));
 }
 
 float Stat::randUniform(float lb, float ub) {
