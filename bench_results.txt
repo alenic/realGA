@@ -1,119 +1,164 @@
+SORT 1
 ==================== GA Test ============================
-Mutation type = Uniform
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           52          5000        0.002461    0.214642    0.000086     [0.0004077005433,0.0001650177292,-9.773258353e-05,-0.0001564049162]
-Rosenbrock     1           174         5000        0.042556    1.191890    0.000047     [1.000743628,1.001494288]
-Flat surface   1           1           5000        0.000283    1.318281    0.000000     [0.4491889477,0.9395489693,0.7990108728,0.046397686,0.5310277939]
-Foxholes       0           5000        5000        1.320221    1.320221    0.560003     [-31.25390625,-31.92773438]
-Mutation type = Gaussian
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           309         5000        0.013353    0.212709    0.000096     [2.264976501e-05,-2.076333476e-05,-0.0003169997362,1.828870154e-05]
-Rosenbrock     1           4046        5000        0.974151    1.203388    0.000076     [1.000165462,1.000387311]
-Flat surface   1           7           5000        0.001991    1.314495    0.000000     [0.5930486917,0.7535128593,0.6952266097,0.3795881271,0.9703660011]
-Foxholes       0           5000        5000        1.320296    1.320296    0.031201     [-31.82910156,-32.0022583]
-==================== GA Benchmark ============================
-Mutation type = Uniform
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   1           1           500         0.005648    2.858556    0.000000    
-Bench_4_1000   1           1           500         0.005821    2.896042    0.000000    
-Bench_8_1000   1           1           500         0.005920    2.954265    0.000000    
-Bench_16_1000  1           1           500         0.006195    3.072916    0.000000    
-Bench_32_1000  1           1           500         0.006657    3.316307    0.000000    
-Mutation type = Gaussian
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   1           1           500         0.005763    2.859836    0.000000    
-Bench_4_1000   1           1           500         0.005804    2.899578    0.000000    
-Bench_8_1000   1           1           500         0.005919    2.960370    0.000000    
-Bench_16_1000  1           1           500         0.006192    3.103862    0.000000    
-Bench_32_1000  1           1           500         0.006780    3.369307    0.000000
+Mutation type=uniform - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     61.200001    0.003143     0.000046    
+Rosenbrock      1.000000     73.199997    0.014586     0.000219    
+Flat surface    1.000000     5.900000     0.001392     0.000000    
+Foxholes        0.000000     1000.000000  0.217019     0.162283    
+Mutation type=uniform - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     44.299999    0.003660     0.000036    
+Rosenbrock      0.600000     502.200012   0.137272     0.000039    
+Flat surface    1.000000     2.300000     0.000830     0.000000    
+Foxholes        0.000000     1000.000000  0.290008     0.115309    
+Mutation type=gaussian - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     73.900002    0.004101     0.000087    
+Rosenbrock      1.000000     145.800003   0.030531     0.000220    
+Flat surface    1.000000     6.600000     0.001581     0.000000    
+Foxholes        1.000000     98.300003    0.022680     0.003661    
+Mutation type=gaussian - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     42.000000    0.003789     0.000020    
+Rosenbrock      0.600000     774.900024   0.257186     0.000988    
+Flat surface    1.000000     1.800000     0.000669     0.000000    
+Foxholes        1.000000     66.699997    0.021008     0.003950    
+==================== GA Fake Benchmark ============================
+Selection type = "roulette"
+Bench_2_1000    0.000000     500.000000   0.511149     1000.000000 
+Bench_4_1000    0.000000     500.000000   0.538420     1000.000000 
+Bench_8_1000    0.000000     500.000000   0.602899     1000.000000 
+Bench_16_1000   0.000000     500.000000   0.719824     1000.000000 
+Bench_32_1000   0.000000     500.000000   0.971257     1000.000000 
+Selection type = "tournament"
+Bench_2_1000    0.000000     500.000000   0.651811     1000.000000 
+Bench_4_1000    0.000000     500.000000   0.682654     1000.000000 
+Bench_8_1000    0.000000     500.000000   0.748231     1000.000000 
+Bench_16_1000   0.000000     500.000000   0.857179     1000.000000 
+Bench_32_1000   0.000000     500.000000   1.104802     1000.000000
 
 
+SORT 0
+
+==================== GA Test ============================
+Mutation type=uniform - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          0.900000     245.100006   0.010051     0.000018    
+Rosenbrock      1.000000     139.600006   0.023312     0.000105    
+Flat surface    1.000000     10.900000    0.002010     0.000000    
+Foxholes        0.000000     1000.000000  0.193446     109.715446  
+Mutation type=uniform - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          0.200000     841.599976   0.061140     0.000058    
+Rosenbrock      0.200000     805.799988   0.221914     0.000664    
+Flat surface    1.000000     17.400000    0.005564     0.000000    
+Foxholes        0.000000     1000.000000  0.302043     318.929810  
+Mutation type=gaussian - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     144.199997   0.006112     0.000038    
+Rosenbrock      0.700000     388.600006   0.063486     0.000216    
+Flat surface    1.000000     14.200000    0.002662     0.000000    
+Foxholes        0.800000     367.500000   0.071262     0.026024    
+Mutation type=gaussian - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          0.000000     1000.000000  0.073819     0.000941    
+Rosenbrock      0.000000     1000.000000  0.256552     0.017385    
+Flat surface    0.700000     310.399994   0.098211     0.000000    
+Foxholes        0.000000     1000.000000  0.275792     1.041531    
+==================== GA Fake Benchmark ============================
+Selection type = "roulette"
+Bench_2_1000    0.000000     500.000000   1.192342     1000.000000 
+Bench_4_1000    0.000000     500.000000   1.223113     1000.000000 
+Bench_8_1000    0.000000     500.000000   1.288982     1000.000000 
+Bench_16_1000   0.000000     500.000000   1.399591     1000.000000 
+Bench_32_1000   0.000000     500.000000   1.633466     1000.000000 
+Selection type = "tournament"
+Bench_2_1000    0.000000     500.000000   1.318604     1000.000000 
+Bench_4_1000    0.000000     500.000000   1.351132     1000.000000 
+Bench_8_1000    0.000000     500.000000   1.415605     1000.000000 
+Bench_16_1000   0.000000     500.000000   1.539289     1000.000000 
+Bench_32_1000   0.000000     500.000000   1.789900     1000.000000 
+
+
+
+Stochastic acceptance
+SORT 1
+==================== GA Test ============================
+Mutation type=uniform - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     52.400002    0.000552     0.000048    
+Rosenbrock      1.000000     49.200001    0.001364     0.000546    
+Flat surface    1.000000     5.800000     0.000288     0.000000    
+Foxholes        0.000000     1000.000000  0.036720     0.362026    
+Mutation type=uniform - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     44.299999    0.001377     0.000036    
+Rosenbrock      0.600000     502.200012   0.047526     0.000039    
+Flat surface    1.000000     2.300000     0.000271     0.000000    
+Foxholes        0.000000     1000.000000  0.103839     0.115309    
+Mutation type=gaussian - Selection Type=roulette
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     55.000000    0.000575     0.000050    
+Rosenbrock      1.000000     154.199997   0.004567     0.000156    
+Flat surface    1.000000     6.300000     0.000319     0.000000    
+Foxholes        1.000000     81.400002    0.003187     0.011786    
+Mutation type=gaussian - Selection Type=tournament
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     42.000000    0.001324     0.000020    
+Rosenbrock      0.600000     774.900024   0.080397     0.000988    
+Flat surface    1.000000     1.800000     0.000216     0.000000    
+Foxholes        1.000000     66.699997    0.007383     0.003950    
+==================== GA Fake Benchmark ============================
+Selection type = "roulette"
+Bench_2_1000    0.000000     500.000000   0.089968     0.000002    
+Bench_4_1000    0.000000     500.000000   0.111448     0.000001    
+Bench_8_1000    0.000000     500.000000   0.155964     0.000001    
+Bench_16_1000   0.000000     500.000000   0.245572     0.000000    
+Bench_32_1000   0.000000     500.000000   0.419449     0.000006    
+Selection type = "tournament"
+Bench_2_1000    0.000000     500.000000   0.237712     0.000002    
+Bench_4_1000    0.000000     500.000000   0.257773     0.000001    
+Bench_8_1000    0.000000     500.000000   0.300827     0.000002    
+Bench_16_1000   0.000000     500.000000   0.390685     0.000008    
+Bench_32_1000   0.000000     500.000000   0.567313     0.000000
 
 
 ==================== GA Test ============================
 Mutation type=uniform - Selection Type=roulette
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           62          5000        0.003569    0.153378    0.000085     [3.655190812e-05,-0.000274181366,3.490209929e-05,-6.276369095e-05]
-Rosenbrock     1           28          5000        0.003055    0.533075    0.000574     [1.001188993,1.002363563]
-Flat surface   1           5           5000        0.000748    0.722554    0.000000     [0.3136590123,0.2423152924,0.4294986725,0.9661970139,0.760209918]
-Foxholes       0           5000        5000        0.707546    0.707546    0.170922     [-32.1796875,-31.62988281]
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     96.599998    0.000848     0.000012    
+Rosenbrock      0.900000     209.500000   0.005145     0.000032    
+Flat surface    1.000000     6.100000     0.000261     0.000000    
+Foxholes        0.000000     1000.000000  0.035009     11.990150   
 Mutation type=uniform - Selection Type=tournament
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           71          5000        0.006287    0.437255    0.000099     [-7.629394531e-05,-0.0001412221463,0.0002617690479,2.517223038e-05]
-Rosenbrock     1           245         5000        0.068838    1.401849    0.000743     [0.9870201945,0.9741794467]
-Flat surface   1           3           5000        0.001003    1.596335    0.000000     [0.6627629995,0.2423152924,0.4294986725,0.3831652701,0.6786110401]
-Foxholes       1           4462        5000        1.403067    1.572245    0.046014     [-31.8203125,-31.89160156]
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          0.200000     841.599976   0.025031     0.000058    
+Rosenbrock      0.200000     805.799988   0.081119     0.000664    
+Flat surface    1.000000     17.400000    0.001873     0.000000    
+Foxholes        0.000000     1000.000000  0.109478     318.929810  
 Mutation type=gaussian - Selection Type=roulette
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           42          5000        0.001329    0.151422    0.000088     [5.418847877e-07,2.306478564e-08,1.006022558e-06,1.140734298e-07]
-Rosenbrock     1           155         5000        0.017436    0.544798    0.000983     [0.9999948144,0.9999896288]
-Flat surface   1           3           5000        0.000461    0.623161    0.000000     [0.8051653504,0.2036528587,0.4294986725,0.3236656189,0.9438681602]
-Foxholes       1           87          5000        0.012730    0.715425    0.074071     [-31.99951553,-31.99916458]
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          1.000000     60.599998    0.000544     0.000032    
+Rosenbrock      0.700000     442.100006   0.010542     0.000096    
+Flat surface    1.000000     6.600000     0.000291     0.000000    
+Foxholes        0.900000     270.899994   0.009304     0.003098    
 Mutation type=gaussian - Selection Type=tournament
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           34          5000        0.003046    0.441208    0.000051     [1.922569481e-08,3.864155929e-08,-1.171796669e-07,7.635776456e-09]
-Rosenbrock     1           1063        5000        0.314210    1.427854    0.000998     [0.9999759793,0.9999517202]
-Flat surface   1           2           5000        0.000687    1.610019    0.000000     [0.8102681637,0.2423152924,0.4294986725,0.3236656189,0.948045373]
-Foxholes       1           69          5000        0.022123    1.578619    0.009709     [-32.00000763,-32.00149536]
+Test            Converged    Iterations   Time         Min Fitness 
+Sphere          0.400000     834.200012   0.025162     0.000093    
+Rosenbrock      0.200000     825.500000   0.078845     0.000894    
+Flat surface    0.700000     310.399994   0.036778     0.000000    
+Foxholes        0.000000     1000.000000  0.105650     1.041531    
 ==================== GA Fake Benchmark ============================
 Selection type = "roulette"
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   0           500         500         0.320886    0.320886    1000.000000 
-Bench_4_1000   0           500         500         0.354664    0.354664    1000.000000 
-Bench_8_1000   0           500         500         0.483018    0.483018    1000.000000 
-Bench_16_1000  0           500         500         0.711931    0.711931    1000.000000 
-Bench_32_1000  0           500         500         1.193878    1.193878    1000.000000 
+Bench_2_1000    0.000000     500.000000   0.075853     0.000001    
+Bench_4_1000    0.000000     500.000000   0.099437     0.000002    
+Bench_8_1000    0.000000     500.000000   0.141882     0.000001    
+Bench_16_1000   0.000000     500.000000   0.226934     0.000003    
+Bench_32_1000   0.000000     500.000000   0.399730     0.000005    
 Selection type = "tournament"
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   0           500         500         0.689166    0.689166    1000.000000 
-Bench_4_1000   0           500         500         0.740102    0.740102    1000.000000 
-Bench_8_1000   0           500         500         0.857645    0.857645    1000.000000 
-Bench_16_1000  0           500         500         1.093007    1.093007    1000.000000 
-Bench_32_1000  0           500         500         1.579992    1.579992    1000.000000
-
-
-
-
-==================== GA Test ============================
-Mutation type=uniform - Selection Type=roulette
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           70          5000        0.004127    0.155646    0.000094     [4.882723442e-05,0.0004227068275,-4.637241364e-05,1.264570164e-05]
-Rosenbrock     1           50          5000        0.005623    0.545140    0.000835     [0.9969824553,0.9939488173]
-Flat surface   1           6           5000        0.000921    0.732995    0.000000     [0.8522057533,0.1505135298,0.9716230631,0.5792894363,0.351706028]
-Foxholes       0           5000        5000        0.714793    0.714793    0.191935     [-32.08105469,-32.42871094]
-Mutation type=uniform - Selection Type=tournament
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           56          5000        0.005065    0.447912    0.000042     [1.929549035e-05,3.1356205e-05,9.989985847e-05,-4.601955879e-05]
-Rosenbrock     1           1096        5000        0.308021    1.404824    0.000898     [1.004897594,1.009822488]
-Flat surface   1           3           5000        0.001013    1.599952    0.000000     [0.5189527273,0.2036528587,0.9413371086,0.3236656189,0.8156813383]
-Foxholes       1           4462        5000        1.407709    1.577408    0.046014     [-31.8203125,-31.89160156]
-Mutation type=gaussian - Selection Type=roulette
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           42          5000        0.001344    0.152913    0.000092     [-5.12227416e-08,1.035782589e-07,-5.38174163e-08,-6.255577318e-07]
-Rosenbrock     1           38          5000        0.004243    0.547297    0.000014     [1.000010133,1.000020266]
-Flat surface   1           12          5000        0.001876    0.628180    0.000000     [0.04876732826,0.2423152924,0.6517111659,0.3047601879,0.9704267979]
-Foxholes       1           101         5000        0.014877    0.720659    0.062420     [-31.99996758,-31.99995995]
-Mutation type=gaussian - Selection Type=tournament
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Sphere         1           48          5000        0.004339    0.442852    0.000085     [5.048764251e-08,-1.009539119e-09,-2.049582974e-07,1.963088607e-07]
-Rosenbrock     1           961         5000        0.283690    1.427531    0.001000     [0.9999542236,0.9999081492]
-Flat surface   1           2           5000        0.000693    1.613181    0.000000     [0.7708888054,0.2423152924,0.8695882559,0.3236656189,0.3966712952]
-Foxholes       1           58          5000        0.018634    1.580610    0.082503     [-32.0000267,-31.99968719]
-==================== GA Fake Benchmark ============================
-Selection type = "roulette"
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   0           500         500         0.327434    0.327434    1000.000000 
-Bench_4_1000   0           500         500         0.353308    0.353308    1000.000000 
-Bench_8_1000   0           500         500         0.488070    0.488070    1000.000000 
-Bench_16_1000  0           500         500         0.720567    0.720567    1000.000000 
-Bench_32_1000  0           500         500         1.207668    1.207668    1000.000000 
-Selection type = "tournament"
-Test           Converged   iter        maxIter     convTime    maxTime     Fitness     
-Bench_2_1000   0           500         500         0.681908    0.681908    1000.000000 
-Bench_4_1000   0           500         500         0.742623    0.742623    1000.000000 
-Bench_8_1000   0           500         500         0.861033    0.861033    1000.000000 
-Bench_16_1000  0           500         500         1.099383    1.099383    1000.000000 
-Bench_32_1000  0           500         500         1.598239    1.598239    1000.000000
-
-
-
+Bench_2_1000    0.000000     500.000000   0.223421     0.000002    
+Bench_4_1000    0.000000     500.000000   0.243059     0.000001    
+Bench_8_1000    0.000000     500.000000   0.287505     0.000002    
+Bench_16_1000   0.000000     500.000000   0.372662     0.000008    
+Bench_32_1000   0.000000     500.000000   0.547343     0.000000

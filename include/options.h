@@ -17,6 +17,7 @@ typedef enum { ROULETTE_WHEEL_SELECTION=1, TOURNAMENT_SELECTION } SelectionType;
 typedef enum { UNIFORM_CROSSOVER=1, SINGLE_POINT_CROSSOVER, TWO_POINT_CROSSOVER } CrossoverType;
 typedef enum { UNIFORM_MUTATION=1, GAUSSIAN_MUTATION} MutationType;
 typedef enum { NO_VERBOSE=0, SOFT_VERBOSE=1, HARD_VERBOSE=2} VerboseType;
+typedef enum { STOCHASTIC_ACCEPTANCE=0, BIN_SEARCH=1} RouletteType;
 /*
   Class used for option settings
 */

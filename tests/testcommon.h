@@ -32,6 +32,7 @@ class RALGTest {
 public:
     RALGTest();
     void test_argKthSmallest();
+    void test_searchIndexBinarySearch();
 };
 
 // Realchromosome Tests
@@ -49,7 +50,6 @@ public:
 class SelectionTests {
 public:
     SelectionTests();
-    void test_roulette_searchIndexBinarySearch();
     void test_roulette_select();
     void test_tournament_select();
 };

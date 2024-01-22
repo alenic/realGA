@@ -17,7 +17,7 @@ void coutColor(const char * s, TextColor color) {
 
 
 void printDistribution(vector<float> &x, size_t bins, int nstars) {
-    int *freq = new int[bins];
+    int *freq = new int(bins);
     for (int i=0; i<bins; ++i) freq[i] = 0;
 
     if(freq == NULL) {
@@ -38,5 +38,5 @@ void printDistribution(vector<float> &x, size_t bins, int nstars) {
         cout << string(freq[i] * nstars/x.size(), '*') << endl;
     }
     cout << endl;
-    delete freq;
+    delete[] freq;
 }

@@ -308,7 +308,7 @@ void RealGen::checkPopulation() {
     }
 }
 
-#define SORT 1
+#define SORT 0
 // ==================================================== Evolve ====================================================
 void RealGen::evolve() {
     // Allocate offspring (gene after crossover and mutation)
@@ -321,13 +321,13 @@ void RealGen::evolve() {
     fillFitnessValues(mPopulation);
     if(!SORT)
     {   
-        if (mGeneration == 0) {
+
             mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
             //cout << "original"<<endl;
             //for(int i=0;i<mFitnessValues.size();i++)cout << mFitnessValues[i] << ",";
             //cout << endl;
             //cout << "MBEST " << mKthSmallestFitness << endl << endl;
-        }
+
     }
 
     mSelectionAlgorithm->init(mFitnessValues);
@@ -357,7 +357,7 @@ void RealGen::evolve() {
             //cout << mFitnessValues[k] << " < " << mKthSmallestFitness << endl;
             mNewPopulation[k] = mPopulation[k];
             ++k;
-            countElite++;
+            ++countElite;
             continue;
         }
 
@@ -387,7 +387,7 @@ void RealGen::evolve() {
                 break;
         }
 
-        offspring.fitness  = evalFitness(offspring);
+        offspring.fitness = evalFitness(offspring);
         mNewPopulation[k] = offspring;
         ++k;
     }
@@ -402,7 +402,7 @@ void RealGen::evolve() {
     }
     else
     {
-
+    /*
     if(mElitismNumber > 0) {
         //for(int i=0;i<mFitnessValues.size();i++) cout << mNewPopulation[i].fitness << endl;
         fillFitnessValues(mNewPopulation);
@@ -410,7 +410,7 @@ void RealGen::evolve() {
         //exit(-1);
         // it doesn't overwrite mFitnessValues
         mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
-    }
+    }*/
 
     }
 

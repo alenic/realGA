@@ -83,7 +83,46 @@ int argKthSmallest(vector<float> &fitnessValues, int l, int r, int k) {
     return kthIndex;
 }
 
-
-
-
+// An iterative binary search function.
+int searchIndexBinarySearch(vector<float> arr, float x, int left, int right)
+{
+    int l=left, r=right;
+    int m = 0;
+    while (l < r) {
+        m = (r + l) / 2;
+        if (l==r) {
+            return m;
+        }
+        // modified binary search to find the right index
+        if(r == l+1) {
+            if (x > arr[l] && x < arr[r]) return l;
+            if (x > arr[r]) return r;
+        }
+        // Check if x is present at mid
+        if (arr[m] == x)
+            return m;
+        // If x greater, ignore left half
+        if (arr[m] < x)
+            l = m;
+        // If x is smaller, ignore right half
+        else
+            r = m;
+    }
+    // If we reach here, then element was not present
+    return m;
 }
+
+
+void minmax(vector<float> arr, float &minValue, float &maxValue) {
+    minValue = arr[0];
+    maxValue = arr[0];
+    // compute minimum and maximum
+    for(int i=1; i<arr.size(); i++) {
+        float v = arr[i];
+        if(v < minValue) minValue = v;
+        if(v > maxValue) maxValue = v;
+    }
+}
+
+
+} // RALG

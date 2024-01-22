@@ -13,16 +13,16 @@ int main() {
     statTest.test_uniformDist();
     statTest.test_gaussianDist(5.0, 2.0);
 
-
     cout << "==================== Algorithms Test ============================" << endl;
     ralgTest.test_argKthSmallest();
+    ralgTest.test_searchIndexBinarySearch();
 
     cout << "==================== RealChromosome Test ============================" << endl;
     realChromosomeUT.test_randUniform();
     realChromosomeUT.test_uniformMutate();
 
     cout << "==================== Selection Test ============================" << endl;
-    selectionUT.test_roulette_searchIndexBinarySearch();
+    
     selectionUT.test_roulette_select();
     selectionUT.test_tournament_select();
 

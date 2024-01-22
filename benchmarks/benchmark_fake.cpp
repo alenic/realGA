@@ -5,7 +5,7 @@ public:
     Benchmark() {}
 
     float eval(const RealChromosome &g) {
-        return 1000.0;
+        return Stat::randUniform();
     }
 };
 
@@ -13,8 +13,8 @@ void benchmark_fake(RealGenOptions opt, GAResults &results, int chromosomeSize, 
     vector<float> LB(chromosomeSize);
     vector<float> UB(chromosomeSize);
 
-    LB.assign(chromosomeSize, -1000);
-    UB.assign(chromosomeSize,  1000);
+    LB.assign(chromosomeSize, 0);
+    UB.assign(chromosomeSize, 1);
 
     Benchmark *myFitnessFunction = new Benchmark();
     results.name = "Bench_"+to_string(chromosomeSize)+"_"+to_string(populationSize);

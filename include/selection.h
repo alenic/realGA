@@ -8,10 +8,13 @@ website: https://github.com/alenic
 #ifndef REALGEN_SELECTION_H
 #define REALGEN_SELECTION_H
 #include "stat.h"
+#include "options.h"
+#include "algorithms.h"
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
+
 
 using namespace std;
 
@@ -27,17 +30,24 @@ public:
 class RouletteWheelSelection: public Selection {
 public:
     RouletteWheelSelection(int populationSize);
+    RouletteWheelSelection(int populationSize, RouletteType type);
     ~RouletteWheelSelection();
 
     void init(vector<float> &fitnessValues);
-    void computeCumulativeValues(vector<float> &fitnessValues);
-
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
-    int searchIndexBinarySearch(vector<float> arr, float x);
 private:
     vector<float> mCumulativeFitness;
 
+    // For stochastic acceptance
+    vector<float> mNormalizedFitness;
+    float mMinFitnessValue;
+    float mMaxFitnessValue;
+
     float mCumSum;
+    RouletteType mType;
+
+    void computeCumulativeValues(vector<float> &fitnessValues);
+    void selectStochasticAcceptance(int &indexA, int &indexB);
 };
 
 
@@ -62,7 +72,6 @@ private:
     // Local vectors for the tournaments
     float *mTournamentFitness;
     int *mTournamentIndex;
-
 };
 
 
