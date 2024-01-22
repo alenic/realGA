@@ -315,7 +315,6 @@ void RealGen::evolve() {
     while(k < mOptions.populationSize) {
 
         if((mFitnessValues[k] <= mKthSmallestFitness) && (countElite <= mElitismNumber)) {
-            //cout << mFitnessValues[k] << " < " << mKthSmallestFitness << endl;
             mNewPopulation[k] = mPopulation[k];
             ++k;
             ++countElite;
@@ -383,7 +382,6 @@ void RealGen::popInitRandGaussian(float mean, float sigma)
         mPopulation[i].randGaussian(mean, sigma);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
-
 }
 
 
@@ -455,7 +453,6 @@ void RealGen::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
         c.gene[i] = mPopulation[indexB].gene[i];
     }
 }
-
 
 
 //===================================== Mutation ======================

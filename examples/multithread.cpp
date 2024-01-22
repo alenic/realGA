@@ -146,16 +146,14 @@ vector<float> LB = {-5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0, -5.0};
 vector<float> UB = { 5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0,  5.0};  // Upper bound of genes
 
 
-
-
 void optimize(unsigned int seed, unsigned int nThreads) {
     RealGenOptions options;
 
     options.setChromosomeSize(10);
     options.setPopulationSize(200);
     options.setBounds(LB, UB);
-    options.setMaxGenerations(1500);
     options.setMutationType("gaussian");
+    options.setSelectionType("roulette");
     options.setMutationRate(0.05);
     options.setMutationGaussianPerc(0.01, 0.001);
     options.setSeed(seed);
@@ -170,9 +168,7 @@ void optimize(unsigned int seed, unsigned int nThreads) {
         ga = new RealGenMultithread(nThreads);
     }
 
-
     ga->init(options, myFitnessFunction, false);
-
 
     // Init population with uniform random genes between LB and UB
     ga->popInitRandUniform();

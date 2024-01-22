@@ -25,7 +25,6 @@ int main(int argc,  char** argv) {
     options.setChromosomeSize(2);
     options.setPopulationSize(200);
     options.setBounds(LB, UB);
-    options.setMaxGenerations(200);
     options.setMutationType("gaussian");
     options.setMutationRate(0.05);
     options.setMutationGaussianPerc(0.01, 0.001);

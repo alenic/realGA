@@ -50,22 +50,27 @@ void RealGenMultithread::evolve() {
     // Allocate offspring (a new gene)
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
-    int elitismIndex = (int)(mOptions.selectionElitismFactor * mOptions.populationSize);
     int k=0;
+    int countElite=0;
 
+    // fill mFitnessValues to accelerate some functions
+    fillFitnessValues(mPopulation);
+    // Find the kth smallest Fitness value
+    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
+
+    mSelectionAlgorithm->init(mFitnessValues);
     offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
-    // Fill fitness values vector
-    fillFitnessValues(mPopulation);
-    mSelectionAlgorithm->init(mFitnessValues);
+    // Generate New Population
+    while(k < mOptions.populationSize) {
 
-    // Keep the 0:elitismIndex elements in the new population
-    while (k < elitismIndex) {
-        mNewPopulation[k] = mPopulation[k];
-        ++k;
-    }
+        if((mFitnessValues[k] <= mKthSmallestFitness) && (countElite <= mElitismNumber)) {
+            mNewPopulation[k] = mPopulation[k];
+            ++k;
+            ++countElite;
+            continue;
+        }
 
-     while(k < mOptions.populationSize) {
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
@@ -79,26 +84,26 @@ void RealGenMultithread::evolve() {
                 break;
         }
         
-
         // Mutation
         switch(mOptions.mutationType) {
             case UNIFORM_MUTATION:
-                uniformMutate(offspring, mOptions.mutationRate, mGaussianPerc);
+                uniformMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
                 break;
             case GAUSSIAN_MUTATION:
-                gaussianMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
+                gaussianMutate(offspring, mOptions.mutationRate, mGaussianPerc);
                 break;
         }
+
         mNewPopulation[k] = offspring;
         ++k;
     }
 
 
-    int interval = ceil((float)(mOptions.populationSize-elitismIndex)/(float)nThread);
+    int interval = ceil((float)(mOptions.populationSize)/(float)nThread);
     thread_params localThreadParam[nThread];
 
     for (int i = 0; i < nThread; ++i) {
-        localThreadParam[i].startIndex = elitismIndex + interval*i;
+        localThreadParam[i].startIndex = interval*i;
         localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
         localThreadParam[i].ga = this;
 
@@ -124,8 +129,6 @@ void RealGenMultithread::evolve() {
 #endif
     }
 
-    partial_sort(mNewPopulation.begin(), mNewPopulation.begin()+elitismIndex, mNewPopulation.end());
-
     if(mOptions.mutationType == GAUSSIAN_MUTATION) {
         if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
             mGaussianPerc = 1.0f - mOptions.mutationGaussianPercDelta*(float)mGeneration;
@@ -133,7 +136,10 @@ void RealGenMultithread::evolve() {
             mGaussianPerc = mOptions.mutationGaussianPercMin;
         }
     }
+
+    for(int i=0; i<mPopulation.size(); i++) {
+        mPopulation[i] = mNewPopulation[i];
+    }
     
-    mPopulation = mNewPopulation;
     mGeneration++;
 }

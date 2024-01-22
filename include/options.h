@@ -30,7 +30,6 @@ public:
     void setLowerBounds(const vector<float> &lb);
     void setUpperBounds(const vector<float> &ub);
     void setBounds(const vector<float> &lb, const vector<float> &ub);
-    void setMaxGenerations(int value);
     void setVerbose(string value);
     void setSeed(bool seedValue);
 
@@ -53,7 +52,6 @@ public:
     int chromosomeSize;
     vector<float> lowerBounds;
     vector<float> upperBounds;
-    int maxGenerations;
     int seed;
     VerboseType verbose;
 

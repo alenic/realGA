@@ -10,8 +10,6 @@ website: https://github.com/alenic
 RealGenOptions::RealGenOptions() {
     populationSize = 100;
 
-    maxGenerations = 100 * populationSize;
-
     selectionType = ROULETTE_WHEEL_SELECTION;
     selectionTournamentSize = 16;
     selectionTournamentProbability = 1.0;
@@ -59,10 +57,6 @@ void RealGenOptions::setUpperBounds(const vector<float> &ub) {
 void RealGenOptions::setBounds(const vector<float> &lb, const vector<float> &ub) {
     lowerBounds = lb;
     upperBounds = ub;
-}
-
-void RealGenOptions::setMaxGenerations(int value) {
-    maxGenerations = value;
 }
 
 void RealGenOptions::setVerbose(string value) {
