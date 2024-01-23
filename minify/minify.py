@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     min_chars = len(minified_code)
     print("//Original chars: ",  orig_chars)
-    print("//Original chars: ",  min_chars)
-    print(f"//min/original:  {100*min_chars/orig_chars:.2f}%")
+    print("//Minified chars: ",  min_chars)
+    print(f"//minified/original:  {100*min_chars/orig_chars:.2f}%")
 
     print(minified_code)
