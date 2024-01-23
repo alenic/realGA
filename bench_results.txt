@@ -1,38 +1,37 @@
-==================== GA Test ============================
 Mutation type=uniform - Selection Type=roulette
-Test            Converged    Iterations   Time         Min Fitness 
-Sphere          1.000000     95.680000    0.000793     0.000010    
-Rosenbrock      0.970000     187.279999   0.004515     0.000009    
-Flat surface    1.000000     5.610000     0.000236     0.000000    
-Foxholes        0.010000     994.479980   0.035077     0.097558    
+Test            Converged    Iterations   Time         Min Fitness
+Sphere          1.000000     53.439999    0.000507     0.000002
+Rosenbrock      1.000000     32.759998    0.001036     0.000001
+Flat surface    1.000000     5.460000     0.000969     0.000000
+Foxholes        0.070000     969.729980   0.047591     0.019713
 Mutation type=uniform - Selection Type=tournament
-Test            Converged    Iterations   Time         Min Fitness 
-Sphere          1.000000     24.740000    0.000779     0.000008    
-Rosenbrock      0.730000     423.040009   0.044760     0.000001    
-Flat surface    1.000000     2.260000     0.000253     0.000000    
-Foxholes        0.040000     982.630005   0.113482     0.009733    
+Test            Converged    Iterations   Time         Min Fitness
+Sphere          1.000000     24.590000    0.000738     0.000020
+Rosenbrock      1.000000     17.950001    0.001726     0.000023
+Flat surface    1.000000     2.040000     0.000523     0.000000
+Foxholes        0.090000     969.520020   0.115946     0.014984
 Mutation type=gaussian - Selection Type=roulette
-Test            Converged    Iterations   Time         Min Fitness 
-Sphere          1.000000     52.209999    0.000462     0.000018    
-Rosenbrock      0.640000     531.719971   0.012669     0.000001    
-Flat surface    1.000000     6.290000     0.000272     0.000000    
-Foxholes        0.900000     300.220001   0.010476     0.002442    
+Test            Converged    Iterations   Time         Min Fitness
+Sphere          1.000000     47.730000    0.000400     0.000010
+Rosenbrock      1.000000     42.240002    0.001343     0.000010
+Flat surface    1.000000     11.480000    0.002469     0.000000
+Foxholes        1.000000     84.040001    0.004097     0.003309
 Mutation type=gaussian - Selection Type=tournament
-Test            Converged    Iterations   Time         Min Fitness 
-Sphere          1.000000     29.940001    0.001000     0.000002    
-Rosenbrock      0.790000     531.909973   0.052721     0.000185    
-Flat surface    1.000000     2.420000     0.000272     0.000000    
-Foxholes        1.000000     65.720001    0.007500     0.005528    
+Test            Converged    Iterations   Time         Min Fitness
+Sphere          1.000000     30.510000    0.000934     0.000009
+Rosenbrock      1.000000     23.330000    0.002283     0.000009
+Flat surface    1.000000     2.990000     0.000853     0.000000
+Foxholes        1.000000     57.230000    0.007269     0.002248
 ==================== GA Fake Benchmark ============================
 Selection type = "roulette"
-Bench_2_1000    0.000000     500.000000   0.075014     0.000003    
-Bench_4_1000    0.000000     500.000000   0.096234     0.000003    
-Bench_8_1000    0.000000     500.000000   0.145521     0.000004    
-Bench_16_1000   0.000000     500.000000   0.228150     0.000002    
-Bench_32_1000   0.000000     500.000000   0.401684     0.000000    
+Bench_2_1000    0.000000     500.000000   0.174391     0.000001
+Bench_4_1000    0.000000     500.000000   0.188862     0.000004
+Bench_8_1000    0.000000     500.000000   0.227127     0.000008
+Bench_16_1000   0.000000     500.000000   0.292979     0.000001
+Bench_32_1000   0.000000     500.000000   0.434377     0.000000
 Selection type = "tournament"
-Bench_2_1000    0.000000     500.000000   0.236511     0.000008    
-Bench_4_1000    0.000000     500.000000   0.258119     0.000004    
-Bench_8_1000    0.000000     500.000000   0.303254     0.000004    
-Bench_16_1000   0.000000     500.000000   0.389230     0.000008    
-Bench_32_1000   0.000000     500.000000   0.565833     0.000000
+Bench_2_1000    0.000000     500.000000   0.295765     0.000001
+Bench_4_1000    0.000000     500.000000   0.312249     0.000001
+Bench_8_1000    0.000000     500.000000   0.353362     0.000004
+Bench_16_1000   0.000000     500.000000   0.413171     0.000001
+Bench_32_1000   0.000000     500.000000   0.568932     0.000003

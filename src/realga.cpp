@@ -178,37 +178,11 @@ string realGA::populationToString() {
     return os.str();
 }
 
-
-bool realGA::checkChromosome(RealChromosome &chromosome) {
-    for (int j = 0; j < mOptions.chromosomeSize; ++j) {
-        if (isnan(chromosome.gene[j]) || isinf(chromosome.gene[j]) ){
-            cout << "checkGene Failed:" << endl;
-            cout << chromosome.toString() << endl;
-            cout << " has gene[" << j << "] = " << chromosome.gene[j] << " not normal" << endl;
-            return false;
-        }
-        if (chromosome.gene[j] < mOptions.lowerBounds[j]) {
-            cout << "checkGene Failed:" << endl;
-            cout << chromosome.toString() << endl;
-            cout << " has gene[" << j << "] = " << chromosome.gene[j] << " < LB = " << mOptions.lowerBounds[j] << endl;
-            return false;
-        }
-        if (chromosome.gene[j] > mOptions.upperBounds[j]) {
-            cout << "checkGene Failed:" << endl;
-            cout << chromosome.toString() << endl;
-            cout << " has gene[" << j << "] = " << chromosome.gene[j] << " > UB = " << mOptions.upperBounds[j] << endl;
-            return false;
-        }
-    }
-    return true;
-}
-
-
 void realGA::checkPopulation() {
     for (int i = 0; i < mOptions.populationSize; i++) {
-        if (!checkChromosome(mPopulation[i])) {
-            cout << "checkPopulation Failed: Chromosome " << i << endl;
-            exit(-1);
+        for (int j = 0; j < mOptions.chromosomeSize; ++j) {
+            REALGA_ERROR(isnan(mPopulation[i].gene[j])||isinf(mPopulation[i].gene[j]),
+            "error in chromosome "<<i<<" "<<mPopulation[i].toString());
         }
     }
 }
@@ -225,14 +199,14 @@ void realGA::evolve() {
     fillFitnessValues(mPopulation);
 
     // Find the kth smallest Fitness value
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber);
+    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
     mSelectionAlgorithm->init(mFitnessValues);
     offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
     // Generate New Population
     while(k < mOptions.populationSize) {
-        if((mFitnessValues[k] <= mKthSmallestFitness) && (countElite <= mElitismNumber)) {
+        if((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber)) {
             mNewPopulation[k] = mPopulation[k];
             ++k;
             ++countElite;
@@ -253,16 +227,26 @@ void realGA::evolve() {
         }
         
         // Mutation
-        switch(mOptions.mutationType) {
-            case UNIFORM_MUTATION:
-                uniformMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
-                break;
-            case GAUSSIAN_MUTATION:
-                gaussianMutate(offspring, mOptions.mutationRate, mGaussianPerc);
-                break;
+        if(mOptions.mutationType == UNIFORM_MUTATION) {
+            uniformMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
+        } else if (mOptions.mutationType == GAUSSIAN_MUTATION){
+            gaussianMutate(offspring, mOptions.mutationRate, mGaussianPerc);
         }
 
         offspring.fitness = evalFitness(offspring);
+
+        // Force mutation if a chromosome fitness is duplicated
+        for(int j=0; j<k; j++) {
+            if(offspring.fitness == mNewPopulation[j].fitness) {
+                if(mOptions.mutationType == UNIFORM_MUTATION) {
+                    uniformMutate(offspring, 1.0, mOptions.mutationUniformPerc);
+                } else if (mOptions.mutationType == GAUSSIAN_MUTATION){
+                    gaussianMutate(offspring, 1.0, mGaussianPerc);
+                }
+                offspring.fitness = evalFitness(offspring);
+            }
+        }
+
         mNewPopulation[k] = offspring;
         ++k;
     }
@@ -344,23 +328,23 @@ void realGA::popInitSetPopulation(vector<RealChromosome> &population)
 }
 
 //==================================== Crossover ==================
-void realGA::crossoverUniform(int indexA, int indexB, RealChromosome &c) {
+void realGA::crossoverUniform(int indexA, int indexB, RealChromosome &offspring) {
     for(int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform()<0.5) {
-            c.gene[j] = mPopulation[indexA].gene[j];
+            offspring.gene[j] = mPopulation[indexA].gene[j];
         } else {
-            c.gene[j] = mPopulation[indexB].gene[j];
+            offspring.gene[j] = mPopulation[indexB].gene[j];
         }
     }
 }
 
 
-void realGA::crossoverFixed(int indexA, int indexB, RealChromosome &c, int n) {
-    for(int i=0; i<n; i++) {
-        c.gene[i] = mPopulation[indexA].gene[i];
+void realGA::crossoverFixed(int indexA, int indexB, RealChromosome &offspring, int splitIndex) {
+    for(int i=0; i<splitIndex; i++) {
+        offspring.gene[i] = mPopulation[indexA].gene[i];
     }
-    for(int i=n; i<mOptions.chromosomeSize; i++) {
-        c.gene[i] = mPopulation[indexB].gene[i];
+    for(int i=splitIndex; i<mOptions.chromosomeSize; i++) {
+        offspring.gene[i] = mPopulation[indexB].gene[i];
     }
 }
 

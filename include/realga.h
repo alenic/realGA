@@ -52,8 +52,7 @@ public:
     //float getDiversity();  // -> TODO
     vector<RealChromosome> getPopulation();
 
-    // Checking
-    bool checkChromosome(RealChromosome &chromosome);
+    // Debugging
     void checkPopulation();
     string populationToString();
 
@@ -65,8 +64,8 @@ public:
     void popInitSetPopulation(vector<RealChromosome>  &population);
 
     // Crossover
-    void crossoverUniform(int indexA, int indexB, RealChromosome &c);
-    void crossoverFixed(int indexA, int indexB, RealChromosome &c, int n);
+    void crossoverUniform(int indexA, int indexB, RealChromosome & offspring);
+    void crossoverFixed(int indexA, int indexB, RealChromosome &offspring, int splitIndex);
     // Mutation
     void uniformMutate(RealChromosome &chromosome, float mutationRate, float perc);
     void gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc);

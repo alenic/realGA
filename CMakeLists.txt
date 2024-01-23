@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(realGA)
-
+set(default_build_type "Release")
 
 set(CMAKE_SUPPRESS_REGENERATION true)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-sign-compare")

@@ -80,6 +80,8 @@ public:
     // Uniform mutation
     float mutationUniformPerc;
     // Gaussian mutation
+    //  mutationGaussianPercDelta suggestion:
+    //  setMutationGaussianPerc(1.0 / (number of iterations to reach the PercMin), PercMin);
     float mutationGaussianPercDelta;
     float mutationGaussianPercMin;
 };
