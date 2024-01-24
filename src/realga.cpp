@@ -80,10 +80,10 @@ void realGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         resetPopulation();
         
         // Set bounds to all chromosomes
-        for (int i = 0; i < mPopulation.size(); ++i) {
-            mPopulation[i].setBounds(mOptions.lowerBounds, mOptions.upperBounds);
-            mNewPopulation[i].setBounds(mOptions.lowerBounds, mOptions.upperBounds);
-        }
+        //for (int i = 0; i < mPopulation.size(); ++i) {
+        //    mPopulation[i].setBounds(mOptions.lowerBounds, mOptions.upperBounds);
+        //    mNewPopulation[i].setBounds(mOptions.lowerBounds, mOptions.upperBounds);
+        //}
         
         // Initialize gaussian standard deviation
         if(mOptions.mutationType == GAUSSIAN_MUTATION) {
@@ -104,6 +104,10 @@ void realGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
 
         Stat::setSeed(mOptions.seed);
         mGeneration = 0;
+        mOptions.checkOptions();
+        // Set bounds
+        mLB = mOptions.lowerBounds;
+        mUB = mOptions.upperBounds;
     }
     mElitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
 }
@@ -202,7 +206,6 @@ void realGA::evolve() {
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
     mSelectionAlgorithm->init(mFitnessValues);
-    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
     // Generate New Population
     while(k < mOptions.populationSize) {
@@ -271,7 +274,7 @@ void realGA::popInitRandUniform()
 // Init random uniform population
 {
     for(int i=0; i<mOptions.populationSize; i++) {
-        mPopulation[i].randUniform();
+        mPopulation[i].randUniform(mLB, mUB);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
     
@@ -281,7 +284,7 @@ void realGA::popInitRandGaussian(float mean, float sigma)
 // Init random gaussian population
 {
     for(int i=0; i<mOptions.populationSize; i++) {
-        mPopulation[i].randGaussian(mean, sigma);
+        mPopulation[i].randGaussian(mean, sigma, mLB, mUB);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 }
@@ -291,7 +294,6 @@ void realGA::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float
 // Init population from a given chromosome and mutate it
 {
     RealChromosome g(mOptions.chromosomeSize);
-    g.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
     for(int i=0; i<mOptions.chromosomeSize; i++) {
         g.gene[i] = gene[i];
     }
@@ -353,7 +355,7 @@ void realGA::crossoverFixed(int indexA, int indexB, RealChromosome &offspring, i
 void realGA::uniformMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int i=0; i<mOptions.chromosomeSize; i++) {
         if(Stat::randUniform() < mutationRate) {
-            chromosome.uniformMutate(i, perc);
+            chromosome.uniformMutate(i, perc, mLB, mUB);
         }
     }
 }
@@ -361,7 +363,7 @@ void realGA::uniformMutate(RealChromosome &chromosome, float mutationRate, float
 void realGA::gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc) {
     for (int j=0; j<mOptions.chromosomeSize; j++) {
         if(Stat::randUniform() < mutationRate) {
-            chromosome.gaussianMutate(j, perc);
+            chromosome.gaussianMutate(j, perc, mLB, mUB);
         }
     }
 }

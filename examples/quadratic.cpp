@@ -28,7 +28,7 @@ int main(int argc,  char** argv) {
     options.setMutationType("gaussian");
     options.setMutationRate(0.05);
     options.setMutationGaussianPerc(0.01, 0.001);
-    options.setSelectionType("tournament");
+    options.setSelectionType("roulette");
     options.setSelectionTournamentProbability(0.8);
     options.setVerbose("soft");
     // Define realGA(Population size, number of genes in a chromosome, LB, UB)
@@ -39,7 +39,7 @@ int main(int argc,  char** argv) {
     // Init population with uniform random
     ga.popInitRandUniform();
     // Evolve the population for 100 times
-    for (int i=0; i<100; i++) {
+    for (int i=0; i<1000; i++) {
         ga.evolve();
     }
     // get the best score function (the minimum)

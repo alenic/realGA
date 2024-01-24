@@ -25,9 +25,6 @@ public:
     vector<float> gene;
     float fitness;
 
-    vector<float> LB;
-    vector<float> UB;
-
     RealChromosome();
     RealChromosome(int n);
     RealChromosome(const RealChromosome &c);
@@ -35,14 +32,12 @@ public:
 
     string toString();
 
-    void setBounds(const vector<float> &lb, const vector<float> &ub);
-
-    void randUniform();
-    void randUniform(int i);
-    void uniformMutate(int i, float perc);
-    void randGaussian(float mean, float sigma);
-    void randGaussian(int i, float mean, float sigma);
-    void gaussianMutate(int i, float perc);
+    void randUniform(vector<float> &lb, vector<float> &ub);
+    void randUniform(int i, vector<float> &lb, vector<float> &ub);
+    void uniformMutate(int i, float perc, vector<float> &lb, vector<float> &ub);
+    void randGaussian(float mean, float sigma,  vector<float> &lb, vector<float> &ub);
+    void randGaussian(int i, float mean, float sigma, vector<float> &lb, vector<float> &ub);
+    void gaussianMutate(int i, float perc, vector<float> &lb, vector<float> &ub);
 
     float distanceTo(RealChromosome &);
 

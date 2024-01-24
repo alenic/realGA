@@ -52,7 +52,6 @@ void RealGenMultithread::evolve() {
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
     mSelectionAlgorithm->init(mFitnessValues);
-    offspring.setBounds(mOptions.lowerBounds, mOptions.upperBounds);
 
     // Generate New Population
     while(k < mOptions.populationSize) {

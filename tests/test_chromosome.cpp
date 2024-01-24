@@ -15,11 +15,11 @@ void RealChromosomeTest::test_randUniform() {
         LB[i] = 100 * rand() - 50;
         UB[i] = LB[i] + 10;
     }
-    g.setBounds(LB, UB);
+
     bool fail = false;
     for(int n=1; n<=40 && !fail; n++) {
         g.gene.resize(n);
-        g.randUniform();
+        g.randUniform(LB, UB);
         for(int i=0; i<n; i++) {
             if(g.gene[i] < LB [i] || g.gene[i] > UB[i]) {
                 fail = true;
@@ -43,13 +43,12 @@ void RealChromosomeTest::test_uniformMutate() {
     vector<float> LB = { 0.0 };
     vector<float> UB = { 1.0 };
 
-    g.setBounds(LB, UB);
     bool fail = false;
     float minValue = 1.0;
     float maxValue = 0.0;
     for(int i=0; i<10000; i++) {
         g.gene[0] = 0.5;
-        g.uniformMutate(0, 0.4);
+        g.uniformMutate(0, 0.4, LB, UB);
         if(g.gene[0] < minValue) {
             minValue = g.gene[0];
         }

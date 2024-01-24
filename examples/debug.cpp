@@ -23,10 +23,10 @@ int main(int argc,  char** argv) {
     QuadraticFitness *myFitnessFunction = new QuadraticFitness();
     RealGAOptions options;
     options.setChromosomeSize(2);
-    options.setPopulationSize(20);
+    options.setPopulationSize(200);
     options.setBounds(LB, UB);
     options.setMutationType("gaussian");
-    options.setMutationRate(0.05);
+    options.setMutationRate(0.1);
     options.setMutationGaussianPerc(1.0/10.0, 0.001);
     options.setSelectionType("roulette");
     options.setSelectionTournamentProbability(0.8);
@@ -45,7 +45,7 @@ int main(int argc,  char** argv) {
     cout << "Best Fitness value = " << best.fitness << endl;
 
     // Evolve the population for 100 times
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<1000; i++) {
         ga.evolve();
         // Print results
         RealChromosome best = ga.getBestChromosome();

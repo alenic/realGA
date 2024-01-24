@@ -73,6 +73,9 @@ public:
     virtual void evolve();
 
 protected:
+    vector<float> mLB;
+    vector<float> mUB;
+
     vector<RealChromosome> mPopulation;
     vector<RealChromosome> mNewPopulation;
     RealGAOptions mOptions;

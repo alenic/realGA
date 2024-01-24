@@ -16,8 +16,6 @@ RealChromosome::RealChromosome(const RealChromosome &c)
 {
     gene = c.gene;
     fitness = c.fitness;
-    LB = c.LB;
-    UB = c.UB;
 }
 
 RealChromosome::~RealChromosome()
@@ -28,8 +26,6 @@ RealChromosome::~RealChromosome()
 RealChromosome & RealChromosome::operator= (const RealChromosome &c) {
     gene = c.gene;
     fitness = c.fitness;
-    LB = c.LB;
-    UB = c.UB;
     return *this;
 }
 
@@ -43,12 +39,6 @@ bool RealChromosome::operator==(const RealChromosome &other) const {
         if(gene[i] != other.gene[i]) return false;
     }
     return true;
-}
-
-void RealChromosome::setBounds(const vector<float> &lb, const vector<float> &ub)
-{
-    LB = lb;
-    UB = ub;
 }
 
 string RealChromosome::toString() {
@@ -71,46 +61,46 @@ float RealChromosome::distanceTo(RealChromosome &g) {
     return sqrt(sse);
 }
 
-void RealChromosome::randUniform()
+void RealChromosome::randUniform(vector<float> &lb, vector<float> &ub)
 {
     for(int i=0; i<gene.size(); i++) {
-        gene[i] = Stat::randUniform(LB[i], UB[i]);
+        gene[i] = Stat::randUniform(lb[i], ub[i]);
     }
 }
 
-void RealChromosome::randUniform(int i)
+void RealChromosome::randUniform(int i, vector<float> &lb, vector<float> &ub)
 {
-    gene[i] = Stat::randUniform(LB[i], UB[i]);
+    gene[i] = Stat::randUniform(lb[i], ub[i]);
 }
 
-void RealChromosome::uniformMutate(int i, float perc)
+void RealChromosome::uniformMutate(int i, float perc, vector<float> &lb, vector<float> &ub)
 {
-    float fraction = perc*(Stat::randUniform()-0.5)*(UB[i]-LB[i]);
+    float fraction = perc*(Stat::randUniform()-0.5)*(ub[i]-lb[i]);
     // Mutate
     gene[i] += fraction;
 
-    if(gene[i] < LB[i])
-        gene[i] = LB[i];
-    if(gene[i] > UB[i])
-        gene[i] = UB[i];
+    if(gene[i] < lb[i])
+        gene[i] = lb[i];
+    if(gene[i] > ub[i])
+        gene[i] = ub[i];
 }
 
-void RealChromosome::randGaussian(float mean, float sigma)
+void RealChromosome::randGaussian(float mean, float sigma, vector<float> &lb, vector<float> &ub)
 {
     for(int i=0; i<gene.size(); i++) {
         gene[i] = Stat::randGaussian(mean, sigma);
-        if (gene[i] < LB[i]) gene[i] = LB[i];
-        if (gene[i] > UB[i]) gene[i] = UB[i];
+        if (gene[i] < lb[i]) gene[i] = lb[i];
+        if (gene[i] > ub[i]) gene[i] = ub[i];
     }
 }
 
-void RealChromosome::randGaussian(int i, float mean, float sigma)
+void RealChromosome::randGaussian(int i, float mean, float sigma, vector<float> &lb, vector<float> &ub)
 {
-    gene[i] = Stat::randUniform(LB[i], UB[i]);
+    gene[i] = Stat::randUniform(lb[i], ub[i]);
 }
 
-void RealChromosome::gaussianMutate(int i, float perc) {
-    float delta = UB[i] - LB[i];
+void RealChromosome::gaussianMutate(int i, float perc, vector<float> &lb, vector<float> &ub) {
+    float delta = ub[i] - lb[i];
 
     // 2 * sigma = delta / 2
     float sigma = perc * (delta / 4.0f);
@@ -122,10 +112,11 @@ void RealChromosome::gaussianMutate(int i, float perc) {
 
     // Mutate
     gene[i] += r;
-    if (gene[i] < LB[i])
-        gene[i] = LB[i];
-    if (gene[i] > UB[i])
-        gene[i] = UB[i];
+    
+    if(gene[i] < lb[i])
+        gene[i] = lb[i];
+    if(gene[i] > ub[i])
+        gene[i] = ub[i];
 }
 
 
