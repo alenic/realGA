@@ -114,4 +114,12 @@ To test realGA you can execute the **tests.bin** executable into **build/tests**
 # Benchmarks
 To perform realGA's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
 
-  
+# Minified Code
+In some situations, like online competitions, could be useful to have a compressed version of the library code inside a single file.
+
+The bash script
+
+```
+./minify.sh
+```
+produces a minified version of **realGA** in **./minify/realga_lib_minified.h**.
