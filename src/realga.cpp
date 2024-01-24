@@ -134,18 +134,16 @@ float RealGA::evalFitness(const RealChromosome &x) {
 }
 
 RealChromosome RealGA::getBestChromosome() {
-    RealChromosome best;
     int minIndex=0;
     float minValue=mPopulation[0].fitness;
-    for(int i=0; i<mPopulation.size(); i++) {
+    for(int i=1; i<mPopulation.size(); i++) {
         float value = mPopulation[i].fitness;
         if(value < minValue) {
             minValue = value;
             minIndex = i;
         }
     }
-    best = mPopulation[minIndex];
-    return best;
+    return mPopulation[minIndex];
 }
 
 /*
