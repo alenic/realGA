@@ -1,6 +1,6 @@
 #include "realga_mt.h"
 
-RealGenMultithread::RealGenMultithread(unsigned int nThread) : realGA() {
+RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGA() {
 #ifdef _WIN32
     localThread = new HANDLE[nThread];
 #else

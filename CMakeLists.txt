@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(realGA)
+project(RealGA)
 
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")

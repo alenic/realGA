@@ -160,10 +160,10 @@ void optimize(unsigned int seed, unsigned int nThreads) {
 
     MyFitnessFunction *myFitnessFunction = new MyFitnessFunction();
 
-    realGA *ga;
+    RealGA *ga;
 
     if (nThreads==1) {
-        ga = new realGA();
+        ga = new RealGA();
     } else {
         ga = new RealGenMultithread(nThreads);
     }

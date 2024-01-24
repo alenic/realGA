@@ -56,7 +56,7 @@ int main(int argc,  char** argv) {
     options.setVerbose("none");
 
 
-    realGA ga;
+    RealGA ga;
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random

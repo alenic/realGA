@@ -5,7 +5,7 @@
     license: MIT
 
     file description:
-        realGA algorithms for general purpose
+        RealGA algorithms for general purpose
 ---------------------------------------------
 */
 #ifndef REALGA_ALGORITHMS_H

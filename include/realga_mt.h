@@ -31,7 +31,7 @@
 
 #include "realga.h"
 
-class RealGenMultithread: public realGA {
+class RealGenMultithread: public RealGA {
 private:
     unsigned int nThread;
 #ifdef _WIN32

@@ -28,7 +28,7 @@ void benchmark_sphere(RealGAOptions opt, GAResults &results) {
     opt.setChromosomeSize(4);
     opt.setBounds(LB, UB);
 
-    realGA ga;
+    RealGA ga;
     ga.init(opt, myFitnessFunction, false);
     
     benchmarkRealGen(ga, results.maxIter, 1e-4, results, BENCH_NUM_EXPERIMENTS);

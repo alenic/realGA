@@ -24,7 +24,7 @@ void benchmark_rosenbrock(RealGAOptions opt, GAResults &results) {
     opt.setPopulationSize(results.Np);
     opt.setChromosomeSize(2);
     opt.setBounds(LB, UB);
-    realGA ga;
+    RealGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 1e-3, results, BENCH_NUM_EXPERIMENTS);

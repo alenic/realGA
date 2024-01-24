@@ -24,7 +24,7 @@ int main(int argc,  char** argv) {
     options.setVerbose("soft");
 
     // Init Genetic Algorithm with options, fitness function and keepState=false
-    realGA ga;
+    RealGA ga;
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random between LB and UB

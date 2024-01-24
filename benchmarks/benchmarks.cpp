@@ -1,7 +1,7 @@
 #include "benchmarks.h"
 
 
-void benchmarkRealGen(realGA &ga, int maxIter, float eps, GAResults &results, int numExperiments) {
+void benchmarkRealGen(RealGA &ga, int maxIter, float eps, GAResults &results, int numExperiments) {
     vector<GAResults> resultsVector(numExperiments);
     int generation;
 

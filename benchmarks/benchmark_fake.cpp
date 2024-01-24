@@ -25,7 +25,7 @@ void benchmark_fake(RealGAOptions opt, GAResults &results, int chromosomeSize, i
     opt.setChromosomeSize(chromosomeSize);
     opt.setBounds(LB, UB);
 
-    realGA ga;
+    RealGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 0.0f, results, 1);

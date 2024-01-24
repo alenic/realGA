@@ -32,10 +32,10 @@
 
 using namespace std;
 
-class realGA {
+class RealGA {
 public:
-    realGA();
-    ~realGA();
+    RealGA();
+    ~RealGA();
     // Setter
     void restart();
     void init(RealGAOptions &opt, FitnessFunction *func, bool keepState);

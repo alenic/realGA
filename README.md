@@ -1,4 +1,4 @@
-# realGA
+# RealGA
 
 <p align="center">
   <img src="images/logo.png" width="140" alt="Nest Logo" />
@@ -38,7 +38,7 @@ int main(int argc,  char** argv) {
     options.setVerbose("soft");
 
     // Init Genetic Algorithm with options, fitness function and keepState=false
-    realGA ga;
+    RealGA ga;
     ga.init(options, myFitnessFunction, false);
 
     // Init population with uniform random between LB and UB
@@ -79,8 +79,8 @@ A genetic algorithm may struggle to converge to the true global minimum due to t
 On terminal
 
 ```
-git clone https://github.com/alenic/realGA.git
-cd realGA
+git clone https://github.com/alenic/RealGA.git
+cd RealGA
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -92,12 +92,12 @@ make
 
 On Powershell
 ```
-git clone https://github.com/alenic/realGA.git
-cd realGA
+git clone https://github.com/alenic/RealGA.git
+cd RealGA
 mkdir build
 cd build
 cmake ..
-MSBuild.exe .\realGA.sln /p:Configuration=Release
+MSBuild.exe .\RealGA.sln /p:Configuration=Release
 ```
 
 If you want to use Win64 compiler use the command:
@@ -109,10 +109,10 @@ cmake -G "Visual Studio 14 2015 Win64" ..
 It will generates the static library **librealga.a** and the shared library **librealga_shared.so** into the folder **build/libs**
 
 # Tests
-To test realGA you can execute the **tests.bin** executable into **build/tests** folder
+To test RealGA you can execute the **tests.bin** executable into **build/tests** folder
 
 # Benchmarks
-To perform realGA's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
+To perform RealGA's benchmarks you can execute the **benchmarks.bin** executable into **build/benchmarks** folder
 
 # Minified Code
 In some situations, like online competitions, could be useful to have a compressed version of the library code inside a single file.
@@ -122,4 +122,4 @@ The bash script
 ```
 ./minify.sh
 ```
-produces a minified version of **realGA** in **./minify/realga_lib_minified.h**.
+produces a minified version of **RealGA** in **./minify/realga_lib_minified.h**.

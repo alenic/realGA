@@ -27,7 +27,7 @@ void benchmark_flatSurface(RealGAOptions opt, GAResults &results) {
     opt.setChromosomeSize(5);
     opt.setBounds(LB, UB);
 
-    realGA ga;
+    RealGA ga;
     ga.init(opt, myFitnessFunction, false);
 
     benchmarkRealGen(ga, results.maxIter, 1, results, BENCH_NUM_EXPERIMENTS);
