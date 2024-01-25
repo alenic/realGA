@@ -39,6 +39,7 @@ public:
     void setVerbose(string value);
     void setSeed(unsigned int seedValue);
     void setElitismFactor(float value);
+    void setMutateDuplicatedFitness(bool value);
     
     void setSelectionType(string value);
     void setSelectionTournamentSize(int value);
@@ -64,6 +65,7 @@ public:
     VerboseType verbose;
 
     float elitismFactor;
+    bool mutateDuplicatedFitness;
 
     //SelectionOpt
     SelectionType selectionType;

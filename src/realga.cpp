@@ -236,17 +236,20 @@ void RealGA::evolve() {
 
         offspring.fitness = evalFitness(offspring);
 
-        // Force mutation if a chromosome fitness is duplicated
-        for(int j=0; j<k; j++) {
-            if(offspring.fitness == mNewPopulation[j].fitness) {
-                if(mOptions.mutationType == UNIFORM_MUTATION) {
-                    uniformMutate(offspring, 1.0, mOptions.mutationUniformPerc);
-                } else if (mOptions.mutationType == GAUSSIAN_MUTATION){
-                    gaussianMutate(offspring, 1.0, mGaussianPerc);
+        if (mOptions.mutateDuplicatedFitness) {
+            // Force mutation if a chromosome fitness is duplicated
+            for(int j=0; j<k; j++) {
+                if(offspring.fitness == mNewPopulation[j].fitness) {
+                    if(mOptions.mutationType == UNIFORM_MUTATION) {
+                        uniformMutate(offspring, 1.0, mOptions.mutationUniformPerc);
+                    } else if (mOptions.mutationType == GAUSSIAN_MUTATION){
+                        gaussianMutate(offspring, 1.0, mGaussianPerc);
+                    }
+                    offspring.fitness = evalFitness(offspring);
                 }
-                offspring.fitness = evalFitness(offspring);
             }
         }
+
 
         mNewPopulation[k] = offspring;
         ++k;
@@ -324,6 +327,12 @@ void RealGA::popInitSetPopulation(vector<RealChromosome> &population)
     } else {
         mPopulation = population;
         // TODO : Check the LB and UB
+    }
+}
+
+void RealGA::evaluatePopulationFitness() {
+    for(int i=0; i<mOptions.populationSize; i++) {
+        mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 }
 

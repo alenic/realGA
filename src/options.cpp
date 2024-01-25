@@ -6,6 +6,7 @@ RealGAOptions::RealGAOptions() {
     verbose = NO_VERBOSE;
     seed = 42;
     elitismFactor = 0.1;
+    mutateDuplicatedFitness = true;
 
     //SelectionOpt
     selectionType = ROULETTE_WHEEL_SELECTION;
@@ -65,6 +66,14 @@ void RealGAOptions::setVerbose(string value) {
         REALGA_ERROR(1, value << " is an invalid verbose type");
 }
 
+void RealGAOptions::setElitismFactor(float value) {
+    REALGA_ERROR((value<0.0)||(value>1.0), "elitism factor must be in [0,1]");
+    elitismFactor = value;
+}
+
+void RealGAOptions::setMutateDuplicatedFitness(bool value) {
+    mutateDuplicatedFitness = value;
+}
 
 void RealGAOptions::setSeed(unsigned int value) {
     seed = value;
@@ -89,10 +98,6 @@ void RealGAOptions::setSelectionTournamentProbability(float value) {
     selectionTournamentProbability = value;
 }
 
-void RealGAOptions::setElitismFactor(float value) {
-    REALGA_ERROR((value<0.0)||(value>1.0), "elitism factor must be in [0,1]");
-    elitismFactor = value;
-}
 
 void RealGAOptions::setMutationType(string value) {
     if (value == "uniform")

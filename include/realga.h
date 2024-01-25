@@ -62,6 +62,7 @@ public:
     void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc);
     void popInitSetChromosome(unsigned int index, RealChromosome &chromosome);
     void popInitSetPopulation(vector<RealChromosome>  &population);
+    void evaluatePopulationFitness();
 
     // Crossover
     void crossoverUniform(int indexA, int indexB, RealChromosome & offspring);
