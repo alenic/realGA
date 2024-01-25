@@ -11,7 +11,11 @@ void RouletteWheelSelection::init(vector<float> &fitnessValues) {
     RALG::minmax(fitnessValues, mMinFitnessValue, mMaxFitnessValue);
     for(int i=0; i< fitnessValues.size(); i++) {
         // weakest chromosome taken with probability 0.01
-        mNormalizedFitness[i] = (1.01f - (fitnessValues[i] - mMinFitnessValue) / (mMaxFitnessValue - mMinFitnessValue)) / 1.01f;
+        if(mMaxFitnessValue == mMinFitnessValue) {
+            mNormalizedFitness[i] = 0.01;
+        } else {
+            mNormalizedFitness[i] = (1.01f - (fitnessValues[i] - mMinFitnessValue) / (mMaxFitnessValue - mMinFitnessValue)) / 1.01f;
+        }
     }
 }
 

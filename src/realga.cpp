@@ -130,6 +130,10 @@ int RealGA::getGeneration() {
 
 
 float RealGA::evalFitness(const RealChromosome &x) {
+    float eval = mFitnessFcn->eval(x);
+    if(isnan(eval)||isinf(eval)) {
+        return MAXFLOAT;
+    }
     return mFitnessFcn->eval(x);
 }
 
@@ -199,7 +203,7 @@ void RealGA::evolve() {
 
     // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
-
+  
     // Find the kth smallest Fitness value
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
@@ -216,7 +220,6 @@ void RealGA::evolve() {
         
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-
         // Crossover
         switch(mOptions.crossoverType) {
             case UNIFORM_CROSSOVER:

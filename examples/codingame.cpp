@@ -563,7 +563,7 @@ int main()
             
             evolutions++;
             elapsed = chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - time_start_cycle).count();
-            cerr << "elapsed " << elapsed << endl;
+            //cerr << "elapsed " << elapsed << endl;
             if (elapsed >= max_elapsed) break;
         }
 
