@@ -541,7 +541,7 @@ int main()
     options.setPopulationSize(50);
     options.setMutationType("uniform");
     options.setMutateDuplicatedFitness(false);
-    options.setSelectionType("roulette");
+    options.setSelectionType("tournament");
     options.setMutationRate(0.02);
 
     realga.init(options, &fitnessFunc, false);
@@ -571,6 +571,8 @@ int main()
         bestSolution = realga.getBestChromosome();
         cerr << "Num evolutions: " << evolutions << endl;
         cerr << "Best fitness: " << bestSolution.fitness << endl;
+
+        if(evolutions < 10) exit(-1);
 
         control_x = game.car.x + 1000*cos(bestSolution.gene[0]);
         control_y = game.car.y + 1000*sin(bestSolution.gene[0]);
