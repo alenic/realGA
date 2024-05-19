@@ -12,8 +12,8 @@ RealGA::RealGA()
 
 RealGA::~RealGA()
 {
-    delete mSelectionAlgorithm;
-    delete mCrossover;
+    if(mCrossover != nullptr) delete mCrossover;
+    if(mSelectionAlgorithm != nullptr) delete mSelectionAlgorithm;
 }
 
 // ========================================= Setter ======================================
@@ -103,15 +103,14 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
                 ((TournamentSelection *)mSelectionAlgorithm)->setSelectionProbability(mOptions.selectionTournamentProbability);
                 break;
         }
+        REALGA_ERROR(mSelectionAlgorithm==nullptr, "SelectionAlgorithm is null");
         // Create the crossover algorithm
         switch(mOptions.crossoverType) {
             case UNIFORM_CROSSOVER:
-                mCrossover = new UniformCrossover();
-                break;
-            case SINGLE_POINT_CROSSOVER:
-                //TODO
+                mCrossover = new UniformCrossover(mOptions.chromosomeSize);
                 break;
         }
+        REALGA_ERROR(mCrossover==nullptr, "Crossover is null");
 
         Stat::setSeed(mOptions.seed);
         mGeneration = 0;
@@ -218,8 +217,6 @@ void RealGA::evolve() {
     // Find the kth smallest Fitness value
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
-    mSelectionAlgorithm->init(mFitnessValues);
-
     // Generate New Population
     while(k < mOptions.populationSize) {
         if((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber)) {
@@ -231,8 +228,6 @@ void RealGA::evolve() {
         
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-
-        // Crossover
         mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
         
         // Mutation
@@ -343,28 +338,6 @@ void RealGA::evaluatePopulationFitness() {
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
 }
-
-//==================================== Crossover ==================
-void RealGA::crossoverUniform(int indexA, int indexB, RealChromosome &offspring) {
-    for(int j=0; j<mOptions.chromosomeSize; j++) {
-        if(Stat::randUniform()<0.5) {
-            offspring.gene[j] = mPopulation[indexA].gene[j];
-        } else {
-            offspring.gene[j] = mPopulation[indexB].gene[j];
-        }
-    }
-}
-
-
-void RealGA::crossoverFixed(int indexA, int indexB, RealChromosome &offspring, int splitIndex) {
-    for(int i=0; i<splitIndex; i++) {
-        offspring.gene[i] = mPopulation[indexA].gene[i];
-    }
-    for(int i=splitIndex; i<mOptions.chromosomeSize; i++) {
-        offspring.gene[i] = mPopulation[indexB].gene[i];
-    }
-}
-
 
 //===================================== Mutation ======================
 void RealGA::uniformMutate(RealChromosome &chromosome, float mutationRate, float perc) {

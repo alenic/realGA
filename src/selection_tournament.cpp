@@ -1,28 +1,30 @@
 #include "selection.h"
 
-TournamentSelection::TournamentSelection(int populationSize) {
-    mTournamentSize = (int)(populationSize*0.1);
+TournamentSelection::TournamentSelection(size_t populationSize) {
+    mTournamentSize = max(2, (int)((float)populationSize*0.1));
     mPopulationSize = populationSize;
     mSelectionProbability = 0.85;
+    mTournamentFitness = new float[(int)mTournamentSize];
+    mTournamentIndex = new int[(int)mTournamentSize];
 }
 
 TournamentSelection::~TournamentSelection() {
-    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
     if(mTournamentIndex != nullptr) delete []mTournamentIndex;
+    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
 }
 
 void TournamentSelection::setTournamentSize(int tournamentSize) {
     mTournamentSize = tournamentSize;
+    if(mTournamentIndex != nullptr) delete []mTournamentIndex;
+    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
+    mTournamentFitness = new float[(int)mTournamentSize];
+    mTournamentIndex = new int[(int)mTournamentSize];
 }
 
 void TournamentSelection::setSelectionProbability(float selectionProbability) {
     mSelectionProbability = selectionProbability;
 }
 
-void TournamentSelection::init(vector<float> &fitnessValues) {
-    mTournamentFitness = new float[mTournamentSize];
-    mTournamentIndex = new int[mTournamentSize];
-}
 
 void TournamentSelection::select(vector<float> &fitnessValues, int &indexA, int &indexB) {
     // choose randomly mTournamentSize fitness value and get the 1st and 2nd winners
@@ -30,8 +32,8 @@ void TournamentSelection::select(vector<float> &fitnessValues, int &indexA, int 
     indexB = tournament(fitnessValues);
 
     while(indexA == indexB) {
-        indexA = Stat::randIndex(fitnessValues.size()-1);
-        indexB = Stat::randIndex(fitnessValues.size()-1);
+        indexA = Stat::randIndex(mTournamentSize-1);
+        indexB = Stat::randIndex(mTournamentSize-1);
     }
 }
 

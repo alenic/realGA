@@ -21,9 +21,6 @@ void SelectionTests::test_roulette_select() {
 
     RouletteWheelSelection selector = RouletteWheelSelection(popSize);
 
-    // allocate for performances
-    selector.init(fitnessValues);
-
     for(int i=0; i<numSelect; i++) {
         int A, B;
         selector.select(fitnessValues, A, B);
@@ -54,9 +51,6 @@ void SelectionTests::test_tournament_select() {
     }
 
     TournamentSelection selector = TournamentSelection(popSize);
-
-    // allocate for performances
-    selector.init(fitnessValues);
 
     for(int i=0; i<numSelect; i++) {
         int A, B;

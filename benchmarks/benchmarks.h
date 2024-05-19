@@ -24,7 +24,7 @@ void benchmarkRealGen(RealGA &ga, int maxIter, float eps, GAResults &results, in
 
 // Benchmark Problems
 void benchmark_all(RealGAOptions &opt);
-void benchmark_fake(RealGAOptions opt, GAResults &results, int chromosomeSize, int populationSize);
+void benchmark_fake(RealGAOptions opt, GAResults &results, size_t chromosomeSize, size_t populationSize);
 // Problems
 void benchmark_sphere(RealGAOptions opt, GAResults &results);
 void benchmark_rosenbrock(RealGAOptions opt, GAResults &results);

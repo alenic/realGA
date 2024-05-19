@@ -29,9 +29,11 @@ public:
 // Uniform Crossover
 class UniformCrossover: public Crossover {
 public:
-    UniformCrossover();
+    UniformCrossover(size_t chromosomeSize);
     ~UniformCrossover();
     void crossover(RealChromosome &a, RealChromosome &b, RealChromosome &offspring);
+private:
+    size_t mChromosomeSize;
 };
 
 

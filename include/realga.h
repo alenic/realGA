@@ -65,9 +65,6 @@ public:
     void popInitSetPopulation(vector<RealChromosome>  &population);
     void evaluatePopulationFitness();
 
-    // Crossover
-    void crossoverUniform(int indexA, int indexB, RealChromosome & offspring);
-    void crossoverFixed(int indexA, int indexB, RealChromosome &offspring, int splitIndex);
     // Mutation
     void uniformMutate(RealChromosome &chromosome, float mutationRate, float perc);
     void gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc);

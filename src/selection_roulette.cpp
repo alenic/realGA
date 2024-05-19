@@ -1,13 +1,13 @@
 #include "selection.h"
 
-RouletteWheelSelection::RouletteWheelSelection(int populationSize) {
+RouletteWheelSelection::RouletteWheelSelection(size_t populationSize) {
     mNormalizedFitness.resize(populationSize);
 }
 
 RouletteWheelSelection::~RouletteWheelSelection() {}
 
 
-void RouletteWheelSelection::init(vector<float> &fitnessValues) {
+void RouletteWheelSelection::normalize(vector<float> &fitnessValues) {
     RALG::minmax(fitnessValues, mMinFitnessValue, mMaxFitnessValue);
     for(int i=0; i< fitnessValues.size(); i++) {
         // weakest chromosome taken with probability 0.01
@@ -38,6 +38,7 @@ void RouletteWheelSelection::selectStochasticAcceptance(int &indexA, int &indexB
 }
 
 void RouletteWheelSelection::select(vector<float> &fitnessValues, int &indexA, int &indexB) {
+    normalize(fitnessValues);
     selectStochasticAcceptance(indexA, indexB);
 }
 

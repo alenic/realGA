@@ -32,12 +32,12 @@ RealGAOptions::~RealGAOptions() {
 
 }
 
-void RealGAOptions::setPopulationSize(int value) {
+void RealGAOptions::setPopulationSize(size_t value) {
     REALGA_ERROR(value <= 0, "Population size must be > 0");
     populationSize = value;
 }
 
-void RealGAOptions::setChromosomeSize(int value) {
+void RealGAOptions::setChromosomeSize(size_t value) {
     REALGA_ERROR(value <= 0, "Chromosome size must be > 0");
     chromosomeSize = value;
 }

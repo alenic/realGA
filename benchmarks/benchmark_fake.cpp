@@ -9,7 +9,7 @@ public:
     }
 };
 
-void benchmark_fake(RealGAOptions opt, GAResults &results, int chromosomeSize, int populationSize) {
+void benchmark_fake(RealGAOptions opt, GAResults &results, size_t chromosomeSize, size_t populationSize) {
     vector<float> LB(chromosomeSize);
     vector<float> UB(chromosomeSize);
 

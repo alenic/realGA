@@ -51,8 +51,6 @@ void RealGenMultithread::evolve() {
     // Find the kth smallest Fitness value
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
 
-    mSelectionAlgorithm->init(mFitnessValues);
-
     // Generate New Population
     while(k < mOptions.populationSize) {
 
@@ -67,14 +65,7 @@ void RealGenMultithread::evolve() {
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
 
         // Crossover
-        switch(mOptions.crossoverType) {
-            case UNIFORM_CROSSOVER:
-                crossoverUniform(selectedIndexA, selectedIndexB, offspring);
-                break;
-            case SINGLE_POINT_CROSSOVER:
-                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
-                break;
-        }
+        mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
         
         // Mutation
         switch(mOptions.mutationType) {

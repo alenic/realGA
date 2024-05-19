@@ -25,17 +25,16 @@ using namespace std;
 class Selection {
 public:
     virtual ~Selection() {}
-    virtual void init(vector<float> &fitnessValues) = 0;
     virtual void select(vector<float> &fitnessValues, int &indexA, int &indexB) = 0;
 };
 
 // Roulette-Wheel selection strategy
 class RouletteWheelSelection: public Selection {
 public:
-    RouletteWheelSelection(int populationSize);
+    RouletteWheelSelection(size_t populationSize);
     ~RouletteWheelSelection();
 
-    void init(vector<float> &fitnessValues);
+    void normalize(vector<float> &fitnessValues);
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
 private:
     // For stochastic acceptance
@@ -49,18 +48,17 @@ private:
 // Tournament selection strategy
 class TournamentSelection: public Selection {
 public:
-    TournamentSelection(int populationSize);
+    TournamentSelection(size_t populationSize);
     ~TournamentSelection();
 
     void setTournamentSize(int tournamentSize);
     void setSelectionProbability(float selectionProbability);
 
-    void init(vector<float> &fitnessValues);
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
     int tournament(vector<float> &fitnessValues);
 private:
     int mTournamentSize;
-    int mPopulationSize;
+    size_t mPopulationSize;
     // Probability of select the winner in a tournament
     float mSelectionProbability;
 

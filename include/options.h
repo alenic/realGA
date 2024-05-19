@@ -31,8 +31,8 @@ public:
     RealGAOptions();
     ~RealGAOptions();
 
-    void setPopulationSize(int np);
-    void setChromosomeSize(int nx);
+    void setPopulationSize(size_t np);
+    void setChromosomeSize(size_t nx);
     void setLowerBounds(const vector<float> &lb);
     void setUpperBounds(const vector<float> &ub);
     void setBounds(const vector<float> &lb, const vector<float> &ub);
@@ -57,8 +57,8 @@ public:
     void checkOptions();
 
     // Basic options
-    int populationSize;
-    int chromosomeSize;
+    size_t populationSize;
+    size_t chromosomeSize;
     vector<float> lowerBounds;
     vector<float> upperBounds;
     int seed;
