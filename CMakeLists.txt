@@ -30,7 +30,7 @@ set_target_properties(realga_static realga_shared
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
 )
 
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 #====================================== Build Tests ====================================
 file(GLOB TESTSOURCES "tests/*.cpp")
 add_executable(tests.bin ${TESTSOURCES})

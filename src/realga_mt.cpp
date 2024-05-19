@@ -66,16 +66,11 @@ void RealGenMultithread::evolve() {
 
         // Crossover
         mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
-        
+
         // Mutation
-        switch(mOptions.mutationType) {
-            case UNIFORM_MUTATION:
-                uniformMutate(offspring, mOptions.mutationRate, mOptions.mutationUniformPerc);
-                break;
-            case GAUSSIAN_MUTATION:
-                gaussianMutate(offspring, mOptions.mutationRate, mGaussianPerc);
-                break;
-        }
+        if(mOptions.mutationType == GAUSSIAN_MUTATION)
+            mMutation->setMutationPercentage(mGaussianPerc);
+        mMutation->mutate(offspring, mLB, mUB);
 
         mNewPopulation[k] = offspring;
         ++k;

@@ -19,7 +19,6 @@ int main() {
 
     cout << "==================== RealChromosome Test ============================" << endl;
     realChromosomeUT.test_randUniform();
-    realChromosomeUT.test_uniformMutate();
 
     cout << "==================== Selection Test ============================" << endl;
     

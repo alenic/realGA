@@ -34,10 +34,8 @@ public:
 
     void randUniform(vector<float> &lb, vector<float> &ub);
     void randUniform(int i, vector<float> &lb, vector<float> &ub);
-    void uniformMutate(int i, float perc, vector<float> &lb, vector<float> &ub);
     void randGaussian(float mean, float sigma,  vector<float> &lb, vector<float> &ub);
     void randGaussian(int i, float mean, float sigma, vector<float> &lb, vector<float> &ub);
-    void gaussianMutate(int i, float perc, vector<float> &lb, vector<float> &ub);
 
     float distanceTo(RealChromosome &);
 

@@ -29,6 +29,7 @@
 #include "fitnessfunction.h"
 #include "selection.h"
 #include "crossover.h"
+#include "mutation.h"
 #include "messages.h"
 
 using namespace std;
@@ -60,15 +61,10 @@ public:
     // Initialization
     void popInitRandUniform();
     void popInitRandGaussian(float mean, float sigma);
-    void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float perc);
+    void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float mutationPerc);
     void popInitSetChromosome(unsigned int index, RealChromosome &chromosome);
     void popInitSetPopulation(vector<RealChromosome>  &population);
     void evaluatePopulationFitness();
-
-    // Mutation
-    void uniformMutate(RealChromosome &chromosome, float mutationRate, float perc);
-    void gaussianMutate(RealChromosome &chromosome, float mutationRate, float perc);
-
     virtual void evolve();
 
 protected:
@@ -89,6 +85,9 @@ protected:
 
     // Crossover
     Crossover *mCrossover;
+
+    // Mutation
+    Mutation *mMutation;
     
     // State
     int mGeneration;

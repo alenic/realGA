@@ -35,43 +35,6 @@ void RealChromosomeTest::test_randUniform() {
 }
 
 
-void RealChromosomeTest::test_uniformMutate() {
-    cout << "RealChromosomeTest::test_uniformMutate" << endl;
-    // Test the interval bound
-    cout << "|---> 0.5 +- 0.2*rand() - : ";
-    RealChromosome g(1);
-    vector<float> LB = { 0.0 };
-    vector<float> UB = { 1.0 };
-
-    bool fail = false;
-    float minValue = 1.0;
-    float maxValue = 0.0;
-    for(int i=0; i<10000; i++) {
-        g.gene[0] = 0.5;
-        g.uniformMutate(0, 0.4, LB, UB);
-        if(g.gene[0] < minValue) {
-            minValue = g.gene[0];
-        }
-        if(g.gene[0] > maxValue) {
-            maxValue = g.gene[0];
-        }
-        if(g.gene[0] < 0.3 || g.gene[0] > 0.7) {
-            fail = true;
-            break;
-        }
-    }
-    cout << "min/max: [" << minValue << "," << maxValue << "] :";
-    if(fail)
-        coutColor("FAILED", TEXT_RED);
-    else
-        coutColor("PASSED", TEXT_GREEN);
-    cout << endl;
-}
-
-void RealChromosomeTest::test_gaussianMutate() {
-
-}
-
 void RealChromosomeTest::test_bound() {
 
 }
