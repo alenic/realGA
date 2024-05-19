@@ -28,6 +28,7 @@
 #include "options.h"
 #include "fitnessfunction.h"
 #include "selection.h"
+#include "crossover.h"
 #include "messages.h"
 
 using namespace std;
@@ -88,6 +89,9 @@ protected:
 
     // Selection Algorithm
     Selection *mSelectionAlgorithm;
+
+    // Crossover
+    Crossover *mCrossover;
     
     // State
     int mGeneration;

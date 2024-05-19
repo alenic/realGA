@@ -6,12 +6,14 @@ RealGA::RealGA()
     mFitnessFcn = nullptr;
     mGeneration = 0;
     mSelectionAlgorithm = nullptr;
+    mCrossover = nullptr;
     mGaussianPerc = 1.0f;
 }
 
 RealGA::~RealGA()
 {
     delete mSelectionAlgorithm;
+    delete mCrossover;
 }
 
 // ========================================= Setter ======================================
@@ -90,7 +92,7 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
             resetGaussianMutationPerc();
         }
         
-        // Allocate the selection algorithm
+        // Create the selection algorithm
         switch(mOptions.selectionType) {
             case ROULETTE_WHEEL_SELECTION:
                 mSelectionAlgorithm = new RouletteWheelSelection(mOptions.populationSize);
@@ -99,6 +101,15 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
                 mSelectionAlgorithm = new TournamentSelection(mOptions.populationSize);
                 ((TournamentSelection *)mSelectionAlgorithm)->setTournamentSize(mOptions.selectionTournamentSize);
                 ((TournamentSelection *)mSelectionAlgorithm)->setSelectionProbability(mOptions.selectionTournamentProbability);
+                break;
+        }
+        // Create the crossover algorithm
+        switch(mOptions.crossoverType) {
+            case UNIFORM_CROSSOVER:
+                mCrossover = new UniformCrossover();
+                break;
+            case SINGLE_POINT_CROSSOVER:
+                //TODO
                 break;
         }
 
@@ -220,15 +231,9 @@ void RealGA::evolve() {
         
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
+
         // Crossover
-        switch(mOptions.crossoverType) {
-            case UNIFORM_CROSSOVER:
-                crossoverUniform(selectedIndexA, selectedIndexB, offspring);
-                break;
-            case SINGLE_POINT_CROSSOVER:
-                crossoverFixed(selectedIndexA, selectedIndexB, offspring, mOptions.crossoverindexA);
-                break;
-        }
+        mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
         
         // Mutation
         if(mOptions.mutationType == UNIFORM_MUTATION) {
