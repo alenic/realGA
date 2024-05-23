@@ -1,7 +1,7 @@
 # RealGA
 
 <p align="center">
-  <img src="images/logo.png" width="140" alt="realGA Logo" />
+  <img src="images/logo.png" width="180" alt="realGA Logo" />
 </p>
 
 <p align="center">A fast and simple C++ library for Genetic Algorithms, that can be used for nonlinear constrained optimization problems.</p>
