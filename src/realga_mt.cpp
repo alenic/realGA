@@ -27,6 +27,7 @@ unsigned __stdcall RealGenMultithread::evaluatePopulationThread(void *params)
     return 0;
 }
 #else
+
 void *RealGenMultithread::evaluatePopulationThread(void *params)
 {
     struct thread_params *tp;
@@ -43,53 +44,46 @@ void *RealGenMultithread::evaluatePopulationThread(void *params)
 
 void RealGenMultithread::evolve()
 {
-    // Allocate offspring (a new gene)
+    // Allocate offspring (gene after crossover and mutation)
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
-    size_t k = 0;
+    size_t iter = 0;
     int countElite = 0;
 
-    // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
-    // Find the kth smallest Fitness value
+    // Find the kth smallest Fitness
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
 
     // Generate New Population
-    while (k < mOptions.populationSize)
-    {
 
-        if ((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber))
+    // First, generate the new population (without evaluating fitness)
+    while (iter < mOptions.populationSize)
+    {
+        if ((mFitnessValues[iter] <= mKthSmallestFitness) && (countElite < mElitismNumber))
         {
-            mNewPopulation[k] = mPopulation[k];
-            ++k;
+            mNewPopulation[iter] = mPopulation[iter];
+            ++iter;
             ++countElite;
             continue;
         }
-
-        // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-
-        // Crossover
         mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
-
-        // Mutation
-        if (mOptions.mutationType == GAUSSIAN_MUTATION)
-            mMutation->setMutationPercentage(mGaussianMutationPerc);
         mMutation->mutate(offspring, mLB, mUB);
-
-        mNewPopulation[k] = offspring;
-        ++k;
+        // Do not evaluate fitness here, will be done in parallel below
+        mNewPopulation[iter] = offspring;
+        ++iter;
     }
 
+    // Parallel fitness evaluation for non-elite chromosomes
+    int nThread = this->nThread; // Assuming nThread is a member variable
     int interval = ceil((float)(mOptions.populationSize) / (float)nThread);
     thread_params localThreadParam[nThread];
 
     for (unsigned int i = 0; i < nThread; ++i)
     {
         localThreadParam[i].startIndex = interval * i;
-        localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
+        localThreadParam[i].endIndex = std::min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
         localThreadParam[i].ga = this;
-
 #ifdef _WIN32
         unsigned threadID;
         localThread[i] = (HANDLE)_beginthreadex(0, 0, &RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i], 0, &threadID);
@@ -109,22 +103,35 @@ void RealGenMultithread::evolve()
 #endif
     }
 
+    // After parallel fitness evaluation, handle duplicated fitness mutation if needed (serially)
+    if (mOptions.mutateDuplicatedFitness)
+    {
+        for (size_t i = 0; i < mOptions.populationSize; ++i)
+        {
+            for (size_t j = 0; j < i; ++j)
+            {
+                if (fabs(mNewPopulation[i].fitness - mNewPopulation[j].fitness) < 1.0e-12)
+                {
+                    mMutation->mutate(mNewPopulation[i], mLB, mUB);
+                    mNewPopulation[i].fitness = evalFitness(mNewPopulation[i]);
+                }
+            }
+        }
+    }
+
     if (mOptions.mutationType == GAUSSIAN_MUTATION)
     {
-        if (mGaussianMutationPerc > mOptions.mutationGaussianPercMin)
-        {
-            mGaussianMutationPerc = 1.0f - mOptions.mutationGaussianPercDelta * (float)mGeneration;
-        }
-        else
-        {
-            mGaussianMutationPerc = mOptions.mutationGaussianPercMin;
-        }
+        mGaussianMutationPerc = fmax(mOptions.mutationGaussianPercMin, 1.0f - mOptions.mutationGaussianPercDelta * (float)mGeneration);
+        mMutation->setMutationPercentage(mGaussianMutationPerc);
     }
 
-    for (size_t i = 0; i < mPopulation.size(); i++)
+    if (mOptions.mutationType == UNIFORM_MUTATION)
     {
-        mPopulation[i] = mNewPopulation[i];
+        mUniformMutationPerc = fmax(mOptions.mutationUniformPercMin, 1.0f - mOptions.mutationUniformPercDelta * (float)mGeneration);
+        mMutation->setMutationPercentage(mUniformMutationPerc);
     }
 
+    // Copy the new population
+    mPopulation = mNewPopulation;
     mGeneration++;
 }

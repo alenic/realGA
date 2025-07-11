@@ -38,7 +38,7 @@ class RealGA
 {
 public:
     RealGA();
-    ~RealGA();
+    virtual ~RealGA();
     // Setter
     void restart();
     void init(RealGAOptions &opt, FitnessFunction *func, bool keepState);

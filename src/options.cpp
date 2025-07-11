@@ -7,7 +7,7 @@ RealGAOptions::RealGAOptions()
     verbose = NO_VERBOSE;
     seed = 42;
     elitismFactor = 0.1;
-    mutateDuplicatedFitness = true;
+    mutateDuplicatedFitness = false;
 
     // SelectionOpt
     selectionType = ROULETTE_WHEEL_SELECTION;
