@@ -6,7 +6,7 @@
 
     file description:
         RealGAOptions defines all the option of your Genetic
-        algorithm. You can set the selection, mutation and 
+        algorithm. You can set the selection, mutation and
         crossover strategy with relative parameters.
 ---------------------------------------------
 */
@@ -20,13 +20,29 @@
 
 using namespace std;
 
-typedef enum { ROULETTE_WHEEL_SELECTION=1, TOURNAMENT_SELECTION } SelectionType;
-typedef enum { UNIFORM_CROSSOVER=1, SINGLE_POINT_CROSSOVER } CrossoverType;
-typedef enum { UNIFORM_MUTATION=1, GAUSSIAN_MUTATION} MutationType;
-typedef enum { NO_VERBOSE=0, SOFT_VERBOSE=1, HARD_VERBOSE=2} VerboseType;
+typedef enum
+{
+    ROULETTE_WHEEL_SELECTION = 1,
+    TOURNAMENT_SELECTION
+} SelectionType;
+typedef enum
+{
+    UNIFORM_CROSSOVER = 1
+} CrossoverType;
+typedef enum
+{
+    UNIFORM_MUTATION = 1,
+    GAUSSIAN_MUTATION
+} MutationType;
+typedef enum
+{
+    NO_VERBOSE = 0,
+    SOFT_VERBOSE = 1,
+    HARD_VERBOSE = 2
+} VerboseType;
 
-
-class RealGAOptions {
+class RealGAOptions
+{
 public:
     RealGAOptions();
     ~RealGAOptions();
@@ -40,11 +56,10 @@ public:
     void setSeed(unsigned int seedValue);
     void setElitismFactor(float value);
     void setMutateDuplicatedFitness(bool value);
-    
+
     void setSelectionType(string value);
     void setSelectionTournamentSize(int value);
     void setSelectionTournamentProbability(float value);
-    
 
     void setMutationType(string value);
     void setUniformMutationRate(float value);
@@ -67,12 +82,12 @@ public:
     float elitismFactor;
     bool mutateDuplicatedFitness;
 
-    //SelectionOpt
+    // SelectionOpt
     SelectionType selectionType;
     int selectionTournamentSize;
     float selectionTournamentProbability;
-    
-    //CrossoverOpt
+
+    // CrossoverOpt
     CrossoverType crossoverType;
     int crossoverindexA;
 
@@ -88,5 +103,4 @@ public:
     float mutationGaussianPercMin;
 };
 
-
-#endif //REALGA_OPTIONS_H
+#endif // REALGA_OPTIONS_H
