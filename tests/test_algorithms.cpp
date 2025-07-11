@@ -9,7 +9,7 @@ void RALGTest::test_searchIndexBinarySearch()
         float x = Stat::randUniform() * 15 - 1;
         // naive search
         int expected = 0;
-        for (int j = 0; j < array.size(); j++)
+        for (size_t j = 0; j < array.size(); j++)
         {
             if (x >= array[j])
             {
@@ -47,15 +47,15 @@ void RALGTest::test_argKthSmallest()
     bool passed = true;
     int index;
 
-    for (int i = 0; i < x.size(); i++)
+    for (size_t i = 0; i < x.size(); i++)
     {
         x[i] = (float)(i + 1);
     }
 
-    for (int i = 0; i < x.size(); i++)
+    for (size_t i = 0; i < x.size(); i++)
     {
         index = RALG::argKthSmallest(x, 0, x.size() - 1, i + 1);
-        if (index != i)
+        if (index != (int)i)
         {
             passed = false;
             break;
@@ -78,7 +78,7 @@ void RALGTest::test_kthSmallest()
     std::sort(sorted.begin(), sorted.end());
 
     bool passed = true;
-    for (int k = 1; k <= sorted.size(); ++k)
+    for (size_t k = 1; k <= sorted.size(); ++k)
     {
         vector<float> copy = x;
         float val = RALG::kthSmallest(copy, 0, copy.size() - 1, k);

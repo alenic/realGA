@@ -21,8 +21,10 @@ RealGAOptions::RealGAOptions()
     // MutationOpt
     mutationType = UNIFORM_MUTATION;
     mutationRate = 0.1;
+
     // Uniform mutation
-    mutationUniformPerc = 0.25;
+    mutationUniformPercDelta = 0.01; // 100 iterations decay to 0.01
+    mutationUniformPercMin = 0.001;  // 1000 iterations
 
     // Gaussian mutation
     mutationGaussianPercDelta = 0.01; // 100 iterations decay to 0.01
@@ -121,16 +123,18 @@ void RealGAOptions::setMutationType(string value)
         REALGA_ERROR(1, value << " is an invalid mutation type");
 }
 
-void RealGAOptions::setUniformMutationRate(float value)
-{
-    REALGA_ERROR((value < 0.0) || (value > 1.0), "mutation rate must be in [0,1]");
-    mutationUniformPerc = value;
-}
-
 void RealGAOptions::setMutationRate(float value)
 {
     REALGA_ERROR((value < 0.0) || (value > 1.0), "mutation rate must be in [0,1]");
     mutationRate = value;
+}
+
+void RealGAOptions::setMutationUniformPerc(float percDelta, float percMin)
+{
+    REALGA_ERROR((percDelta < 0.0) || (percDelta > 1.0), "uniform mutation delta percentage must be in [0,1]");
+    REALGA_ERROR((percMin < 0.0) || (percMin > 1.0), "uniform mutation min percentage must be in [0,1]");
+    mutationUniformPercDelta = percDelta;
+    mutationUniformPercMin = percMin;
 }
 
 void RealGAOptions::setMutationGaussianPerc(float percDelta, float percMin)

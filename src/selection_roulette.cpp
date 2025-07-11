@@ -10,7 +10,8 @@ RouletteWheelSelection::~RouletteWheelSelection() {}
 void RouletteWheelSelection::normalize(vector<float> &fitnessValues)
 {
     RALG::minmax(fitnessValues, mMinFitnessValue, mMaxFitnessValue);
-    for (int i = 0; i < fitnessValues.size(); i++)
+
+    for (size_t i = 0; i < fitnessValues.size(); i++)
     {
         // weakest chromosome taken with probability 0.01
         if (mMaxFitnessValue == mMinFitnessValue)
@@ -29,7 +30,7 @@ void RouletteWheelSelection::selectStochasticAcceptance(int &indexA, int &indexB
     int n = mNormalizedFitness.size();
     while (1)
     {
-        indexA = Stat::randIndex(n - 1);
+        indexA = Stat::randIndex(n);
         if (Stat::randUniform() < mNormalizedFitness[indexA])
         {
             break;
@@ -38,7 +39,7 @@ void RouletteWheelSelection::selectStochasticAcceptance(int &indexA, int &indexB
 
     while (1)
     {
-        indexB = Stat::randIndex(n - 1);
+        indexB = Stat::randIndex(n);
         if (indexB == indexA)
             continue;
         if (Stat::randUniform() < mNormalizedFitness[indexB])

@@ -62,9 +62,9 @@ public:
     void setSelectionTournamentProbability(float value);
 
     void setMutationType(string value);
-    void setUniformMutationRate(float value);
     void setMutationRate(float value);
     void setMutationGaussianPerc(float percDelta, float percMin);
+    void setMutationUniformPerc(float percDelta, float percMin);
 
     void setCrossoverType(string value);
     void setSinglePointCrossoverIndex(int value);
@@ -84,7 +84,7 @@ public:
 
     // SelectionOpt
     SelectionType selectionType;
-    int selectionTournamentSize;
+    size_t selectionTournamentSize;
     float selectionTournamentProbability;
 
     // CrossoverOpt
@@ -94,11 +94,10 @@ public:
     // MutationOpt
     MutationType mutationType;
     float mutationRate;
-    // Uniform mutation
-    float mutationUniformPerc;
-    // Gaussian mutation
-    //  mutationGaussianPercDelta suggestion:
-    //  setMutationGaussianPerc(1.0 / (number of iterations to reach the PercMin), PercMin);
+
+    float mutationUniformPercDelta;
+    float mutationUniformPercMin;
+
     float mutationGaussianPercDelta;
     float mutationGaussianPercMin;
 };

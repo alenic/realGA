@@ -8,7 +8,7 @@
         This is the core class, where you can call
         the evolve method to create new populations.
         You have to provide the options of your Genetic
-        Algorithm to change selection, mutation and 
+        Algorithm to change selection, mutation and
         crossover strategies.
 ---------------------------------------------
 */
@@ -34,7 +34,8 @@
 
 using namespace std;
 
-class RealGA {
+class RealGA
+{
 public:
     RealGA();
     ~RealGA();
@@ -51,8 +52,8 @@ public:
     // Getter
     RealChromosome getBestChromosome();
     int getGeneration();
-    //float getDiversity();  // -> TODO
-    vector<RealChromosome> getPopulation();
+    // float getDiversity();  // -> TODO
+    const vector<RealChromosome> &getPopulation() const;
 
     // Debugging
     void checkPopulation();
@@ -63,7 +64,7 @@ public:
     void popInitRandGaussian(float mean, float sigma);
     void popInitGaussianMutate(vector<float> &gene, float mutatioRate, float mutationPerc);
     void popInitSetChromosome(unsigned int index, RealChromosome &chromosome);
-    void popInitSetPopulation(vector<RealChromosome>  &population);
+    void popInitSetPopulation(vector<RealChromosome> &population);
     void evaluatePopulationFitness();
     virtual void evolve();
 
@@ -88,11 +89,12 @@ protected:
 
     // Mutation
     Mutation *mMutation;
-    
+
     // State
     int mGeneration;
     // Gaussian mutation perc (change during generations)
-    float mGaussianPerc;
+    float mGaussianMutationPerc;
+    float mUniformMutationPerc;
 
     // Fill mFitnessValues vector
     void fillFitnessValues(vector<RealChromosome> &population);

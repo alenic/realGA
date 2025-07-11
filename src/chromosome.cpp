@@ -38,7 +38,7 @@ bool RealChromosome::operator==(const RealChromosome &other) const
 {
     if (gene.size() != other.gene.size())
         return false;
-    for (int i = 0; i < other.gene.size(); i++)
+    for (size_t i = 0; i < other.gene.size(); i++)
     {
         if (gene[i] != other.gene[i])
             return false;
@@ -51,7 +51,7 @@ string RealChromosome::toString()
     std::ostringstream os;
     os.precision(10);
     os << "[";
-    for (int i = 0; i < gene.size() - 1; i++)
+    for (size_t i = 0; i < gene.size() - 1; i++)
     {
         os << gene[i] << ",";
     }
@@ -62,7 +62,7 @@ string RealChromosome::toString()
 float RealChromosome::distanceTo(RealChromosome &g)
 {
     float sse = 0.0;
-    for (int i = 0; i < gene.size(); i++)
+    for (size_t i = 0; i < gene.size(); i++)
     {
         float dx = gene[i] - g.gene[i];
         sse += dx * dx;
@@ -72,7 +72,7 @@ float RealChromosome::distanceTo(RealChromosome &g)
 
 void RealChromosome::randUniform(vector<float> &lb, vector<float> &ub)
 {
-    for (int i = 0; i < gene.size(); i++)
+    for (size_t i = 0; i < gene.size(); i++)
     {
         gene[i] = Stat::randUniform(lb[i], ub[i]);
     }
@@ -85,7 +85,7 @@ void RealChromosome::randUniform(int i, vector<float> &lb, vector<float> &ub)
 
 void RealChromosome::randGaussian(float mean, float sigma, vector<float> &lb, vector<float> &ub)
 {
-    for (int i = 0; i < gene.size(); i++)
+    for (size_t i = 0; i < gene.size(); i++)
     {
         gene[i] = Stat::randGaussian(mean, sigma);
         if (gene[i] < lb[i])

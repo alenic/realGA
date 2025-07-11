@@ -40,7 +40,7 @@ int TournamentSelection::tournament(std::vector<float> &fitnessValues)
     int i = 0;
     while (i < mTournamentSize)
     {
-        int index = Stat::randIndex(mPopulationSize - 1);
+        int index = Stat::randIndex(mPopulationSize);
         bool match = false;
         for (int j = 0; j < i; j++)
         {

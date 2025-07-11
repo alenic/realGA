@@ -18,8 +18,8 @@ namespace RALG
 {
 
     int partition(std::vector<float> &arr, int l, int r);
-    float kthSmallest(vector<float> &arr, int l, int r, int k);
-    int argKthSmallest(const vector<float> &arr, int l, int r, int k);
+    float kthSmallest(const std::vector<float> &arr, int l, int r, int k);
+    int argKthSmallest(const std::vector<float> &arr, int l, int r, int k);
     int searchIndexBinarySearch(const vector<float> &arr, float x, int left, int right);
     void minmax(const vector<float> &arr, float &minValue, float &maxValue);
     int argMin(const float arr[], int l, int r);

@@ -23,30 +23,23 @@ namespace RALG
         return i;
     }
 
-    float kthSmallest(std::vector<float> &arr, int l, int r, int k)
+    float kthSmallest(const std::vector<float> &arr, int l, int r, int k)
     {
-        if (k > 0 && k <= r - l + 1)
-        {
-            int index = partition(arr, l, r);
-            if (index - l == k - 1)
-                return arr[index];
-            if (index - l > k - 1)
-                return kthSmallest(arr, l, index - 1, k);
-            return kthSmallest(arr, index + 1, r, k - index + l - 1);
-        }
-        return -1.0f;
+        if (k <= 0 || k > r - l + 1)
+            return -1.0f;
+
+        std::vector<float> copy(arr.begin() + l, arr.begin() + r + 1);
+        std::nth_element(copy.begin(), copy.begin() + k - 1, copy.end());
+        return copy[k - 1];
     }
 
     int argKthSmallest(const std::vector<float> &arr, int l, int r, int k)
     {
-        std::vector<float> copy(arr.begin(), arr.end());
-        float kth = kthSmallest(copy, l, r, k);
-        for (int i = 0; i < (int)arr.size(); i++)
+        float kth = kthSmallest(arr, l, r, k);
+        for (int i = l; i <= r; ++i)
         {
             if (arr[i] == kth)
-            {
                 return i;
-            }
         }
         return -1;
     }
@@ -67,37 +60,23 @@ namespace RALG
                 right = mid - 1;
         }
 
-        return std::max(0, left - 1);
+        // Not found, return -1 (standard behavior)
+        return -1;
     }
 
     void minmax(const std::vector<float> &arr, float &minValue, float &maxValue)
     {
         assert(!arr.empty());
-        minValue = arr[0];
-        maxValue = arr[0];
-        for (size_t i = 1; i < arr.size(); i++)
-        {
-            float v = arr[i];
-            if (v < minValue)
-                minValue = v;
-            if (v > maxValue)
-                maxValue = v;
-        }
+        auto result = std::minmax_element(arr.begin(), arr.end());
+        minValue = *result.first;
+        maxValue = *result.second;
     }
 
     int argMin(const float arr[], int l, int r)
     {
-        float minValue = arr[l];
-        int minIndex = l;
-        for (int i = l + 1; i <= r; i++)
-        {
-            if (arr[i] < minValue)
-            {
-                minValue = arr[i];
-                minIndex = i;
-            }
-        }
-        return minIndex;
+        // Use std::min_element for efficiency and clarity
+        const float *minPtr = std::min_element(arr + l, arr + r + 1);
+        return static_cast<int>(minPtr - arr);
     }
 
 } // namespace RALG

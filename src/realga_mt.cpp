@@ -1,6 +1,7 @@
 #include "realga_mt.h"
 
-RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGA() {
+RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGA()
+{
 #ifdef _WIN32
     localThread = new HANDLE[nThread];
 #else
@@ -8,53 +9,57 @@ RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGA() {
 #endif
 }
 
-
-RealGenMultithread::~RealGenMultithread() {
-    delete []localThread;
+RealGenMultithread::~RealGenMultithread()
+{
+    delete[] localThread;
 }
 
 #ifdef _WIN32
 unsigned __stdcall RealGenMultithread::evaluatePopulationThread(void *params)
 {
     struct thread_params *tp;
-    tp = (struct thread_params *) params;
+    tp = (struct thread_params *)params;
 
-    for (int k = tp->startIndex; k<(tp->startIndex + tp->neval) && k < tp->ga->Np; ++k) {
+    for (int k = tp->startIndex; k < (tp->startIndex + tp->neval) && k < tp->ga->Np; ++k)
+    {
         tp->ga->newPopulation[k].fitness = tp->ga->evalFitness(tp->ga->newPopulation[k]);
     }
     return 0;
 }
 #else
-void *RealGenMultithread::evaluatePopulationThread(void *params) {
+void *RealGenMultithread::evaluatePopulationThread(void *params)
+{
     struct thread_params *tp;
-    tp = (struct thread_params *) params;
-    RealGenMultithread * ga = tp->ga;
+    tp = (struct thread_params *)params;
+    RealGenMultithread *ga = tp->ga;
 
-    for (int k = tp->startIndex; k < tp->endIndex; ++k) {
+    for (int k = tp->startIndex; k < tp->endIndex; ++k)
+    {
         ga->mNewPopulation[k].fitness = ga->evalFitness(ga->mNewPopulation[k]);
     }
     pthread_exit(NULL);
 }
 #endif
 
-
-
-void RealGenMultithread::evolve() {
+void RealGenMultithread::evolve()
+{
     // Allocate offspring (a new gene)
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
-    int k=0;
-    int countElite=0;
+    size_t k = 0;
+    int countElite = 0;
 
     // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
     // Find the kth smallest Fitness value
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize-1, mElitismNumber+1);
+    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
 
     // Generate New Population
-    while(k < mOptions.populationSize) {
+    while (k < mOptions.populationSize)
+    {
 
-        if((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber)) {
+        if ((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber))
+        {
             mNewPopulation[k] = mPopulation[k];
             ++k;
             ++countElite;
@@ -68,23 +73,22 @@ void RealGenMultithread::evolve() {
         mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
 
         // Mutation
-        if(mOptions.mutationType == GAUSSIAN_MUTATION)
-            mMutation->setMutationPercentage(mGaussianPerc);
+        if (mOptions.mutationType == GAUSSIAN_MUTATION)
+            mMutation->setMutationPercentage(mGaussianMutationPerc);
         mMutation->mutate(offspring, mLB, mUB);
 
         mNewPopulation[k] = offspring;
         ++k;
     }
 
-
-    int interval = ceil((float)(mOptions.populationSize)/(float)nThread);
+    int interval = ceil((float)(mOptions.populationSize) / (float)nThread);
     thread_params localThreadParam[nThread];
 
-    for (int i = 0; i < nThread; ++i) {
-        localThreadParam[i].startIndex = interval*i;
+    for (unsigned int i = 0; i < nThread; ++i)
+    {
+        localThreadParam[i].startIndex = interval * i;
         localThreadParam[i].endIndex = min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
         localThreadParam[i].ga = this;
-
 
 #ifdef _WIN32
         unsigned threadID;
@@ -96,7 +100,8 @@ void RealGenMultithread::evolve() {
 #endif
     }
 
-    for(int i=0; i<nThread; ++i) {
+    for (unsigned int i = 0; i < nThread; ++i)
+    {
 #ifdef _WIN32
         WaitForSingleObject(localThread[i], INFINITE);
 #else
@@ -104,17 +109,22 @@ void RealGenMultithread::evolve() {
 #endif
     }
 
-    if(mOptions.mutationType == GAUSSIAN_MUTATION) {
-        if (mGaussianPerc > mOptions.mutationGaussianPercMin) {
-            mGaussianPerc = 1.0f - mOptions.mutationGaussianPercDelta*(float)mGeneration;
-        } else {
-            mGaussianPerc = mOptions.mutationGaussianPercMin;
+    if (mOptions.mutationType == GAUSSIAN_MUTATION)
+    {
+        if (mGaussianMutationPerc > mOptions.mutationGaussianPercMin)
+        {
+            mGaussianMutationPerc = 1.0f - mOptions.mutationGaussianPercDelta * (float)mGeneration;
+        }
+        else
+        {
+            mGaussianMutationPerc = mOptions.mutationGaussianPercMin;
         }
     }
 
-    for(int i=0; i<mPopulation.size(); i++) {
+    for (size_t i = 0; i < mPopulation.size(); i++)
+    {
         mPopulation[i] = mNewPopulation[i];
     }
-    
+
     mGeneration++;
 }
