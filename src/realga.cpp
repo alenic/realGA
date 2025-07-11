@@ -252,25 +252,29 @@ void RealGA::evolve()
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
     int k = 0;
+    int k_e = 0;
     int countElite = 0;
 
+    fillFitnessValues(mPopulation);
+    // Find the kth smallest Fitness (WARNING it modify mFitnessValues!)
+    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
     // fill mFitnessValues to accelerate some functions
     fillFitnessValues(mPopulation);
-
-    // Find the kth smallest Fitness value
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
+    // Keep first mElitismNumber population elitism
+    while (k_e < mOptions.populationSize)
+    {
+        if ((mFitnessValues[k_e] < mKthSmallestFitness) && (k <= mElitismNumber))
+        {
+            mNewPopulation[k] = mPopulation[k_e];
+            // cout << mKthSmallestFitness << " -> mNewPopulation[" << k << "] = " << mFitnessValues[k_e] << "    " << mPopulation[k_e].fitness << endl;
+            ++k;
+        }
+        ++k_e;
+    }
 
     // Generate New Population
     while (k < mOptions.populationSize)
     {
-        if ((mFitnessValues[k] < mKthSmallestFitness) && (countElite <= mElitismNumber))
-        {
-            mNewPopulation[k] = mPopulation[k];
-            ++k;
-            ++countElite;
-            continue;
-        }
-
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
         // Crossover
@@ -311,11 +315,8 @@ void RealGA::evolve()
         }
     }
 
-    for (int i = 0; i < mPopulation.size(); i++)
-    {
-        mPopulation[i] = mNewPopulation[i];
-    }
-
+    // Copy the new population
+    mPopulation = mNewPopulation;
     mGeneration++;
 }
 

@@ -9,18 +9,21 @@
 
 using namespace std;
 
-enum TextColor {
+enum TextColor
+{
     TEXT_GREEN = 0,
     TEXT_YELLOW,
     TEXT_RED
 };
 
-void coutColor(const char * s, TextColor color);
+void coutColor(const char *s, TextColor color);
 
 // Statistics Tests
-class StatTest {
+class StatTest
+{
 private:
     float uniformChiSquared(int *a, int n, int N);
+
 public:
     StatTest();
     void test_uniformDist();
@@ -28,15 +31,20 @@ public:
 };
 
 // Algorithms Tests
-class RALGTest {
+class RALGTest
+{
 public:
-    RALGTest(){};
-    void test_argKthSmallest();
+    RALGTest() {};
     void test_searchIndexBinarySearch();
+    void test_argKthSmallest();
+    void test_kthSmallest();
+    void test_argMin();
+    void test_minmax();
 };
 
 // Realchromosome Tests
-class RealChromosomeTest {
+class RealChromosomeTest
+{
 public:
     RealChromosomeTest();
     void test_randUniform();
@@ -45,13 +53,13 @@ public:
 };
 
 // Selection Tests
-class SelectionTests {
+class SelectionTests
+{
 public:
     SelectionTests();
     void test_roulette_select();
     void test_tournament_select();
 };
-
 
 void printDistribution(vector<float> &x, int bins, int nstars);
 

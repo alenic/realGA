@@ -1,85 +1,83 @@
 #include "selection.h"
 
-TournamentSelection::TournamentSelection(size_t populationSize) {
-    mTournamentSize = max(2, (int)((float)populationSize*0.1));
+TournamentSelection::TournamentSelection(size_t populationSize)
+{
+    mTournamentSize = std::max(2, (int)((float)populationSize * 0.1f));
     mPopulationSize = populationSize;
-    mSelectionProbability = 0.85;
-    mTournamentFitness = new float[(int)mTournamentSize];
-    mTournamentIndex = new int[(int)mTournamentSize];
+    mSelectionProbability = 0.85f;
+    mTournamentFitness.resize(mTournamentSize);
+    mTournamentIndex.resize(mTournamentSize);
 }
 
-TournamentSelection::~TournamentSelection() {
-    if(mTournamentIndex != nullptr) delete []mTournamentIndex;
-    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
-}
+TournamentSelection::~TournamentSelection() = default;
 
-void TournamentSelection::setTournamentSize(int tournamentSize) {
+void TournamentSelection::setTournamentSize(int tournamentSize)
+{
     mTournamentSize = tournamentSize;
-    if(mTournamentIndex != nullptr) delete []mTournamentIndex;
-    if(mTournamentFitness != nullptr) delete []mTournamentFitness;
-    mTournamentFitness = new float[(int)mTournamentSize];
-    mTournamentIndex = new int[(int)mTournamentSize];
+    mTournamentFitness.resize(mTournamentSize);
+    mTournamentIndex.resize(mTournamentSize);
 }
 
-void TournamentSelection::setSelectionProbability(float selectionProbability) {
+void TournamentSelection::setSelectionProbability(float selectionProbability)
+{
     mSelectionProbability = selectionProbability;
 }
 
-
-void TournamentSelection::select(vector<float> &fitnessValues, int &indexA, int &indexB) {
-    // choose randomly mTournamentSize fitness value and get the 1st and 2nd winners
+void TournamentSelection::select(std::vector<float> &fitnessValues, int &indexA, int &indexB)
+{
     indexA = tournament(fitnessValues);
     indexB = tournament(fitnessValues);
 
-    while(indexA == indexB) {
-        indexA = Stat::randIndex(mTournamentSize-1);
-        indexB = Stat::randIndex(mTournamentSize-1);
+    while (indexA == indexB)
+    {
+        indexA = tournament(fitnessValues);
+        indexB = tournament(fitnessValues);
     }
 }
 
-int TournamentSelection::tournament(vector<float> &fitnessValues) {
-    // return the index of winner
-    int i=0;
-    bool match = false;
-    // sample random mTournamentSize indices from mPopulationSize indices, without replacement
-    while(i < mTournamentSize) {
-        int index = Stat::randIndex(mPopulationSize-1);
-        // check if the index was choosen
-        match = false;
-        for(int j=0; j<i; j++) {
-            if(mTournamentIndex[j] == index) {
+int TournamentSelection::tournament(std::vector<float> &fitnessValues)
+{
+    int i = 0;
+    while (i < mTournamentSize)
+    {
+        int index = Stat::randIndex(mPopulationSize - 1);
+        bool match = false;
+        for (int j = 0; j < i; j++)
+        {
+            if (mTournamentIndex[j] == index)
+            {
                 match = true;
                 break;
             }
         }
-        if(!match) {
+        if (!match)
+        {
             mTournamentIndex[i] = index;
             mTournamentFitness[i] = fitnessValues[index];
-            i++;
+            ++i;
         }
     }
 
-    int kth;
-    int kthMinIndex;
-    int localKthIndex;
-    
-    if(mSelectionProbability < 1.0) {
+    int kth, localKthIndex, kthMinIndex;
+
+    if (mSelectionProbability < 1.0f)
+    {
         float chooseP = mSelectionProbability;
-        // choose the winner with a probability p, 2nd with p*(1-p), 3rd with p*(1-p)*2,...
-        for(kth=1; kth<mTournamentSize; kth++) {
-            if(Stat::randUniform() < chooseP) {
+        for (kth = 1; kth < mTournamentSize; ++kth)
+        {
+            if (Stat::randUniform() < chooseP)
                 break;
-            }
-            chooseP *= (1.0 - mSelectionProbability);
+            chooseP *= (1.0f - mSelectionProbability);
         }
-        // Get k-th min value
-        localKthIndex = RALG::argSelection(mTournamentFitness, 0, mTournamentSize-1, kth);
-        kthMinIndex = mTournamentIndex[localKthIndex];
-    } else {
-        localKthIndex = RALG::argMin(mTournamentFitness, 0, mTournamentSize-1);
+
+        localKthIndex = RALG::argKthSmallest(mTournamentFitness, 0, mTournamentSize - 1, kth);
         kthMinIndex = mTournamentIndex[localKthIndex];
     }
-
+    else
+    {
+        localKthIndex = RALG::argMin(mTournamentFitness.data(), 0, mTournamentSize - 1);
+        kthMinIndex = mTournamentIndex[localKthIndex];
+    }
 
     return kthMinIndex;
 }

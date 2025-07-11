@@ -1,7 +1,8 @@
 #include "testcommon.h"
 #define MAX_RESULTS_BUFFER 16
 
-int main() {
+int main()
+{
     RealGAOptions opt;
 
     StatTest statTest;
@@ -16,12 +17,15 @@ int main() {
     cout << "==================== Algorithms Test ============================" << endl;
     ralgTest.test_argKthSmallest();
     ralgTest.test_searchIndexBinarySearch();
+    ralgTest.test_argMin();
+    ralgTest.test_kthSmallest();
+    ralgTest.test_minmax();
 
     cout << "==================== RealChromosome Test ============================" << endl;
     realChromosomeUT.test_randUniform();
 
     cout << "==================== Selection Test ============================" << endl;
-    
+
     selectionUT.test_roulette_select();
     selectionUT.test_tournament_select();
 

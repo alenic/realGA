@@ -22,20 +22,23 @@
 using namespace std;
 
 // Abstract class
-class Selection {
+class Selection
+{
 public:
     virtual ~Selection() {}
     virtual void select(vector<float> &fitnessValues, int &indexA, int &indexB) = 0;
 };
 
 // Roulette-Wheel selection strategy
-class RouletteWheelSelection: public Selection {
+class RouletteWheelSelection : public Selection
+{
 public:
     RouletteWheelSelection(size_t populationSize);
     ~RouletteWheelSelection();
 
     void normalize(vector<float> &fitnessValues);
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
+
 private:
     // For stochastic acceptance
     vector<float> mNormalizedFitness;
@@ -44,9 +47,9 @@ private:
     void selectStochasticAcceptance(int &indexA, int &indexB);
 };
 
-
 // Tournament selection strategy
-class TournamentSelection: public Selection {
+class TournamentSelection : public Selection
+{
 public:
     TournamentSelection(size_t populationSize);
     ~TournamentSelection();
@@ -56,6 +59,7 @@ public:
 
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
     int tournament(vector<float> &fitnessValues);
+
 private:
     int mTournamentSize;
     size_t mPopulationSize;
@@ -63,9 +67,8 @@ private:
     float mSelectionProbability;
 
     // Local vectors for the tournaments
-    float *mTournamentFitness;
-    int *mTournamentIndex;
+    vector<float> mTournamentFitness;
+    vector<int> mTournamentIndex;
 };
-
 
 #endif // REALGA_SELECTION_H
