@@ -32,8 +32,6 @@
 #include "mutation.h"
 #include "messages.h"
 
-using namespace std;
-
 class RealGA
 {
 public:

@@ -1,10 +1,11 @@
 #include "chromosome.h"
 #include <sstream>
 #include <math.h>
+#include <limits>
 
 RealChromosome::RealChromosome()
 {
-    fitness = 0.0;
+    fitness = std::numeric_limits<float>::max();
 }
 
 RealChromosome::RealChromosome(int n) : RealChromosome()
@@ -24,11 +25,13 @@ RealChromosome::~RealChromosome()
 
 RealChromosome &RealChromosome::operator=(const RealChromosome &c)
 {
-    gene = c.gene;
-    fitness = c.fitness;
+    if (this != &c)
+    {
+        gene = c.gene;
+        fitness = c.fitness;
+    }
     return *this;
 }
-
 bool RealChromosome::operator<(const RealChromosome &c) const
 {
     return fitness < c.fitness;

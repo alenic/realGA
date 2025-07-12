@@ -158,7 +158,7 @@ void optimize(unsigned int seed, unsigned int nThreads)
     RealGAOptions options;
 
     options.setChromosomeSize(10);
-    options.setPopulationSize(10);
+    options.setPopulationSize(200);
     options.setBounds(LB, UB);
     options.setMutationType("gaussian");
     options.setSelectionType("roulette");
@@ -193,7 +193,7 @@ void optimize(unsigned int seed, unsigned int nThreads)
     // Print results
     cout << "Best solution: " << best.toString() << endl;
     cout << "Best Fitness value = " << best.fitness << endl;
-    cout << ga->populationToString();
+    // cout << ga->populationToString();
 
     // Free memory
     delete ga;

@@ -1,62 +1,26 @@
 #include "realga_mt.h"
 
-RealGenMultithread::RealGenMultithread(unsigned int nThread) : RealGA()
-{
-#ifdef _WIN32
-    localThread = new HANDLE[nThread];
-#else
-    localThread = new pthread_t[nThread];
-#endif
-}
+#include <thread>
+#include <vector>
+#include <cmath>
+#include <algorithm>
 
-RealGenMultithread::~RealGenMultithread()
-{
-    delete[] localThread;
-}
+RealGenMultithread::RealGenMultithread(unsigned int nThread)
+    : RealGA(), mNthread(nThread) {}
 
-#ifdef _WIN32
-unsigned __stdcall RealGenMultithread::evaluatePopulationThread(void *params)
-{
-    struct thread_params *tp;
-    tp = (struct thread_params *)params;
-
-    for (int k = tp->startIndex; k < (tp->startIndex + tp->neval) && k < tp->ga->Np; ++k)
-    {
-        tp->ga->newPopulation[k].fitness = tp->ga->evalFitness(tp->ga->newPopulation[k]);
-    }
-    return 0;
-}
-#else
-
-void *RealGenMultithread::evaluatePopulationThread(void *params)
-{
-    struct thread_params *tp;
-    tp = (struct thread_params *)params;
-    RealGenMultithread *ga = tp->ga;
-
-    for (int k = tp->startIndex; k < tp->endIndex; ++k)
-    {
-        ga->mNewPopulation[k].fitness = ga->evalFitness(ga->mNewPopulation[k]);
-    }
-    pthread_exit(NULL);
-}
-#endif
+RealGenMultithread::~RealGenMultithread() {}
 
 void RealGenMultithread::evolve()
 {
-    // Allocate offspring (gene after crossover and mutation)
     RealChromosome offspring(mOptions.chromosomeSize);
     int selectedIndexA, selectedIndexB;
     size_t iter = 0;
     int countElite = 0;
 
     fillFitnessValues(mPopulation);
-    // Find the kth smallest Fitness
     mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
 
-    // Generate New Population
-
-    // First, generate the new population (without evaluating fitness)
+    // Generate new population (without evaluating fitness)
     while (iter < mOptions.populationSize)
     {
         if ((mFitnessValues[iter] <= mKthSmallestFitness) && (countElite < mElitismNumber))
@@ -66,44 +30,42 @@ void RealGenMultithread::evolve()
             ++countElite;
             continue;
         }
+
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
         mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
         mMutation->mutate(offspring, mLB, mUB);
-        // Do not evaluate fitness here, will be done in parallel below
         mNewPopulation[iter] = offspring;
+        mNewPopulation[iter].fitness = std::numeric_limits<float>::max();
+        ; // Evaluate only non-elites fitness
         ++iter;
     }
 
-    // Parallel fitness evaluation for non-elite chromosomes
-    int nThread = this->nThread; // Assuming nThread is a member variable
-    int interval = ceil((float)(mOptions.populationSize) / (float)nThread);
-    thread_params localThreadParam[nThread];
+    // Parallel fitness evaluation
+    int chunkSize = std::ceil(static_cast<float>(mOptions.populationSize) / mNthread);
+    std::vector<std::thread> threads;
 
-    for (unsigned int i = 0; i < nThread; ++i)
+    for (unsigned int t = 0; t < mNthread; ++t)
     {
-        localThreadParam[i].startIndex = interval * i;
-        localThreadParam[i].endIndex = std::min(localThreadParam[i].startIndex + interval, (int)mOptions.populationSize);
-        localThreadParam[i].ga = this;
-#ifdef _WIN32
-        unsigned threadID;
-        localThread[i] = (HANDLE)_beginthreadex(0, 0, &RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i], 0, &threadID);
-#else
-        int rc;
-        rc = pthread_create(&localThread[i], NULL, RealGenMultithread::evaluatePopulationThread, (void *)&localThreadParam[i]);
-        REALGA_ERROR(rc, "Error:unable to create thread");
-#endif
+        int start = t * chunkSize;
+        int end = std::min(start + chunkSize, (int)mOptions.populationSize);
+
+        threads.emplace_back([this, start, end]()
+                             {
+            for (int k = start; k < end; ++k)
+            {
+                if (mNewPopulation[k].fitness == std::numeric_limits<float>::max())  // Only evaluate non-elites
+                {
+                    mNewPopulation[k].fitness = evalFitness(mNewPopulation[k]);
+                }
+            } });
     }
 
-    for (unsigned int i = 0; i < nThread; ++i)
+    for (auto &thread : threads)
     {
-#ifdef _WIN32
-        WaitForSingleObject(localThread[i], INFINITE);
-#else
-        pthread_join(localThread[i], NULL);
-#endif
+        thread.join();
     }
 
-    // After parallel fitness evaluation, handle duplicated fitness mutation if needed (serially)
+    // Handle duplicated fitness mutation (serial)
     if (mOptions.mutateDuplicatedFitness)
     {
         for (size_t i = 0; i < mOptions.populationSize; ++i)
@@ -119,19 +81,21 @@ void RealGenMultithread::evolve()
         }
     }
 
+    // Update mutation percentages if adaptive
     if (mOptions.mutationType == GAUSSIAN_MUTATION)
     {
-        mGaussianMutationPerc = fmax(mOptions.mutationGaussianPercMin, 1.0f - mOptions.mutationGaussianPercDelta * (float)mGeneration);
+        mGaussianMutationPerc = std::max(mOptions.mutationGaussianPercMin,
+                                         1.0f - mOptions.mutationGaussianPercDelta * static_cast<float>(mGeneration));
         mMutation->setMutationPercentage(mGaussianMutationPerc);
     }
 
     if (mOptions.mutationType == UNIFORM_MUTATION)
     {
-        mUniformMutationPerc = fmax(mOptions.mutationUniformPercMin, 1.0f - mOptions.mutationUniformPercDelta * (float)mGeneration);
+        mUniformMutationPerc = std::max(mOptions.mutationUniformPercMin,
+                                        1.0f - mOptions.mutationUniformPercDelta * static_cast<float>(mGeneration));
         mMutation->setMutationPercentage(mUniformMutationPerc);
     }
 
-    // Copy the new population
     mPopulation = mNewPopulation;
     mGeneration++;
 }
