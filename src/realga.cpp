@@ -82,7 +82,7 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
 
     if (keepState)
     {
-        REALGA_ERROR(mPopulation.size() == 0, "reset is false, but chromosome population size is 0");
+        REALGA_ERROR(mPopulation.empty(), "reset is false, but chromosome population size is 0");
         REALGA_ERROR(mOptions.populationSize != mPopulation.size(), "reset is false, but population size " << mPopulation.size() << " is different from option population size " << mOptions.populationSize);
         REALGA_ERROR(mOptions.chromosomeSize != mPopulation[0].gene.size(), "reset is false, but chromosome size " << mPopulation[0].gene.size() << " is different from option chromosome size " << mOptions.chromosomeSize);
     }
@@ -142,7 +142,6 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         mLB = mOptions.lowerBounds;
         mUB = mOptions.upperBounds;
     }
-    mElitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
 }
 
 void RealGA::setFitnessFunction(FitnessFunction *f)
@@ -245,16 +244,17 @@ void RealGA::evolve()
     int selectedIndexA, selectedIndexB;
     size_t iter = 0;
     int countElite = 0;
+    int elitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
 
     fillFitnessValues(mPopulation);
     // Find the kth smallest Fitness
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
+    float kthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, elitismNumber + 1);
 
     // Generate New Population
     while (iter < mOptions.populationSize)
     {
         // If population[iter] fitness is smaller than mKth fitness then is an elite chromosome, save and skip it
-        if ((mFitnessValues[iter] <= mKthSmallestFitness) && (countElite < mElitismNumber))
+        if ((mFitnessValues[iter] <= kthSmallestFitness) && (countElite < elitismNumber))
         {
             mNewPopulation[iter] = mPopulation[iter];
             ++iter;

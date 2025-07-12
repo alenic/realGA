@@ -16,14 +16,15 @@ void RealGenMultithread::evolve()
     int selectedIndexA, selectedIndexB;
     size_t iter = 0;
     int countElite = 0;
+    int elitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
 
     fillFitnessValues(mPopulation);
-    mKthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, mElitismNumber + 1);
+    float kthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, elitismNumber + 1);
 
     // Generate new population (without evaluating fitness)
     while (iter < mOptions.populationSize)
     {
-        if ((mFitnessValues[iter] <= mKthSmallestFitness) && (countElite < mElitismNumber))
+        if ((mFitnessValues[iter] <= kthSmallestFitness) && (countElite < elitismNumber))
         {
             mNewPopulation[iter] = mPopulation[iter];
             ++iter;

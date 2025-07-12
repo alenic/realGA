@@ -75,9 +75,6 @@ protected:
     RealGAOptions mOptions;
     FitnessFunction *mFitnessFcn;
     vector<float> mFitnessValues;
-    float mKthSmallestFitness;
-
-    int mElitismNumber;
 
     // Selection Algorithm
     Selection *mSelectionAlgorithm;
