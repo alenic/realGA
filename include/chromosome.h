@@ -17,10 +17,10 @@
 #include <vector>
 #include <string>
 
-
 using namespace std;
 
-class RealChromosome {
+class RealChromosome
+{
 public:
     vector<float> gene;
     float fitness;
@@ -30,16 +30,16 @@ public:
     RealChromosome(const RealChromosome &c);
     ~RealChromosome();
 
-    string toString();
+    string toString() const;
 
     void randUniform(vector<float> &lb, vector<float> &ub);
     void randUniform(int i, vector<float> &lb, vector<float> &ub);
-    void randGaussian(float mean, float sigma,  vector<float> &lb, vector<float> &ub);
+    void randGaussian(float mean, float sigma, vector<float> &lb, vector<float> &ub);
     void randGaussian(int i, float mean, float sigma, vector<float> &lb, vector<float> &ub);
 
-    float distanceTo(RealChromosome &);
+    float distanceTo(const RealChromosome &g) const;
 
-    RealChromosome & operator= ( const RealChromosome &c );
+    RealChromosome &operator=(const RealChromosome &c);
     bool operator<(const RealChromosome &c) const;
     bool operator==(const RealChromosome &other) const;
 };

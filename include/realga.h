@@ -56,6 +56,8 @@ public:
     // Debugging
     void checkPopulation();
     string populationToString();
+    string populationToCSVString();
+    void populationToCSV(const string &csvFilename);
 
     // Initialization
     void popInitRandUniform();

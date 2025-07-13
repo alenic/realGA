@@ -12,6 +12,7 @@
 #define REALGA_MUTATION_H
 #include "stat.h"
 #include "options.h"
+#include <cmath>
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -20,7 +21,8 @@
 using namespace std;
 
 // Base class
-class Mutation {
+class Mutation
+{
 public:
     Mutation();
     Mutation(float mutationRate, float mutationPerc);
@@ -30,13 +32,15 @@ public:
     void setMutationPercentage(float mutationPerc);
     float getMutationRate();
     float getMutationPercentage();
+
 protected:
     float mMutationRate;
     float mMutationPerc;
 };
 
 // Uniform Mutation
-class UniformMutation: public Mutation {
+class UniformMutation : public Mutation
+{
 public:
     UniformMutation();
     UniformMutation(float mutationRate, float mutationPerc);
@@ -45,13 +49,13 @@ public:
 };
 
 // Gaussian Mutation
-class GaussianMutation: public Mutation {
+class GaussianMutation : public Mutation
+{
 public:
     GaussianMutation();
     GaussianMutation(float mutationRate, float mutationPerc);
     ~GaussianMutation();
     void mutate(RealChromosome &x, vector<float> &lb, vector<float> &ub);
 };
-
 
 #endif // REALGA_MUTATION_H

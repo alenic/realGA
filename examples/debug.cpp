@@ -1,5 +1,6 @@
 #include <iostream>
 #include <time.h>
+#include <cmath>
 #include "realga.h"
 #include "fitnessfunction.h"
 
@@ -12,9 +13,11 @@ class QuadraticFitness : public FitnessFunction
 public:
     float eval(const RealChromosome &g)
     {
-        float dx1 = g.gene[0] - 2.5,
-              dx2 = g.gene[1] - 2.5;
-        return dx1 * dx1 + dx2 * dx2;
+        float dx = (g.gene[0] - 1.0f),
+              dy = (g.gene[1] - 1.0f),
+              cx = cos(g.gene[0]),
+              sy = sin(g.gene[1]);
+        return 0.1 * dx * dx + 0.1 * dy * dy - cx * cx - sy * sy;
     }
 };
 
@@ -25,12 +28,12 @@ int main(int argc, char **argv)
     QuadraticFitness *myFitnessFunction = new QuadraticFitness();
     RealGAOptions options;
     options.setChromosomeSize(2);
-    options.setPopulationSize(20);
+    options.setPopulationSize(100);
     options.setElitismFactor(0.20);
     options.setBounds(LB, UB);
     options.setMutationType("gaussian");
     options.setMutationRate(0.1);
-    options.setMutationGaussianPerc(1.0 / 10.0, 0.001);
+    options.setMutationGaussianPerc(0.01, 0.01);
     options.setSelectionType("roulette");
     options.setSelectionTournamentProbability(0.8);
     options.setVerbose("soft");
@@ -42,19 +45,24 @@ int main(int argc, char **argv)
     ga.popInitRandUniform();
 
     RealChromosome best = ga.getBestChromosome();
-    cout << ga.populationToString(); // print all the population
+    cout << ga.populationToCSVString(); // print all the population
+    ga.populationToCSV("debug_csv/pop_0.csv");
     cout << "Best solution: " << best.toString() << endl;
     cout << "Best Fitness value = " << best.fitness << endl;
 
     // Evolve the population for 100 times
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 200; i++)
     {
         ga.evolve();
         // Print results
         RealChromosome best = ga.getBestChromosome();
-        cout << ga.populationToString(); // print all the population
+        cout << ga.populationToCSVString(); // print all the population
+
         cout << "Best solution: " << best.toString() << endl;
         cout << "Best Fitness value = " << best.fitness << endl;
+
+        std::string filename = "debug_csv/pop_" + std::to_string(i) + ".csv";
+        ga.populationToCSV(filename);
     }
 
     delete myFitnessFunction;

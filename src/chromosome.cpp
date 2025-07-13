@@ -10,18 +10,19 @@ RealChromosome::RealChromosome()
 
 RealChromosome::RealChromosome(int n) : RealChromosome()
 {
+    if (n <= 0)
+    {
+        throw std::invalid_argument("Chromosome size must be positive");
+    }
+    gene.reserve(n); // Reserve capacity to avoid reallocations
     gene.resize(n);
 }
 
-RealChromosome::RealChromosome(const RealChromosome &c)
+RealChromosome::RealChromosome(const RealChromosome &c) : gene(c.gene), fitness(c.fitness)
 {
-    gene = c.gene;
-    fitness = c.fitness;
 }
 
-RealChromosome::~RealChromosome()
-{
-}
+RealChromosome::~RealChromosome() = default;
 
 RealChromosome &RealChromosome::operator=(const RealChromosome &c)
 {
@@ -40,37 +41,56 @@ bool RealChromosome::operator<(const RealChromosome &c) const
 bool RealChromosome::operator==(const RealChromosome &other) const
 {
     if (gene.size() != other.gene.size())
-        return false;
-    for (size_t i = 0; i < other.gene.size(); i++)
     {
-        if (gene[i] != other.gene[i])
+        return false;
+    }
+
+    // Use epsilon for floating point comparison
+    constexpr float epsilon = std::numeric_limits<float>::epsilon();
+    for (size_t i = 0; i < gene.size(); ++i)
+    {
+        if (std::abs(gene[i] - other.gene[i]) > epsilon)
+        {
             return false;
+        }
     }
     return true;
 }
 
-string RealChromosome::toString()
+std::string RealChromosome::toString() const
 {
+    if (gene.empty())
+    {
+        return "[]";
+    }
+
     std::ostringstream os;
     os.precision(10);
     os << "[";
-    for (size_t i = 0; i < gene.size() - 1; i++)
+
+    for (size_t i = 0; i < gene.size() - 1; ++i)
     {
         os << gene[i] << ",";
     }
-    os << gene[gene.size() - 1] << "]";
+    os << gene.back() << "]";
+
     return os.str();
 }
 
-float RealChromosome::distanceTo(RealChromosome &g)
+float RealChromosome::distanceTo(const RealChromosome &g) const
 {
-    float sse = 0.0;
-    for (size_t i = 0; i < gene.size(); i++)
+    if (gene.size() != g.gene.size())
     {
-        float dx = gene[i] - g.gene[i];
+        throw std::invalid_argument("Chromosomes must have same size for distance calculation");
+    }
+
+    float sse = 0.0f;
+    for (size_t i = 0; i < gene.size(); ++i)
+    {
+        const float dx = gene[i] - g.gene[i];
         sse += dx * dx;
     }
-    return sqrt(sse);
+    return std::sqrt(sse);
 }
 
 void RealChromosome::randUniform(vector<float> &lb, vector<float> &ub)

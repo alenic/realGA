@@ -56,6 +56,10 @@ public:
 
     void setTournamentSize(int tournamentSize);
     void setSelectionProbability(float selectionProbability);
+    int probabilisticTournament();
+    float getAverageSelectionPressure() const;
+
+    void validateParameters() const;
 
     void select(vector<float> &fitnessValues, int &indexA, int &indexB);
     int tournament(vector<float> &fitnessValues);
@@ -65,6 +69,8 @@ private:
     size_t mPopulationSize;
     // Probability of select the winner in a tournament
     float mSelectionProbability;
+
+    vector<int> mPopulationIndices;
 
     // Local vectors for the tournaments
     vector<float> mTournamentFitness;

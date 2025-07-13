@@ -1,4 +1,6 @@
 #include "realga.h"
+#include <fstream>
+#include <iostream>
 
 RealGA::RealGA()
 {
@@ -216,12 +218,44 @@ const vector<RealChromosome> &RealGA::getPopulation() const
 string RealGA::populationToString()
 {
     std::ostringstream os;
-    os << "============== Generation: " << mGeneration << " ===================" << endl;
+    os << "Population of Generation: " << mGeneration << "\n";
     for (size_t i = 0; i < mOptions.populationSize; i++)
     {
-        os << "[" << (i + 1) << "] : " << mPopulation[i].toString() << " -> Fitness " << mPopulation[i].fitness << endl;
+        os << i << ": " << mPopulation[i].toString() << " -> Fitness " << mPopulation[i].fitness << "\n";
     }
     return os.str();
+}
+
+string RealGA::populationToCSVString()
+{
+    std::ostringstream os;
+    os << "id,";
+    for (size_t i = 0; i < mPopulation[i].gene.size(); i++)
+    {
+        os << "x" << i << ",";
+    }
+    os << "fitness\n";
+    for (size_t i = 0; i < mOptions.populationSize; i++)
+    {
+        string geneString = mPopulation[i].toString();
+        os << i << "," << geneString.substr(1, geneString.size() - 2) << "," << mPopulation[i].fitness << "\n";
+    }
+    return os.str();
+}
+
+void RealGA::populationToCSV(const std::string &csvFilename)
+{
+    // Write the current population to a CSV file
+    std::ofstream ofs(csvFilename);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error: Could not open file " << csvFilename << " for writing." << std::endl;
+        return;
+    }
+
+    // Write header
+    ofs << populationToCSVString();
+    ofs.close();
 }
 
 void RealGA::checkPopulation()
