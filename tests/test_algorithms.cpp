@@ -24,7 +24,7 @@ void RALGTest::test_searchIndexBinarySearch()
 
         if (expected != index)
         {
-            coutColor("FAILED", TEXT_RED);
+            coutColor("test_searchIndexBinarySearch", "FAILED", TEXT_RED);
             cout << x << " founded index " << index << " , expected index " << expected << endl;
             passed = false;
             break;
@@ -33,11 +33,11 @@ void RALGTest::test_searchIndexBinarySearch()
     cout << "test_RWsearchIndexBinarySearch ";
     if (passed)
     {
-        coutColor("PASSED", TEXT_GREEN);
+        coutColor("test_searchIndexBinarySearch", "PASSED", TEXT_GREEN);
     }
     else
     {
-        coutColor("FAILED", TEXT_RED);
+        coutColor("test_searchIndexBinarySearch", "FAILED", TEXT_RED);
     }
 }
 
@@ -63,11 +63,11 @@ void RALGTest::test_argKthSmallest()
     }
     if (passed)
     {
-        coutColor("PASSED", TEXT_GREEN);
+        coutColor("test_argKthSmallest", "PASSED", TEXT_GREEN);
     }
     else
     {
-        coutColor("FAILED", TEXT_RED);
+        coutColor("test_argKthSmallest", "FAILED", TEXT_RED);
     }
 }
 
@@ -90,8 +90,7 @@ void RALGTest::test_kthSmallest()
         }
     }
 
-    cout << "test_kthSmallest ";
-    passed ? coutColor("PASSED", TEXT_GREEN) : coutColor("FAILED", TEXT_RED);
+    passed ? coutColor("test_kthSmallest", "PASSED", TEXT_GREEN) : coutColor("test_kthSmallest", "FAILED", TEXT_RED);
 }
 
 void RALGTest::test_argMin()
@@ -100,8 +99,7 @@ void RALGTest::test_argMin()
     int index = RALG::argMin(arr, 0, 5);
     bool passed = (index == 4);
 
-    cout << "test_argMin ";
-    passed ? coutColor("PASSED", TEXT_GREEN) : coutColor("FAILED", TEXT_RED);
+    passed ? coutColor("test_argMin", "PASSED", TEXT_GREEN) : coutColor("test_argMin", "FAILED", TEXT_RED);
 }
 
 void RALGTest::test_minmax()
@@ -112,6 +110,5 @@ void RALGTest::test_minmax()
 
     bool passed = (minVal == -5.0f && maxVal == 9.0f);
 
-    cout << "test_minmax ";
-    passed ? coutColor("PASSED", TEXT_GREEN) : coutColor("FAILED", TEXT_RED);
+    passed ? coutColor("test_minmax", "PASSED", TEXT_GREEN) : coutColor("test_minmax", "FAILED", TEXT_RED);
 }

@@ -11,9 +11,22 @@ int main()
     SelectionTests selectionUT;
 
     cout << "==================== Statistical Test ============================" << endl;
-    statTest.test_uniformDist();
-    statTest.test_gaussianDist(5.0, 2.0);
+    // test uniform distribution
+    statTest.test_randUniform(0.0f, 1.0f);
+    statTest.test_randUniform(-1.0f, 1.0f);
+    // test gaussian distribution
+    for (auto mean : {-1.0f, 0.0f, 1.0f})
+    {
+        for (auto sigma : {0.01f, 0.1f, 1.0f, 10.0f})
+        {
+            statTest.test_randGaussian(mean, sigma);
+        }
+    }
 
+    // statTest.test_randIndex();
+    // statTest.test_randInteger();
+    statTest.test_smallSigmaGaussian();
+    /*
     cout << "==================== Algorithms Test ============================" << endl;
     ralgTest.test_argKthSmallest();
     ralgTest.test_searchIndexBinarySearch();
@@ -28,6 +41,6 @@ int main()
 
     selectionUT.test_roulette_select();
     selectionUT.test_tournament_select();
-
+    */
     return 0;
 }

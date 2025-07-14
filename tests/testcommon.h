@@ -6,6 +6,7 @@
 #include <time.h>
 #include <math.h>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
@@ -16,18 +17,26 @@ enum TextColor
     TEXT_RED
 };
 
-void coutColor(const char *s, TextColor color);
+void coutColor(const char *name, const char *s, TextColor color);
 
 // Statistics Tests
 class StatTest
 {
 private:
-    float uniformChiSquared(int *a, int n, int N);
+    float chiSquare(const int *observed, const float *expected, int bins);
+    double erfcinv(double x);
+    double chi_square_quantile_approx(int df, double alpha);
+    bool mVerbose;
 
 public:
     StatTest();
-    void test_uniformDist();
-    void test_gaussianDist(int mean, int stDev);
+    StatTest(bool verbose);
+    void test_randUniform(float lb, float ub);
+    void test_randGaussian(float mean, float sigma);
+
+    // void test_randIndex();
+    // void test_randInteger();
+    void test_smallSigmaGaussian();
 };
 
 // Algorithms Tests
