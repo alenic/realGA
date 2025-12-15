@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="5.8608518"
+     inkscape:cx="194.34035"
+     inkscape:cy="89.150864"
+     inkscape:window-width="2494"
+     inkscape:window-height="1371"
+     inkscape:window-x="1986"
+     inkscape:window-y="32"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       id="grid1"
+       units="mm"
+       originx="0"
+       originy="0"
+       spacingx="0.99999998"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch23"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop23" />
+    </linearGradient>
+    <linearGradient
+       id="swatch22"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop22" />
+    </linearGradient>
+    <linearGradient
+       id="swatch15"
+       inkscape:swatch="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop16" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect7"
+       is_visible="true"
+       lpeversion="1.3"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false"
+       uniform="false" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.665;stroke-dasharray:none;stroke-opacity:1"
+       d="m 46.679079,15.89075 -0.04515,8.757971"
+       id="path8" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.665;stroke-dasharray:none;stroke-opacity:1"
+       d="m 68.178154,15.959549 -0.04515,8.757971"
+       id="path8-63" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.627342;stroke-dasharray:none;stroke-opacity:1"
+       d="m 48.802768,16.67674 -0.04533,7.762465"
+       id="path8-6" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.627342;stroke-dasharray:none;stroke-opacity:1"
+       d="m 66.238323,16.612875 -0.04533,7.762465"
+       id="path8-6-1" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.592693;stroke-dasharray:none;stroke-opacity:1"
+       d="m 54.021904,16.988571 -0.0455,6.902864"
+       id="path8-2" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.698731;stroke-dasharray:none;stroke-opacity:1"
+       d="m 56.192074,15.539277 -0.04496,9.708821"
+       id="path8-2-6" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.646159;stroke-dasharray:none;stroke-opacity:1"
+       d="m 60.795197,16.28161 -0.0452,8.261242"
+       id="path8-6-4" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#f000cd;stroke-width:0.692192;stroke-dasharray:none;stroke-opacity:1"
+       d="m 58.526679,15.617277 -0.04497,9.528454"
+       id="path8-6-4-6" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#16b0ff;stroke-width:1.363;stroke-dasharray:none;stroke-opacity:1"
+       d="m 45.771036,15.263476 c 5.788986,0.06378 5.640552,10.013604 11.652192,10.077385 6.011639,0.06378 5.714769,-9.949823 11.577972,-10.013604"
+       id="path7" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#16b0ff;stroke-width:1.36324;stroke-dasharray:none;stroke-opacity:1"
+       d="M 69.13274,25.204664 C 63.343754,25.140887 63.492187,15.19106 57.480547,15.127279 51.468909,15.063502 51.765779,25.077102 45.902576,25.140884"
+       id="path7-9" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.56899px;font-family:'Noto Sans Thaana';-inkscape-font-specification:'Noto Sans Thaana';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#16b0ff;fill-opacity:1;fill-rule:nonzero;stroke:#16b0ff;stroke-width:0.289412;stroke-dasharray:none;stroke-opacity:1"
+       x="45.539318"
+       y="30.571571"
+       id="text9"><tspan
+         sodipodi:role="line"
+         id="tspan9"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Anta;-inkscape-font-specification:Anta;stroke-width:0.289412;stroke:#16b0ff;stroke-opacity:1;fill:#16b0ff;fill-opacity:1"
+         x="45.539318"
+         y="30.571571">REAL GA</tspan></text>
+  </g>
+</svg>
