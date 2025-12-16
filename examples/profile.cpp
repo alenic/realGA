@@ -53,7 +53,7 @@ int main(int argc,  char** argv) {
     options.setMutationGaussianPerc(1.0 / (float(nIter)*0.8), 0.001);
     options.setSelectionType("roulette");
     //options.setSelectionTournamentProbability(0.8);
-    options.setVerbose("none");
+    options.setVerbose(0);
 
 
     RealGA ga;

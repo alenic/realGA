@@ -63,16 +63,14 @@ void RealGAOptions::setBounds(const vector<float> &lb, const vector<float> &ub)
     setUpperBounds(ub);
 }
 
-void RealGAOptions::setVerbose(string value)
+void RealGAOptions::setVerbose(int level)
 {
-    if (value == "none")
+    if (level <= 0)
         verbose = NO_VERBOSE;
-    else if (value == "soft")
+    else if (level == 1)
         verbose = SOFT_VERBOSE;
-    else if (value == "hard")
+    else if (level >=  2)
         verbose = HARD_VERBOSE;
-    else
-        REALGA_ERROR(1, value << " is an invalid verbose type");
 }
 
 void RealGAOptions::setElitismFactor(float value)

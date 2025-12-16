@@ -104,7 +104,9 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         {
             resetGaussianMutationPerc();
         }
-
+        if (mSelectionAlgorithm) delete mSelectionAlgorithm;
+        if (mCrossover) delete mCrossover;
+        if (mMutation) delete mMutation;
         // Create the selection strategy
         switch (mOptions.selectionType)
         {
@@ -273,28 +275,30 @@ void RealGA::checkPopulation()
 // ==================================================== Evolve ====================================================
 void RealGA::evolve()
 {
-    // Allocate offspring (gene after crossover and mutation)
-    RealChromosome offspring(mOptions.chromosomeSize);
-    int selectedIndexA, selectedIndexB;
-    size_t iter = 0;
-    int countElite = 0;
     int elitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
-
     fillFitnessValues(mPopulation);
+
+    size_t iter = 0;
+
     // Find the kth smallest Fitness
     float kthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, elitismNumber + 1);
 
+    // Copy individuals that meet the elitism criteria into the start of the new population
+    for (size_t i = 0; i < mOptions.populationSize && iter < elitismNumber; i++)
+    {
+        if (mPopulation[i].fitness <= kthSmallestFitness)
+        {
+            mNewPopulation[iter] = mPopulation[i];
+            iter++;
+        }
+    }
+
+    // Allocate offspring (gene after crossover and mutation)
+    RealChromosome offspring(mOptions.chromosomeSize);
     // Generate New Population
     while (iter < mOptions.populationSize)
     {
-        // If population[iter] fitness is smaller than mKth fitness then is an elite chromosome, save and skip it
-        if ((mFitnessValues[iter] <= kthSmallestFitness) && (countElite < elitismNumber))
-        {
-            mNewPopulation[iter] = mPopulation[iter];
-            ++iter;
-            ++countElite;
-            continue;
-        }
+        int selectedIndexA, selectedIndexB;
         // Selection
         mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
         // Crossover

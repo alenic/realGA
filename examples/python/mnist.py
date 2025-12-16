@@ -18,20 +18,20 @@ class SoftmaxLoss(rg.FitnessFunction):
     ):
         super().__init__()
 
-        self.device = "cpu"
+        self.device = "cuda"
 
         # 28x28 -> 8x8 because model is Linear(8*8, 10)
         train_tr = T.Compose(
             [
-                T.Resize((8, 8)),
                 T.ToTensor(),
                 T.Normalize((0.1307,), (0.3081,)),
-                T.Lambda(lambda x: x.view(-1)),  # [1,8,8] -> [64]
+                T.Lambda(lambda x: x.flatten()),
             ]
         )
         val_tr = train_tr
 
         self.ds_train = MNIST(".", train=True, download=True, transform=train_tr)
+
         self.ds_test = MNIST(".", train=False, download=True, transform=val_tr)
 
         # fixed subsets for deterministic eval speed
@@ -47,21 +47,19 @@ class SoftmaxLoss(rg.FitnessFunction):
             self.train_subset,
             batch_size=batch_size,
             shuffle=False,
-            num_workers=2,
-            pin_memory=(self.device == "cuda"),
+            num_workers=4,
         )
         self.test_loader = DataLoader(
             self.test_subset,
             batch_size=batch_size,
             shuffle=False,
-            num_workers=2,
-            pin_memory=(self.device == "cuda"),
+            num_workers=4,
         )
 
         self.criterion = torch.nn.CrossEntropyLoss(reduction="mean")
 
     def _make_model(self) -> torch.nn.Module:
-        return torch.nn.Linear(8 * 8, 10).to(self.device)
+        return torch.nn.Linear(28 * 28, 10).to(self.device)
 
     def get_params(self, model: Optional[torch.nn.Module] = None) -> List[float]:
         # Flatten all parameters into a single python list[float]
@@ -132,23 +130,23 @@ chromosome_size = len(myFitnessFunction.get_params())
 options = rg.RealGAOptions()
 options.setChromosomeSize(chromosome_size)
 options.setSelectionType("roulette")
-options.setPopulationSize(50)
+options.setPopulationSize(80)
 options.setBounds(
-    (-50 * np.ones(chromosome_size)).tolist(),
-    (50 * np.ones(chromosome_size)).tolist(),
-)
-options.setVerbose("soft")
-options.setMutationType("gaussian")
-options.setMutationGaussianPerc(0.01, 0.001)
-options.setElitismFactor(0.2)
-
+    (-0.2 * np.ones(chromosome_size)).tolist(),
+    (0.2 * np.ones(chromosome_size)).tolist(),
+    )
+options.setVerbose(1)
+options.setMutationType("uniform")
+options.setMutationUniformPerc(0.1, 0.001)
+options.setElitismFactor(0.1)
+options.setSeed(21)
 
 ga = rg.RealGA()
 ga.init(options, myFitnessFunction, False)
-ga.popInitRandGaussian(0, 1)
+ga.popInitRandGaussian(0, 0.01)
 
 # ---- Evolution loop ----
-for gen in range(100):
+for gen in range(40):
     ga.evolve()
 
     chromosome = ga.getBestChromosome()

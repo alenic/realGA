@@ -14,7 +14,7 @@ options = rg.RealGAOptions()
 options.setChromosomeSize(2)
 options.setPopulationSize(50)
 options.setBounds([-5.0, -5.0], [5.0, 5.0])
-options.setVerbose("soft")
+options.setVerbose(1)
 options.setMutationType("gaussian")
 options.setMutationGaussianPerc(0.01, 0.001)
 

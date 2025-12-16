@@ -23,7 +23,7 @@ int main(int argc,  char** argv) {
     options.setChromosomeSize(2);
     options.setPopulationSize(50);
     options.setBounds(LB, UB);
-    options.setVerbose("soft");
+    options.setVerbose(1);
 
     // Init Genetic Algorithm with options, fitness function and keepState=false
     RealGA ga;

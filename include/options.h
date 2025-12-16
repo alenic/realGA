@@ -52,7 +52,7 @@ public:
     void setLowerBounds(const vector<float> &lb);
     void setUpperBounds(const vector<float> &ub);
     void setBounds(const vector<float> &lb, const vector<float> &ub);
-    void setVerbose(string value);
+    void setVerbose(int value);
     void setSeed(unsigned int seedValue);
     void setElitismFactor(float value);
     void setMutateDuplicatedFitness(bool value);

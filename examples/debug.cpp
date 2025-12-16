@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     options.setMutationGaussianPerc(0.01, 0.01);
     options.setSelectionType("roulette");
     options.setSelectionTournamentProbability(0.8);
-    options.setVerbose("soft");
+    options.setVerbose(1);
     // Define RealGA(Population size, number of genes in a chromosome, LB, UB)
     RealGA ga;
     ga.init(options, myFitnessFunction, false);
