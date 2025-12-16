@@ -9,3 +9,6 @@ lib
 obj
 .vscode
 build
+
+
+MNIST
