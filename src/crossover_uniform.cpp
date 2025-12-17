@@ -1,9 +1,6 @@
 #include "crossover.h"
 
-UniformCrossover::UniformCrossover(size_t chromosomeSize)
-{
-    mChromosomeSize = chromosomeSize;
-}
+UniformCrossover::UniformCrossover(size_t chromosomeSize) : Crossover(chromosomeSize) {}
 
 UniformCrossover::~UniformCrossover()
 {

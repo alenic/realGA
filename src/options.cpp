@@ -145,8 +145,11 @@ void RealGAOptions::setMutationGaussianPerc(float percDelta, float percMin)
 
 void RealGAOptions::setCrossoverType(string value)
 {
+
     if (value == "uniform")
         crossoverType = UNIFORM_CROSSOVER;
+    else if (value == "linear")
+        crossoverType = LINEAR_CROSSOVER;
     else
         REALGA_ERROR(1, value << " is an invalid crossover type");
 }
@@ -167,6 +170,6 @@ void RealGAOptions::checkOptions()
     // check population size
     if (selectionType == TOURNAMENT_SELECTION)
     {
-        REALGA_ERROR(populationSize <= selectionTournamentSize, "tournament size " << selectionTournamentSize << " must be less than population size " << populationSize);
+        REALGA_ERROR(populationSize >= selectionTournamentSize, "tournament size " << selectionTournamentSize << " must be less than population size " << populationSize);
     }
 }

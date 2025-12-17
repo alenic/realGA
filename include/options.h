@@ -27,7 +27,8 @@ typedef enum
 } SelectionType;
 typedef enum
 {
-    UNIFORM_CROSSOVER = 1
+    UNIFORM_CROSSOVER = 1,
+    LINEAR_CROSSOVER
 } CrossoverType;
 typedef enum
 {

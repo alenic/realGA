@@ -12,6 +12,7 @@
 #define REALGA_CROSSOVER_H
 #include "stat.h"
 #include "options.h"
+#include "messages.h"
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
@@ -22,8 +23,11 @@ using namespace std;
 // Base class
 class Crossover {
 public:
+    Crossover(size_t chromosomeSize): mChromosomeSize(chromosomeSize) {}
     virtual ~Crossover() {}
     virtual void crossover(RealChromosome &a, RealChromosome &b, RealChromosome &offspring) = 0;
+protected:
+    size_t mChromosomeSize;
 };
 
 // Uniform Crossover
@@ -32,8 +36,15 @@ public:
     UniformCrossover(size_t chromosomeSize);
     ~UniformCrossover();
     void crossover(RealChromosome &a, RealChromosome &b, RealChromosome &offspring);
-private:
-    size_t mChromosomeSize;
+};
+
+
+// Linear Crossover
+class LinearCrossover: public Crossover {
+public:
+    LinearCrossover(size_t chromosomeSize);
+    ~LinearCrossover();
+    void crossover(RealChromosome &a, RealChromosome &b, RealChromosome &offspring);
 };
 
 

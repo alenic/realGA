@@ -1,8 +1,4 @@
-```
-pip install swig
-```
 
-```
 mkdir -p build/swig-python/realga
 
 swig -c++ -python -relativeimport \
@@ -24,4 +20,7 @@ c++ -O3 -fPIC -shared \
 
 cp ./build/libs/librealga_shared.so ./build/swig-python/realga/
 cp ./swig/setup.py ./build/swig-python/
-```
+
+
+cd build/swig-python
+pip install .

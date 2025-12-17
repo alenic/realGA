@@ -18,7 +18,10 @@ class SoftmaxLoss(rg.FitnessFunction):
     ):
         super().__init__()
 
-        self.device = "cuda"
+        if use_gpu and torch.cuda.is_available():
+            self.device = "cuda"
+        else:
+            self.device = "cpu"
 
         # 28x28 -> 8x8 because model is Linear(8*8, 10)
         train_tr = T.Compose(
@@ -132,12 +135,13 @@ options.setChromosomeSize(chromosome_size)
 options.setSelectionType("roulette")
 options.setPopulationSize(80)
 options.setBounds(
-    (-0.2 * np.ones(chromosome_size)).tolist(),
-    (0.2 * np.ones(chromosome_size)).tolist(),
+    (-1 * np.ones(chromosome_size)).tolist(),
+    (1 * np.ones(chromosome_size)).tolist(),
     )
 options.setVerbose(1)
 options.setMutationType("uniform")
-options.setMutationUniformPerc(0.1, 0.001)
+options.setCrossoverType("linear")
+options.setMutationUniformPerc(0.1, 0.0001)
 options.setElitismFactor(0.1)
 options.setSeed(21)
 

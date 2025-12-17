@@ -1,6 +1,7 @@
 #include "realga.h"
 #include <fstream>
 #include <iostream>
+#include <unordered_set>
 
 RealGA::RealGA()
 {
@@ -82,6 +83,11 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
     // set fitness function
     mFitnessFcn = func;
 
+    if (mSelectionAlgorithm) { delete mSelectionAlgorithm; mSelectionAlgorithm = nullptr; }
+    if (mCrossover) { delete mCrossover; mCrossover = nullptr; }
+    if (mMutation) { delete mMutation; mMutation = nullptr; }
+
+
     if (keepState)
     {
         REALGA_ERROR(mPopulation.empty(), "reset is false, but chromosome population size is 0");
@@ -104,9 +110,8 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         {
             resetGaussianMutationPerc();
         }
-        if (mSelectionAlgorithm) delete mSelectionAlgorithm;
-        if (mCrossover) delete mCrossover;
-        if (mMutation) delete mMutation;
+            // Always clean up old strategies (move outside if-block)
+
         // Create the selection strategy
         switch (mOptions.selectionType)
         {
@@ -125,6 +130,9 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         {
         case UNIFORM_CROSSOVER:
             mCrossover = new UniformCrossover(mOptions.chromosomeSize);
+            break;
+        case LINEAR_CROSSOVER:
+            mCrossover = new LinearCrossover(mOptions.chromosomeSize);
             break;
         }
         REALGA_ERROR(mCrossover == nullptr, "Crossover is null");
@@ -275,55 +283,63 @@ void RealGA::checkPopulation()
 // ==================================================== Evolve ====================================================
 void RealGA::evolve()
 {
-    int elitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
-    fillFitnessValues(mPopulation);
+    int n = mOptions.populationSize;
+    int elitismNumber = (int)(mOptions.elitismFactor * n);
 
-    size_t iter = 0;
+    // 1. Efficiency: Use nth_element to move the best individuals to the front
+    // This is O(N) on average and handles ties perfectly.
+    std::nth_element(mPopulation.begin(), 
+                     mPopulation.begin() + elitismNumber, 
+                     mPopulation.end(), 
+                     [](const RealChromosome& a, const RealChromosome& b) {
+                         return a.fitness < b.fitness;
+                     });
 
-    // Find the kth smallest Fitness
-    float kthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, elitismNumber + 1);
+    // 2. Use a Hash Set for O(1) duplicate lookups
+    // We store fitness values as 'long long' or use a custom epsilon-based hash
+    // for floating point safety, but a set of floats is the simplest upgrade.
+    std::unordered_set<float> fitnessRegistry;
+    int newPopIdx = 0;
 
-    // Copy individuals that meet the elitism criteria into the start of the new population
-    for (size_t i = 0; i < mOptions.populationSize && iter < elitismNumber; i++)
+    // 3. Transfer Elites
+    for (; newPopIdx < elitismNumber; ++newPopIdx)
     {
-        if (mPopulation[i].fitness <= kthSmallestFitness)
-        {
-            mNewPopulation[iter] = mPopulation[i];
-            iter++;
+        mNewPopulation[newPopIdx] = mPopulation[newPopIdx];
+        if (mOptions.mutateDuplicatedFitness) {
+            fitnessRegistry.insert(mNewPopulation[newPopIdx].fitness);
         }
     }
 
-    // Allocate offspring (gene after crossover and mutation)
+    // 4. Generate Offspring
     RealChromosome offspring(mOptions.chromosomeSize);
-    // Generate New Population
-    while (iter < mOptions.populationSize)
+    while (newPopIdx < n)
     {
-        int selectedIndexA, selectedIndexB;
-        // Selection
-        mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-        // Crossover
-        mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
-
+        int idxA, idxB;
+        mSelectionAlgorithm->select(mFitnessValues, idxA, idxB);
+        
+        mCrossover->crossover(mPopulation[idxA], mPopulation[idxB], offspring);
         mMutation->mutate(offspring, mLB, mUB);
-
         offspring.fitness = evalFitness(offspring);
 
+        // O(1) Duplicate Check
         if (mOptions.mutateDuplicatedFitness)
         {
-            // Force mutation if a chromosome fitness is duplicated
-            for (size_t j = 0; j < iter; j++)
+            int attempts = 0;
+            // If duplicate found, mutate again (limit attempts to avoid infinite loops)
+            while (fitnessRegistry.find(offspring.fitness) != fitnessRegistry.end() && attempts < 10)
             {
-                if (fabs(offspring.fitness - mNewPopulation[j].fitness) < 1.0e-12)
-                {
-                    mMutation->mutate(offspring, mLB, mUB);
-                    offspring.fitness = evalFitness(offspring);
-                }
+                mMutation->mutate(offspring, mLB, mUB);
+                offspring.fitness = evalFitness(offspring);
+                attempts++;
             }
+            fitnessRegistry.insert(offspring.fitness);
         }
 
-        mNewPopulation[iter] = offspring;
-        ++iter;
+        mNewPopulation[newPopIdx] = offspring;
+        newPopIdx++;
     }
+
+    // 5. Update mutation cooling parameters
 
     if (mOptions.mutationType == GAUSSIAN_MUTATION)
     {
@@ -337,11 +353,13 @@ void RealGA::evolve()
         mMutation->setMutationPercentage(mUniformMutationPerc);
     }
 
-    // Copy the new population
     mPopulation = mNewPopulation;
+    
+    // Crucial: Update the fitness value cache for the Selection Algorithm next turn
+    fillFitnessValues(mPopulation); 
+    
     mGeneration++;
 }
-
 // ===================================== Init function =============================
 void RealGA::popInitRandUniform()
 // Init random uniform population
@@ -351,6 +369,7 @@ void RealGA::popInitRandUniform()
         mPopulation[i].randUniform(mLB, mUB);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
+    fillFitnessValues(mPopulation);
 }
 
 void RealGA::popInitRandGaussian(float mean, float sigma)
@@ -361,6 +380,7 @@ void RealGA::popInitRandGaussian(float mean, float sigma)
         mPopulation[i].randGaussian(mean, sigma, mLB, mUB);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
+    fillFitnessValues(mPopulation);
 }
 
 void RealGA::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float mutationPerc)
@@ -380,6 +400,7 @@ void RealGA::popInitGaussianMutate(vector<float> &gene, float mutatioRate, float
         mutation.mutate(mPopulation[i], mLB, mUB);
         mPopulation[i].fitness = evalFitness(mPopulation[i]);
     }
+    fillFitnessValues(mPopulation);
 }
 
 // TODO
