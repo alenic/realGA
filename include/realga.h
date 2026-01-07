@@ -42,7 +42,7 @@ public:
     void setFitnessFunction(FitnessFunction *f);
 
     void resetPopulation();
-    void resetGaussianMutationPerc();
+    void resetMutationPerc();
 
     float evalFitness(const RealChromosome &);
 

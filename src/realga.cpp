@@ -59,7 +59,7 @@ void RealGA::resetPopulation()
     }
 }
 
-void RealGA::resetGaussianMutationPerc()
+void RealGA::resetMutationPerc()
 // Initialize standars deviations for gaussian mutation
 {
     mGaussianMutationPerc = 1.0f;
@@ -70,7 +70,7 @@ void RealGA::restart()
 {
     if (mOptions.mutationType == GAUSSIAN_MUTATION)
     {
-        resetGaussianMutationPerc();
+        resetMutationPerc();
     }
     mGeneration = 0;
 }
@@ -108,7 +108,7 @@ void RealGA::init(RealGAOptions &opt, FitnessFunction *func, bool keepState)
         // Initialize gaussian standard deviation
         if (mOptions.mutationType == GAUSSIAN_MUTATION)
         {
-            resetGaussianMutationPerc();
+            resetMutationPerc();
         }
             // Always clean up old strategies (move outside if-block)
 
