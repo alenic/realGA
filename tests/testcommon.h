@@ -39,18 +39,6 @@ public:
     void test_smallSigmaGaussian();
 };
 
-// Algorithms Tests
-class RALGTest
-{
-public:
-    RALGTest() {};
-    void test_searchIndexBinarySearch();
-    void test_argKthSmallest();
-    void test_kthSmallest();
-    void test_argMin();
-    void test_minmax();
-};
-
 // Realchromosome Tests
 class RealChromosomeTest
 {

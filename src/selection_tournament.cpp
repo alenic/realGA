@@ -52,7 +52,7 @@ int TournamentSelection::tournament(std::vector<float> &fitnessValues)
         }
         if (!match)
         {
-            mTournamentIndex[i] = index;
+            mTournamentIndex[i]   = index;
             mTournamentFitness[i] = fitnessValues[index];
             ++i;
         }
@@ -70,13 +70,33 @@ int TournamentSelection::tournament(std::vector<float> &fitnessValues)
             chooseP *= (1.0f - mSelectionProbability);
         }
 
-        localKthIndex = RALG::argKthSmallest(mTournamentFitness, 0, mTournamentSize - 1, kth);
-        kthMinIndex = mTournamentIndex[localKthIndex];
+        // build index order [0,1,2,...]
+        static std::vector<int> order;
+        order.resize(mTournamentSize);
+        std::iota(order.begin(), order.end(), 0);
+
+        int kthPos = std::clamp(kth - 1, 0, mTournamentSize - 1);
+
+        std::nth_element(
+            order.begin(),
+            order.begin() + kthPos,
+            order.end(),
+            [&](int a, int b)
+            {
+                return mTournamentFitness[a] < mTournamentFitness[b];
+            });
+
+        localKthIndex = order[kthPos];
+        kthMinIndex   = mTournamentIndex[localKthIndex];
     }
     else
     {
-        localKthIndex = RALG::argMin(mTournamentFitness.data(), 0, mTournamentSize - 1);
-        kthMinIndex = mTournamentIndex[localKthIndex];
+        auto it = std::min_element(
+            mTournamentFitness.begin(),
+            mTournamentFitness.begin() + mTournamentSize);
+
+        localKthIndex = static_cast<int>(std::distance(mTournamentFitness.begin(), it));
+        kthMinIndex   = mTournamentIndex[localKthIndex];
     }
 
     return kthMinIndex;

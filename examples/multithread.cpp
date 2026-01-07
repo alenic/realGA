@@ -176,7 +176,7 @@ void optimize(unsigned int seed, unsigned int nThreads)
     }
     else
     {
-        ga = new RealGenMultithread(nThreads);
+        ga = new RealGAMultithread(nThreads);
     }
 
     ga->init(options, myFitnessFunction, false);

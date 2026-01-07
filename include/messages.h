@@ -1,7 +1,6 @@
 #ifndef REALGA_MESSAGES_H
 #define REALGA_MESSAGES_H
 
-#pragma once
 #include <stdexcept>
 #include <string>
 #include <sstream>

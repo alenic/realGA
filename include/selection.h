@@ -13,11 +13,11 @@
 #define REALGA_SELECTION_H
 #include "stat.h"
 #include "options.h"
-#include "algorithms.h"
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 using namespace std;
 

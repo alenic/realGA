@@ -170,6 +170,6 @@ void RealGAOptions::checkOptions()
     // check population size
     if (selectionType == TOURNAMENT_SELECTION)
     {
-        REALGA_ERROR(populationSize >= selectionTournamentSize, "tournament size " << selectionTournamentSize << " must be less than population size " << populationSize);
+        REALGA_ERROR(populationSize < selectionTournamentSize, "tournament size " << selectionTournamentSize << " must be less than population size " << populationSize);
     }
 }

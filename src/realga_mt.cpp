@@ -1,44 +1,72 @@
 #include "realga_mt.h"
 
 #include <thread>
-#include <vector>
-#include <cmath>
-#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <unordered_set>
 
-RealGenMultithread::RealGenMultithread(unsigned int nThread)
+
+RealGAMultithread::RealGAMultithread(unsigned int nThread)
     : RealGA(), mNthread(nThread) {}
 
-RealGenMultithread::~RealGenMultithread() {}
+RealGAMultithread::~RealGAMultithread() {}
 
-void RealGenMultithread::evolve()
+void RealGAMultithread::evolve()
 {
-    RealChromosome offspring(mOptions.chromosomeSize);
-    int selectedIndexA, selectedIndexB;
-    size_t iter = 0;
-    int countElite = 0;
-    int elitismNumber = (int)(mOptions.elitismFactor * mOptions.populationSize);
+    int n = mOptions.populationSize;
+    int elitismNumber = (int)(mOptions.elitismFactor * n);
 
-    fillFitnessValues(mPopulation);
-    float kthSmallestFitness = RALG::kthSmallest(mFitnessValues, 0, mOptions.populationSize - 1, elitismNumber + 1);
+    // 1. Efficiency: Use nth_element to move the best individuals to the front
+    // This is O(N) on average and handles ties perfectly.
+    std::nth_element(mPopulation.begin(), 
+                     mPopulation.begin() + elitismNumber, 
+                     mPopulation.end(), 
+                     [](const RealChromosome& a, const RealChromosome& b) {
+                         return a.fitness < b.fitness;
+                     });
 
-    // Generate new population (without evaluating fitness)
-    while (iter < mOptions.populationSize)
+    // 2. Use a Hash Set for O(1) duplicate lookups
+    // We store fitness values as 'long long' or use a custom epsilon-based hash
+    // for floating point safety, but a set of floats is the simplest upgrade.
+    std::unordered_set<float> fitnessRegistry;
+    int newPopIdx = 0;
+
+    // 3. Transfer Elites
+    for (; newPopIdx < elitismNumber; ++newPopIdx)
     {
-        if ((mFitnessValues[iter] <= kthSmallestFitness) && (countElite < elitismNumber))
+        mNewPopulation[newPopIdx] = mPopulation[newPopIdx];
+        if (mOptions.mutateDuplicatedFitness) {
+            fitnessRegistry.insert(mNewPopulation[newPopIdx].fitness);
+        }
+    }
+
+    // 4. Generate Offspring
+    RealChromosome offspring(mOptions.chromosomeSize);
+    while (newPopIdx < n)
+    {
+        int idxA, idxB;
+        mSelectionAlgorithm->select(mFitnessValues, idxA, idxB);
+        
+        mCrossover->crossover(mPopulation[idxA], mPopulation[idxB], offspring);
+        mMutation->mutate(offspring, mLB, mUB);
+        offspring.fitness = evalFitness(offspring);
+
+        // O(1) Duplicate Check
+        if (mOptions.mutateDuplicatedFitness)
         {
-            mNewPopulation[iter] = mPopulation[iter];
-            ++iter;
-            ++countElite;
-            continue;
+            int attempts = 0;
+            // If duplicate found, mutate again (limit attempts to avoid infinite loops)
+            while (fitnessRegistry.find(offspring.fitness) != fitnessRegistry.end() && attempts < 10)
+            {
+                mMutation->mutate(offspring, mLB, mUB);
+                offspring.fitness = evalFitness(offspring);
+                attempts++;
+            }
+            fitnessRegistry.insert(offspring.fitness);
         }
 
-        mSelectionAlgorithm->select(mFitnessValues, selectedIndexA, selectedIndexB);
-        mCrossover->crossover(mPopulation[selectedIndexA], mPopulation[selectedIndexB], offspring);
-        mMutation->mutate(offspring, mLB, mUB);
-        mNewPopulation[iter] = offspring;
-        mNewPopulation[iter].fitness = std::numeric_limits<float>::max();
-        ; // Evaluate only non-elites fitness
-        ++iter;
+        mNewPopulation[newPopIdx] = offspring;
+        newPopIdx++;
     }
 
     // Parallel fitness evaluation
@@ -82,21 +110,23 @@ void RealGenMultithread::evolve()
         }
     }
 
-    // Update mutation percentages if adaptive
+    // 5. Update mutation cooling parameters
     if (mOptions.mutationType == GAUSSIAN_MUTATION)
     {
-        mGaussianMutationPerc = std::max(mOptions.mutationGaussianPercMin,
-                                         1.0f - mOptions.mutationGaussianPercDelta * static_cast<float>(mGeneration));
+        mGaussianMutationPerc = fmax(mOptions.mutationGaussianPercMin, 1.0f - mOptions.mutationGaussianPercDelta * (float)mGeneration);
         mMutation->setMutationPercentage(mGaussianMutationPerc);
     }
 
     if (mOptions.mutationType == UNIFORM_MUTATION)
     {
-        mUniformMutationPerc = std::max(mOptions.mutationUniformPercMin,
-                                        1.0f - mOptions.mutationUniformPercDelta * static_cast<float>(mGeneration));
+        mUniformMutationPerc = fmax(mOptions.mutationUniformPercMin, 1.0f - mOptions.mutationUniformPercDelta * (float)mGeneration);
         mMutation->setMutationPercentage(mUniformMutationPerc);
     }
 
     mPopulation = mNewPopulation;
+    
+    // Crucial: Update the fitness value cache for the Selection Algorithm next turn
+    fillFitnessValues(mPopulation); 
+    
     mGeneration++;
 }

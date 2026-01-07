@@ -9,7 +9,9 @@ RouletteWheelSelection::~RouletteWheelSelection() {}
 
 void RouletteWheelSelection::normalize(vector<float> &fitnessValues)
 {
-    RALG::minmax(fitnessValues, mMinFitnessValue, mMaxFitnessValue);
+    auto mm = std::minmax_element(fitnessValues.begin(), fitnessValues.end());
+    mMinFitnessValue = *mm.first;
+    mMaxFitnessValue = *mm.second;
 
     for (size_t i = 0; i < fitnessValues.size(); i++)
     {
@@ -20,10 +22,13 @@ void RouletteWheelSelection::normalize(vector<float> &fitnessValues)
         }
         else
         {
-            mNormalizedFitness[i] = (1.01f - (fitnessValues[i] - mMinFitnessValue) / (mMaxFitnessValue - mMinFitnessValue)) / 1.01f;
+            mNormalizedFitness[i] =
+                (1.01f - (fitnessValues[i] - mMinFitnessValue) /
+                (mMaxFitnessValue - mMinFitnessValue)) / 1.01f;
         }
     }
 }
+
 
 void RouletteWheelSelection::selectStochasticAcceptance(int &indexA, int &indexB)
 {

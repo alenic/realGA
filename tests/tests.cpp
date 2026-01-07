@@ -6,7 +6,6 @@ int main()
     RealGAOptions opt;
 
     StatTest statTest;
-    RALGTest ralgTest;
     RealChromosomeTest realChromosomeUT;
     SelectionTests selectionUT;
 
@@ -27,13 +26,6 @@ int main()
     // statTest.test_randInteger();
     statTest.test_smallSigmaGaussian();
     /*
-    cout << "==================== Algorithms Test ============================" << endl;
-    ralgTest.test_argKthSmallest();
-    ralgTest.test_searchIndexBinarySearch();
-    ralgTest.test_argMin();
-    ralgTest.test_kthSmallest();
-    ralgTest.test_minmax();
-
     cout << "==================== RealChromosome Test ============================" << endl;
     realChromosomeUT.test_randUniform();
 

@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include "chromosome.h"
 #include "stat.h"
-#include "algorithms.h"
 #include "options.h"
 #include "fitnessfunction.h"
 #include "selection.h"

@@ -19,14 +19,14 @@
 #include <limits>
 #include "realga.h"
 
-class RealGenMultithread : public RealGA
+class RealGAMultithread : public RealGA
 {
 private:
     unsigned int mNthread;
 
 public:
-    RealGenMultithread(unsigned int nThread);
-    ~RealGenMultithread();
+    RealGAMultithread(unsigned int nThread);
+    ~RealGAMultithread();
 
     void evolve() override;
 };
